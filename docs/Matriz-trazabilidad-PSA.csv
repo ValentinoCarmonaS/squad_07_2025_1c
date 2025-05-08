@@ -1,0 +1,40 @@
+ID,Requerimiento,Tipo,Interesado/s,Minuta,Módulo,Prioridad (MoSCoW),User Stories
+1,Desarrollar una herramienta unificada para la gestión de proyectos y soporte,RF,CEO,minuta-01-ceo-psa,General,Must,-
+2,La herramienta debe ser adaptable para clientes externos,RF,CEO,minuta-01-ceo-psa,General,Should,-
+3,"Potencial integración con la suite de PSA (ERP, CRM)",RF,CEO,minuta-01-ceo-psa,General,Should,-
+4,Permitir a los usuarios internos cargar horas trabajadas en proyectos,RF,CEO,minuta-01-ceo-psa,Recursos,Must,-
+5,Generar reportes de avance y ratios financieros,RF,CEO,minuta-01-ceo-psa,Finanzas,Should,-
+6,Implementar un módulo de soporte para la gestión de tickets,RF,CEO,minuta-01-ceo-psa,Soporte,Must,-
+7,Posibilidad de que clientes carguen tickets vía web,RF,CEO,minuta-01-ceo-psa,Soporte,Could,-
+8,Crear un producto estándar evitando customizaciones excesivas,RF,CEO,minuta-01-ceo-psa,General,Must,-
+9,Implementar facturación por proyecto al cliente bajo modalidad Time & Material,RF,Ricardo Ratio,minuta-02-gerente-finanzas-psa,Finanzas,Must,-
+10,Visualizar cuántas horas lleva insumidas un proyecto y consultar desde el último corte,RF,Ricardo Ratio,minuta-02-gerente-finanzas-psa,Finanzas,Must,-
+11,Alertas para incumplimiento de Acuerdos de Nivel de Servicio (SLA),RF,Ricardo Ratio,minuta-02-gerente-finanzas-psa,Finanzas,Must,-
+12,Exportación de datos a Microsoft Project,RF,Ricardo Ratio,minuta-02-gerente-finanzas-psa,Finanzas,Should,-
+13,Acceso a datos en tiempo real para reportes financieros,RF,Ricardo Ratio,minuta-02-gerente-finanzas-psa,Finanzas,Must,-
+14,"Control de cambios de alcance en proyectos ""Fixed Price""",RF,Ricardo Ratio,minuta-02-gerente-finanzas-psa,Finanzas,Should,-
+15,Posibilidad de asignar costos adicionales a los proyectos,RF,Ricardo Ratio,minuta-02-gerente-finanzas-psa,Finanzas,Should,-
+16,Revisión diaria de horas trabajadas,RF,Ricardo Ratio,minuta-02-gerente-finanzas-psa,Recursos,Could,-
+17,Entender la versión del software que utiliza cada cliente para atender incidentes,RF,Agusto Aguanti,minuta-03-area-soporte-psa,Soporte,Must,-
+18,Mejorar la integración del sistema de ticketing con el resto de la empresa,RF,Agusto Aguanti,minuta-03-area-soporte-psa,Soporte,Must,-
+19,"Categorización de tickets por cliente, producto, módulo, tipo de problema, prioridad y severidad",RF,Agusto Aguanti,minuta-03-area-soporte-psa,Soporte,Must,-
+20,"Registro de la historia del ticket, incluyendo quién lo tomó y el tiempo dedicado",RF,Agusto Aguanti,minuta-03-area-soporte-psa,Soporte,Must,-
+21,Mostrar el SLA correspondiente a cada ticket desde el inicio,RF,Agusto Aguanti,minuta-03-area-soporte-psa,Soporte,Must,-
+22,Definir y mostrar la prioridad y urgencia de cada ticket,RF,Agusto Aguanti,minuta-03-area-soporte-psa,Soporte,Must,-
+23,"Permitir que los agentes de soporte abran y cierren tickets, y asignen roles",RF,Agusto Aguanti,minuta-03-area-soporte-psa,Soporte,Must,-
+24,Escalar tickets a niveles superiores de soporte según la complejidad,RF,Agusto Aguanti,minuta-03-area-soporte-psa,Soporte,Must,-
+25,Permitir que PSA administre las actualizaciones y customizaciones del software,RF,Agusto Aguanti,minuta-03-area-soporte-psa,Soporte,Must,-
+26,"Registro de iniciativas como proyectos, con identificación de tareas a ejecutar",RF,Maximiliano Gant,minuta-04-gerencia-operaciones-psa,Proyectos,Must,-
+27,Visualización de un tablero de proyectos que muestre el estado de desarrollo,RF,Maximiliano Gant,minuta-04-gerencia-operaciones-psa,Proyectos,Must,-
+28,"Registro de tiempos de análisis, diseño y desarrollo para proyectos de customización",RF,Maximiliano Gant,minuta-04-gerencia-operaciones-psa,Proyectos,Must,-
+29,"Asociar riesgos a cada proyecto, incluyendo planes de mitigación y contingencia",RF,Maximiliano Gant,minuta-04-gerencia-operaciones-psa,Proyectos,Must,-
+30,Implementar un mecanismo para el seguimiento de horas trabajadas contra tareas,RF,Maximiliano Gant,minuta-04-gerencia-operaciones-psa,Recursos,Must,-
+31,Permitir la modificación de horas estimadas y registrar el tiempo real gastado,RF,Maximiliano Gant,minuta-04-gerencia-operaciones-psa,Proyectos,Should,-
+32,Implementar una matriz de riesgos que ordene los riesgos por impacto y probabilidad,RF,Maximiliano Gant,minuta-04-gerencia-operaciones-psa,Proyectos,Should,-
+33,"Registro integral de la implementación, incluyendo instalación, configuración, análisis de requerimientos y definiciones de customización",RF,Gustavo Cuchina,minuta-05-area-implmentaciones-psa,Proyectos,Must,-
+34,"Registro de la versión del producto instalada, configuración aplicada y customizaciones realizadas para cada cliente",RF,Gustavo Cuchina,minuta-05-area-implmentaciones-psa,Proyectos,Must,-
+35,"Documentación asociada a cada implementación, incluyendo historial de usuarios, requerimientos y configuraciones",RF,Gustavo Cuchina,minuta-05-area-implmentaciones-psa,Proyectos,Must,-
+36,Visualización del estado de los proyectos de implementación y desarrollo para estimar tiempos y coordinar actividades,RF,Gustavo Cuchina,minuta-05-area-implmentaciones-psa,Proyectos,Must,-
+37,"Identificación clara de proyectos de implementación y desarrollo, sin necesidad de establecer relaciones directas entre ellos",RF,Gustavo Cuchina,minuta-05-area-implmentaciones-psa,Proyectos,Must,-
+38,Uso de tags y filtrado textual para identificar proyectos relacionados fácilmente,RF,Gustavo Cuchina,minuta-05-area-implmentaciones-psa,Proyectos,Should,-
+39,Registro de clientes y requerimientos asociados a cada cliente/proyecto,RF,Gustavo Cuchina,minuta-05-area-implmentaciones-psa,Proyectos,Must,-
