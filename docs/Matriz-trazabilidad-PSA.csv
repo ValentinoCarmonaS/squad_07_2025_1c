@@ -1,40 +1,55 @@
-ID,Requerimiento,Tipo,Interesado/s,Minuta,Módulo,Prioridad (MoSCoW),User Stories
-1,Desarrollar una herramienta unificada para la gestión de proyectos y soporte,RF,CEO,minuta-01-ceo-psa,General,Must,-
-2,La herramienta debe ser adaptable para clientes externos,RF,CEO,minuta-01-ceo-psa,General,Should,-
-3,"Potencial integración con la suite de PSA (ERP, CRM)",RF,CEO,minuta-01-ceo-psa,General,Should,-
-4,Permitir a los usuarios internos cargar horas trabajadas en proyectos,RF,CEO,minuta-01-ceo-psa,Recursos,Must,-
-5,Generar reportes de avance y ratios financieros,RF,CEO,minuta-01-ceo-psa,Finanzas,Should,-
-6,Implementar un módulo de soporte para la gestión de tickets,RF,CEO,minuta-01-ceo-psa,Soporte,Must,-
-7,Posibilidad de que clientes carguen tickets vía web,RF,CEO,minuta-01-ceo-psa,Soporte,Could,-
-8,Crear un producto estándar evitando customizaciones excesivas,RF,CEO,minuta-01-ceo-psa,General,Must,-
-9,Implementar facturación por proyecto al cliente bajo modalidad Time & Material,RF,Ricardo Ratio,minuta-02-gerente-finanzas-psa,Finanzas,Must,-
-10,Visualizar cuántas horas lleva insumidas un proyecto y consultar desde el último corte,RF,Ricardo Ratio,minuta-02-gerente-finanzas-psa,Finanzas,Must,-
-11,Alertas para incumplimiento de Acuerdos de Nivel de Servicio (SLA),RF,Ricardo Ratio,minuta-02-gerente-finanzas-psa,Finanzas,Must,-
-12,Exportación de datos a Microsoft Project,RF,Ricardo Ratio,minuta-02-gerente-finanzas-psa,Finanzas,Should,-
-13,Acceso a datos en tiempo real para reportes financieros,RF,Ricardo Ratio,minuta-02-gerente-finanzas-psa,Finanzas,Must,-
-14,"Control de cambios de alcance en proyectos ""Fixed Price""",RF,Ricardo Ratio,minuta-02-gerente-finanzas-psa,Finanzas,Should,-
-15,Posibilidad de asignar costos adicionales a los proyectos,RF,Ricardo Ratio,minuta-02-gerente-finanzas-psa,Finanzas,Should,-
-16,Revisión diaria de horas trabajadas,RF,Ricardo Ratio,minuta-02-gerente-finanzas-psa,Recursos,Could,-
-17,Entender la versión del software que utiliza cada cliente para atender incidentes,RF,Agusto Aguanti,minuta-03-area-soporte-psa,Soporte,Must,-
-18,Mejorar la integración del sistema de ticketing con el resto de la empresa,RF,Agusto Aguanti,minuta-03-area-soporte-psa,Soporte,Must,-
-19,"Categorización de tickets por cliente, producto, módulo, tipo de problema, prioridad y severidad",RF,Agusto Aguanti,minuta-03-area-soporte-psa,Soporte,Must,-
-20,"Registro de la historia del ticket, incluyendo quién lo tomó y el tiempo dedicado",RF,Agusto Aguanti,minuta-03-area-soporte-psa,Soporte,Must,-
-21,Mostrar el SLA correspondiente a cada ticket desde el inicio,RF,Agusto Aguanti,minuta-03-area-soporte-psa,Soporte,Must,-
-22,Definir y mostrar la prioridad y urgencia de cada ticket,RF,Agusto Aguanti,minuta-03-area-soporte-psa,Soporte,Must,-
-23,"Permitir que los agentes de soporte abran y cierren tickets, y asignen roles",RF,Agusto Aguanti,minuta-03-area-soporte-psa,Soporte,Must,-
-24,Escalar tickets a niveles superiores de soporte según la complejidad,RF,Agusto Aguanti,minuta-03-area-soporte-psa,Soporte,Must,-
-25,Permitir que PSA administre las actualizaciones y customizaciones del software,RF,Agusto Aguanti,minuta-03-area-soporte-psa,Soporte,Must,-
-26,"Registro de iniciativas como proyectos, con identificación de tareas a ejecutar",RF,Maximiliano Gant,minuta-04-gerencia-operaciones-psa,Proyectos,Must,-
-27,Visualización de un tablero de proyectos que muestre el estado de desarrollo,RF,Maximiliano Gant,minuta-04-gerencia-operaciones-psa,Proyectos,Must,-
-28,"Registro de tiempos de análisis, diseño y desarrollo para proyectos de customización",RF,Maximiliano Gant,minuta-04-gerencia-operaciones-psa,Proyectos,Must,-
-29,"Asociar riesgos a cada proyecto, incluyendo planes de mitigación y contingencia",RF,Maximiliano Gant,minuta-04-gerencia-operaciones-psa,Proyectos,Must,-
-30,Implementar un mecanismo para el seguimiento de horas trabajadas contra tareas,RF,Maximiliano Gant,minuta-04-gerencia-operaciones-psa,Recursos,Must,-
-31,Permitir la modificación de horas estimadas y registrar el tiempo real gastado,RF,Maximiliano Gant,minuta-04-gerencia-operaciones-psa,Proyectos,Should,-
-32,Implementar una matriz de riesgos que ordene los riesgos por impacto y probabilidad,RF,Maximiliano Gant,minuta-04-gerencia-operaciones-psa,Proyectos,Should,-
-33,"Registro integral de la implementación, incluyendo instalación, configuración, análisis de requerimientos y definiciones de customización",RF,Gustavo Cuchina,minuta-05-area-implmentaciones-psa,Proyectos,Must,-
-34,"Registro de la versión del producto instalada, configuración aplicada y customizaciones realizadas para cada cliente",RF,Gustavo Cuchina,minuta-05-area-implmentaciones-psa,Proyectos,Must,-
-35,"Documentación asociada a cada implementación, incluyendo historial de usuarios, requerimientos y configuraciones",RF,Gustavo Cuchina,minuta-05-area-implmentaciones-psa,Proyectos,Must,-
-36,Visualización del estado de los proyectos de implementación y desarrollo para estimar tiempos y coordinar actividades,RF,Gustavo Cuchina,minuta-05-area-implmentaciones-psa,Proyectos,Must,-
-37,"Identificación clara de proyectos de implementación y desarrollo, sin necesidad de establecer relaciones directas entre ellos",RF,Gustavo Cuchina,minuta-05-area-implmentaciones-psa,Proyectos,Must,-
-38,Uso de tags y filtrado textual para identificar proyectos relacionados fácilmente,RF,Gustavo Cuchina,minuta-05-area-implmentaciones-psa,Proyectos,Should,-
-39,Registro de clientes y requerimientos asociados a cada cliente/proyecto,RF,Gustavo Cuchina,minuta-05-area-implmentaciones-psa,Proyectos,Must,-
+ID,ID,Requerimiento,Tipo,Interesado/s,Minuta,Módulo,Prioridad (MoSCoW),User stories
+,,Donde digo que esta pidiendo el usuario,RF,Quien lo pidio o le interesa,Link a la minuta de reunion y/o fecha de la misma,Proyectos,Must,Identificación de la o las User Stories asociadas al requerimiento
+1,,Asignar un identificador único a cada proyecto que no sea el nombre.,,Maximiliano Gant,minuta-04-gerencia-operaciones-psa,Proyectos,Must,-
+2,,Permitir asociar cada proyecto a un cliente específico o marcarlo como interno.,,Maximiliano Gant,minuta-04-gerencia-operaciones-psa,Proyectos,Must,-
+3,,Registrar para cada proyecto fechas de inicio y fin estimadas.,,Maximiliano Gant,minuta-04-gerencia-operaciones-psa,Proyectos,Must,-
+4,,Mantener un registro de las horas estimadas totales por proyecto.,,Maximiliano Gant,minuta-04-gerencia-operaciones-psa,Proyectos,Must,-
+4,4.1,Calcular automáticamente la estimación total de horas del proyecto como la sumatoria de las horas de todas sus tareas.,,Maximiliano Gant,minuta-04-gerencia-operaciones-psa,Proyectos,Must,-
+5,,"Permitir asignar equipos de trabajo, recursos y responsables a cada proyecto.",,Maximiliano Gant,minuta-04-gerencia-operaciones-psa,Proyectos,Must,-
+6,,"Proporcionar un tablero visual tipo Kanban para visualizar el estado de los proyectos según etapas (inicio, desarrollo y transición).",,Maximiliano Gant,minuta-04-gerencia-operaciones-psa,Proyectos,Must,-
+6,6.1,"Cuando se requiera organizar tareas, permitir clasificarlas según su estado (Iniciada, No iniciada, Terminada).",,Maximiliano Gant,minuta-04-gerencia-operaciones-psa,Proyectos,Must,-
+6,6.2,Permitir customizar las columnas del tablero según las necesidades de cada equipo y/o proyecto.,,Maximiliano Gant,minuta-04-gerencia-operaciones-psa,Proyectos,Must,-
+7,,Permitir registrar y plasmar los requerimientos de los clientes en tareas.,,Maximiliano Gant,minuta-04-gerencia-operaciones-psa,Proyectos,Should,
+7,7.1,"Registrar para cada tarea información del proyecto asociado, estado actual, horas estimadas y etiquetas (tags).",,Maximiliano Gant,minuta-04-gerencia-operaciones-psa,Proyectos,Must,
+7,7.2,"Permitir modificar las horas estimadas, estado actual y etiquetas por tarea cuando sea necesario.",,Maximiliano Gant,minuta-04-gerencia-operaciones-psa,Proyectos,Must,
+8,,"Permitir registrar riesgos asociados a cada proyecto, clasificándolos por impacto en costo y alcance.",,Maximiliano Gant,minuta-04-gerencia-operaciones-psa,Proyectos,Must,
+8,8.1,"Para cada riesgo identificado, permitir documentar planes de mitigación y contingencia",,Maximiliano Gant,minuta-04-gerencia-operaciones-psa,Proyectos,Could,
+9,,"Estimar tiempos iniciales de tareas y proyectos, registrar el tiempo real invertido y permitir ajustes en las estimaciones.",,Maximiliano Gant,minuta-04-gerencia-operaciones-psa,Proyectos,Should,
+10,,"Distinguir entre proyectos de tipo ""time and material"" y proyectos ""fixed price"".",,Maximiliano Gant,minuta-04-gerencia-operaciones-psa,Proyectos,Must,
+10,10.1,"Cuando se registre un cambio de alcance en proyectos ""fixed price"", seguir un proceso de control, permitiendo re-estimar costos y tiempos para aprobación del cliente.",,Ricardo Ratio,minuta-02-gerente-finanzas-psa,Proyectos,Should,
+11,,Permitir a los empleados registrar sus horas trabajadas diaria o semanalmente.,,Ricardo Ratio,minuta-02-gerente-finanzas-psa,Recursos,Must,
+11,11.1,Asignar horas trabajadas a proyectos específicos para calcular costos y facturar al cliente.,,Ricardo Ratio,minuta-02-gerente-finanzas-psa,Recursos,Must,
+11,11.2,"Permitir visualizar el registro de horas filtrado por proyecto, empleado, intervalo de tiempo y equipo.",,Ricardo Ratio y Maximiliano Gant,minuta-02-gerente-finanzas-psa,Recursos,Must,
+11,11.3,Permitir consultar si un equipo está cargando horas y trabajando regularmente.,,Agusto Aguanti y Gustavo Cuchina,minuta-05-area-implmentaciones-psa,Recursos,Must,
+12,,"Registrar detalladamente las configuraciones, customizaciones y versión de los projectos realizados para cada cliente.",,Agusto Aguanti y Gustavo Cuchina,minuta-05-area-implmentaciones-psa,Implementaciones,Must,
+12,12.1,"Almacenar la documentación de análisis, requerimientos y resultados de las implementaciones.",,Gustavo Cuchina,minuta-05-area-implmentaciones-psa,Implementaciones,Must,
+13,,Proporcionar visibilidad sobre el estado de los proyectos de desarrollo que afectan a las implementaciones.,,Gustavo Cuchina,minuta-05-area-implmentaciones-psa,Implementaciones,Must,
+14,,"Permitir etiquetar los proyectos con ""tags"" (por cliente, producto o tipo de proyecto) para facilitar su filtrado eficiente.",,Gustavo Cuchina,minuta-05-area-implmentaciones-psa,Implementaciones,Must,
+14,14.1,Permitir diferenciar entre proyectos de implementación y desarrollo sin necesidad de relacionarlos directamente.,,Gustavo Cuchina,minuta-05-area-implmentaciones-psa,Implementaciones,Must,
+15,,Gestionar tickets de soporte con información detallada sobre cada problematica.,,Agusto Aguanti,minuta-03-area-soporte-psa,Soporte,Must,
+15,15.1,Identificar la versión específica del software del cliente y si incluye customizaciones.,,Agusto Aguanti,minuta-03-area-soporte-psa,Soporte,Must,-
+15,15.2,"Permitir categorizar los tickets por prioridad, severidad, historia, asignación y tiempos asignados.",,Agusto Aguanti,minuta-03-area-soporte-psa,Soporte,Must,-
+15,15.3,"Registrar detalladamente el historial de cada ticket, incluyendo asignaciones, tiempos y acciones tomadas.",,Agusto Aguanti,minuta-03-area-soporte-psa,Soporte,Must,-
+16,,Mostrar y gestionar los acuerdos de nivel de servicio (SLAs) asociados a cada ticket y cliente.,,Agusto Aguanti,minuta-03-area-soporte-psa,Soporte,Must,-
+16,16.1,"Cuando un ticket alcance el 50% del tiempo permitido por el SLA, generar alertas automáticas para prevenir incumplimientos y multas.",,Agusto Aguanti,minuta-03-area-soporte-psa,Soporte,Should,-
+17,,"Soportar la estructura de niveles de soporte, desde el primer nivel que atiende inicialmente al cliente hasta niveles superiores.",,Agusto Aguanti,minuta-03-area-soporte-psa,Soporte,Should,-
+17,17.1,"Cuando se identifique un error de tipo bug o de implementación, permitir elevar el ticket a Ingeniería, asociándolo a una tarea del equipo de desarrollo.",,Agusto Aguanti,minuta-03-area-soporte-psa,Soporte,Should,-
+17,17.2,Cuando se identifique un error de usuario o similar (no bug) permitir elevar el ticket al siguiente eslabón de soporte,,Agusto Aguanti,minuta-03-area-soporte-psa,Soporte,Should,
+17,17.3,Permitir vincular varios tickets de distintos clientes con una misma tarea cuando el error sea común.,RF,Agusto Aguanti,minuta-03-area-soporte-psa,Soporte,Should,-
+17,17.4,Permitir a los ingenieros de soporte crear tareas para los desarrolladores de los proyectos.,,Agusto Aguanti,minuta-03-area-soporte-psa,Soporte,Must,
+18,,Integrarse con la gestión de clientes (CRM) y el procesamiento de facturas (ERP).,,Ricardo Ratio,minuta-02-gerente-finanzas-psa,Finanzas,Must,
+18,18.1,Vincular facturas a proyectos específicos.,,Ricardo Ratio,minuta-02-gerente-finanzas-psa,Finanzas,Must,
+18,18.2,Permitir asignar costos no laborales como servidores o capacitaciones a proyectos mediante facturas.,,Ricardo Ratio,minuta-02-gerente-finanzas-psa,Finanzas,Should,
+,18.3,Consultar facturas de ERP,,Ricardo Ratio,minuta-02-gerente-finanzas-psa,Finanzas,Must,
+19,,Permitir la interoperabilidad con Microsoft Project.,,Ricardo Ratio,minuta-02-gerente-finanzas-psa,Finanzas,Must,
+19,19.1,Permitir exportar información a Microsoft Project para compartirla con externos.,,Ricardo Ratio,minuta-02-gerente-finanzas-psa,Finanzas,Must,
+19,19.2,Permitir importar datos desde Microsoft Project.,,Ricardo Ratio,minuta-02-gerente-finanzas-psa,Finanzas,Must,
+20,,Proporcionar una interfaz de comunicación bajo el protocolo REST para facilitar el intercambio de información entre los distintos módulos y productos.,RF,Tomas Bruneleschi,minuta-06-po-psa,General,Must,
+20,20.1,Consultar al módulo externo que contiene a la pool de desarolladores disponibles a la hora de asignar recursos,RF,Tomas Bruneleschi,minuta-06-po-psa,General,Could,
+21,,"Proporcionar acceso a datos en tiempo real, no solo a través de reportes periódicos.",,Ricardo Ratio,minuta-02-gerente-finanzas-psa,Finanzas,Must,
+21,21.1,"Permitir filtrar datos según tipo de proyecto, equipo y empleado.",,Ricardo Ratio,minuta-02-gerente-finanzas-psa,Finanzas,Must,
+21,21.2,Proporcionar reportes sobre la rentabilidad de los proyectos.,,Ricardo Ratio,minuta-02-gerente-finanzas-psa,Finanzas,Must,-
+22,,Implementar un sistema de alertas.,,Tomas Bruneleschi,minuta-06-po-psa,Finanzas,Must,-
+22,22.1,Generar alertas sobre tickets vencidos.,,Tomas Bruneleschi,minuta-06-po-psa,Finanzas,Must,-
+22,22.2,Proveer información sobre el promedio de fallas o bugs de los proyectos para prevenir la insatisfacción de los clientes.,,Tomas Bruneleschi,minuta-06-po-psa,Soporte,Should,-
+23,,La herramienta debe ser adaptable para clientes externos,,CEO,minuta-01-ceo-psa,Ventas,Should,-
