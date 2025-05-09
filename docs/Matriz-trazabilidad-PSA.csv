@@ -1,5 +1,4 @@
-ID,ID,Requerimiento,Tipo,Interesado/s,Minuta,Módulo,Prioridad (MoSCoW),User stories
-,,Donde digo que esta pidiendo el usuario,RF,Quien lo pidio o le interesa,Link a la minuta de reunion y/o fecha de la misma,Proyectos,Must,Identificación de la o las User Stories asociadas al requerimiento
+ID,SUB-ID,Requerimiento,Tipo,Interesado/s,Minuta,Módulo,Prioridad (MoSCoW),User stories
 1,,Asignar un identificador único a cada proyecto que no sea el nombre.,,Maximiliano Gant,minuta-04-gerencia-operaciones-psa,Proyectos,Must,-
 2,,Permitir asociar cada proyecto a un cliente específico o marcarlo como interno.,,Maximiliano Gant,minuta-04-gerencia-operaciones-psa,Proyectos,Must,-
 3,,Registrar para cada proyecto fechas de inicio y fin estimadas.,,Maximiliano Gant,minuta-04-gerencia-operaciones-psa,Proyectos,Must,-
