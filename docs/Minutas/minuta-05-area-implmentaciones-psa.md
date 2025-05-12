@@ -5,7 +5,7 @@
 - **Nombre de la reunión**: Entrevista para obtención de requisitos - Área de Implementaciones
 - **Fecha**: 24/04/2025
 - **Hora de inicio/fin**: 21:07 - 21:25
-- **Lugar**: Google Meet
+- **Lugar**: Zoom.
 - **Convocante**: Gustavo Cuchina
 
 ## Asistentes
