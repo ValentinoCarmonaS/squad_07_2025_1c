@@ -5,7 +5,7 @@
 - **Nombre de la reunión**: Entrevista para obtención de requisitos - Herramienta de gestión de incidentes
 - **Fecha**: 24/04/2025
 - **Hora de inicio/fin**: 20:00 - 20:24
-- **Lugar**: Google Meet
+- **Lugar**: Zoom.
 
 ## Asistentes
 
