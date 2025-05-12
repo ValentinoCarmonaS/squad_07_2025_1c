@@ -4,7 +4,13 @@
 PSA enfrenta una gestión fragmentada de proyectos y soporte debido al uso de herramientas dispares por parte de los equipos de operaciones, finanzas y soporte, lo que genera esfuerzo adicional para consolidar información. Con el proceso de expansión y la competencia creciente, se requiere una solución que optimice procesos internos y abra oportunidades de comercialización.
 
 ## Objetivo  
-Desarrollar un Módulo de Gestión Unificada (MGU) como MVP en 15 semanas, que unifique la gestión de proyectos (desarrollo e implementaciones), soporte a clientes e información financiera, con potencial de adaptarse para clientes externos e integrarse con la suite de PSA (ERP, CRM).
+Desarrollar un Módulo de Gestión Unificada (MGU) como MVP en 15 semanas, que unifique la gestión de proyectos (desarrollo e implementaciones), soporte a clientes e información financiera, con potencial de adaptarse para clientes externos e integrarse con la suite de PSA (ERP, CRM). La consecuencia deseada es obtener una ventaja competitiva por sobre los competidores gracias a la centralizacón de la información de la empresa.
+
+### Estrategia
+
+- Incorporar nuevo producto de Sistema de Gestion a la cartera existente de PSA.
+- Utilizar a PSA como primer cliente para validad la solucion propuesta (_eat your own dog food_).
+- Utilizar a los lideres y especialestas de PSA para diseñar la solucion.
 
 ### Usuarios  
 - **Internos:**  
