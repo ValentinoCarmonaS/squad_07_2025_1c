@@ -5,7 +5,7 @@
 - **Nombre de la reunión**: Entrevista para obtención de requisitos - Módulo de proyectos
 - **Fecha**: 24/04/2025
 - **Hora de inicio/fin**: 20:30 - 21:07
-- **Lugar**: Google Meet
+- **Lugar**: Zoom.
 - **Convocante**: Maximiliano Gant
 
 ## Asistentes
