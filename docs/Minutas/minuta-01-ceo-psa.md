@@ -1,7 +1,7 @@
 # Minuta de la Reunión - 7 de abril de 2025
 
 **Asistentes:** CEO y equipo de trabajo.  
-**Lugar:** Google Meet.  
+**Lugar:** Zoom.  
 **Fecha:** 7 de abril de 2025.  
 **Hora:** 18:30 - 18:40.  
 
