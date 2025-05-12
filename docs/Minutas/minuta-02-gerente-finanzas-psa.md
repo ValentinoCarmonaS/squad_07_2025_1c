@@ -5,7 +5,7 @@
 - **Nombre de la reunión**: Entrevista para recolección de requisitos del nuevo software
 - **Fecha**: 10/04/2025
 - **Hora de inicio - fin**: 20:41 - 21:20
-- **Lugar**: Google Meet
+- **Lugar**: Zoom.
 
 ## **Asistentes**
 
