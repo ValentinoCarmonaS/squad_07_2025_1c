@@ -24,8 +24,6 @@ Recolectar los requisitos clave del Gerente de Finanzas para el desarrollo de un
 - ERP: Enterprise Resource Planning (sistema en uso actual)
 - _time and material_: Tipo de contrato donde se cobra por el tiempo y materiales utilizados en el proyecto.
 - _fixed priced_ o "llave en mano": Tipo de contrato donde se cobra un precio fijo por el proyecto, independientemente del tiempo y materiales utilizados.
-- subfacturacion: Cuando se declara un valor de una mercancia por debajo de su precio real.
-- Acuerdos de nivel de servicio: contrato formal que define los estándares de calidad y desempeño que un proveedor de servicios se compromete a cumplir con un cliente. En particular, finanzas se concentra en el tiempo en vivo.
 
 ## **Temas tratados**
 
