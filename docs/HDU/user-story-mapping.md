@@ -63,7 +63,7 @@ Visualizar un tablero de proyectos
 | Pasos                             | Sería interesante que...                                                                                   | Variaciones                              | Excepciones                                          | Necesidades diferentes                                    | Priority |
 |-----------------------------------|------------------------------------------------------------------------------------------------------------|------------------------------------------|------------------------------------------------------|----------------------------------------------------------|----------|
 | Navegar al módulo de proyectos    | El sistema resalte el módulo de proyectos si hay proyectos críticos en riesgo.                             |                                          | Usuario sin permisos, mostrar mensaje de error.      |                                                          | Could     |
-| Seleccionar la vista de tablero   | El sistema permita cambiar entre vista Kanban, lista o calendario.                                         | Vista Kanban, lista o calendario.        |                                                      |                                                          | Must     |
+| Seleccionar la vista de tablero | <br/>Configurar nombre, orden y cantidad de columnas.<br>El sistema permita cambiar entre vista Kanban, lista o calendario. | Vista Kanban, lista o calendario.<br/>Elegir modelo Waterfall (fases secuenciales). ||| Must     |
 | Ver el estado de los proyectos    | Las tarjetas muestren información adicional como responsable y fecha estimada al pasar el cursor.         | Personalizar columnas del tablero.       | No hay proyectos en una columna.                     | Proyectos con riesgos podrían resaltarse en rojo.        | Must     |
 | Filtrar o buscar proyectos        | El sistema permita filtrar por cliente, responsable o tipo de proyecto, y buscar por nombre o ID.         | Filtrar por múltiples criterios.         | No hay resultados para el filtro/búsqueda.           |                                                          | Should   |
 | Mover proyectos entre columnas    | El sistema avise si el proyecto no cumple criterios para cambiar de estado (ej. tareas pendientes).       |                                          | Proyecto bloqueado por dependencias.                 |                                                          | Must     |
@@ -162,3 +162,32 @@ Registrar tiempos de proyectos de customización
 | Adjuntar plan de contingencia     | Permita vincular tareas o hitos del proyecto como parte de la contingencia.             | Relación con otras partes del sistema                | Contingencia aún no definida                      |                                                             | Should   |
 | Guardar y visualizar riesgos      | Se permita ordenar y filtrar por criticidad, impacto o estado.                          | Tabla de riesgos, indicadores visuales               | Ningún riesgo guardado                            | Poder exportar los riesgos en PDF/Excel para reuniones.    | Must     |
 | Editar o eliminar riesgos         | El sistema mantenga historial de cambios por auditoría.                                 | Registro de versiones de cada riesgo                 | Usuario sin permisos de edición                   |                                                             | Must     |
+
+---
+
+## 6. Seguimiento de horas trabajadas contra tareas
+
+| Qué                                          | Quién                | Por qué                                          |
+|----------------------------------------------|----------------------|--------------------------------------------------|
+| Se desea implementar un mecanismo para el seguimiento de horas trabajadas contra tareas | Maximiliano Gant     | Para garantizar la precisión en los costos       |
+
+**Como Maximiliano Gant, quiero implementar un mecanismo para el seguimiento de horas trabajadas contra tareas, para que se garantice la precisión en los costos.**
+
+Seguimiento de horas trabajadas contra tareas
+
+| Pasos                                                                                     | Actividades                   |
+|-------------------------------------------------------------------------------------------|-------------------------------|
+| 1. Seleccionar un proyecto<br>2. Seleccionar una tarea específica del proyecto<br>        | Selección del proyecto y tarea |
+| 3. Registrar las horas trabajadas en la tarea<br>                                         | Registro de horas             |
+| 4. Guardar los datos registrados<br>                                                      | Guardado de datos             |
+| 5. Revisar o ajustar las horas registradas<br>                                            | Revisión y ajustes            |
+| 6. Generar un reporte de horas trabajadas para validar costos<br>                         | Validación de costos          |
+
+| Pasos                             | Sería interesante que...                                                                                   | Variaciones                              | Excepciones                                          | Necesidades diferentes                                    | Priority |
+|-----------------------------------|------------------------------------------------------------------------------------------------------------|------------------------------------------|------------------------------------------------------|----------------------------------------------------------|----------|
+| Seleccionar un proyecto || Filtrar por cliente o responsable.       | No hay proyectos disponibles.                        | Podría seleccionarse desde un tablero Kanban.            | Must     |
+| Seleccionar una tarea específica  | El sistema muestre las tareas asociadas al proyecto con su estado (iniciada, no iniciada, terminada).      | Filtrar tareas por estado o responsable. | No hay tareas asociadas al proyecto.                 | Seleccionar múltiples tareas para registrar en lote.     | Must     |
+| Registrar las horas trabajadas    | El sistema permita registrar horas manualmente.                                 | Registro por día o por semana.           | Horas no ingresadas o inválidas (negativas).         | Registrar horas por equipo en lugar de individual.       | Must     |
+| Guardar los datos registrados     | El sistema valide que las horas registradas sumen correctamente con la estimación total del proyecto.      |                                          ||                                                          | Must     |
+| Revisar o ajustar las horas       | El sistema muestre un historial de cambios y permita ajustes por tarea con justificación.                  | Ajuste automático por desviación.        | Sin permisos para modificar horas registradas.       | Revisión por cliente en lugar de gerente.                | Should   |
+| Generar un reporte de horas       | El sistema permita exportar el reporte en formato PDF o CSV para facturación.                              | Reporte por proyecto o por cliente.      || Incluir costos asociados a servicios en la nube.         | Should   |
