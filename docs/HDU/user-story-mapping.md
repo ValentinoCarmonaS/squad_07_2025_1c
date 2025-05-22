@@ -55,9 +55,39 @@ Visualizar un tablero de proyectos
 
 | Pasos                             | Sería interesante que...                                                                                   | Variaciones                              | Excepciones                                          | Necesidades diferentes                                    | Priority |
 |-----------------------------------|------------------------------------------------------------------------------------------------------------|------------------------------------------|------------------------------------------------------|----------------------------------------------------------|----------|
-| Navegar al módulo de proyectos    | El sistema resalte el módulo de proyectos si hay proyectos críticos en riesgo.                             |                                          | Usuario sin permisos, mostrar mensaje de error.      |                                                          | Must     |
+| Navegar al módulo de proyectos    | El sistema resalte el módulo de proyectos si hay proyectos críticos en riesgo.                             |                                          | Usuario sin permisos, mostrar mensaje de error.      |                                                          | Could     |
 | Seleccionar la vista de tablero   | El sistema permita cambiar entre vista Kanban, lista o calendario.                                         | Vista Kanban, lista o calendario.        |                                                      |                                                          | Must     |
 | Ver el estado de los proyectos    | Las tarjetas muestren información adicional como responsable y fecha estimada al pasar el cursor.         | Personalizar columnas del tablero.       | No hay proyectos en una columna.                     | Proyectos con riesgos podrían resaltarse en rojo.        | Must     |
 | Filtrar o buscar proyectos        | El sistema permita filtrar por cliente, responsable o tipo de proyecto, y buscar por nombre o ID.         | Filtrar por múltiples criterios.         | No hay resultados para el filtro/búsqueda.           |                                                          | Should   |
 | Mover proyectos entre columnas    | El sistema avise si el proyecto no cumple criterios para cambiar de estado (ej. tareas pendientes).       |                                          | Proyecto bloqueado por dependencias.                 |                                                          | Must     |
 | Ver detalles de un proyecto específico        | El sistema permita agregar comentarios o actualizar información directamente desde la vista de detalles.   |                                          |                                                      | Podría haber una vista simplificada para clientes.       | Should   |
+
+---
+
+## 3. Registrar tiempos de proyectos de customización
+
+| Qué                                          | Quién                | Por qué                                          |
+|----------------------------------------------|----------------------|--------------------------------------------------|
+| Se desea registrar tiempos de análisis, diseño y desarrollo | Maximiliano Gant     | Para controlar el esfuerzo invertido             |
+
+**Como Maximiliano Gant, quiero registrar tiempos de análisis, diseño y desarrollo para proyectos de customización, para que se controle el esfuerzo invertido.**
+
+Registrar tiempos de proyectos de customización
+
+| Pasos                                                                                     | Actividades                   |
+|-------------------------------------------------------------------------------------------|-------------------------------|
+| 1. Ver proyectos existentes<br>2. Seleccionar un proyecto de customización<br>             | Selección del proyecto        |
+| 3. Estimar tiempos iniciales para las fases (análisis, diseño, desarrollo)<br>             | Registro de tiempos           |
+| 4. Identificar las fases (análisis, diseño, desarrollo)<br>5. Registrar el tiempo invertido en cada fase | Registro de tiempos           |
+| 6. Guardar los datos registrados<br>                                                      | Guardado de datos             |
+| 7. Revisar o ajustar los tiempos registrados<br>                                          | Revisión y ajustes            |
+
+| Pasos                             | Sería interesante que...                                                                                   | Variaciones                              | Excepciones                                          | Necesidades diferentes                                    | Priority |
+|-----------------------------------|------------------------------------------------------------------------------------------------------------|------------------------------------------|------------------------------------------------------|----------------------------------------------------------|----------|
+| Ver proyectos existentes          | Se puedan filtrar proyectos de customización.                                   | Filtrar por múltiples criterios.         | No hay proyectos de customización.       | Mostrar también proyectos de nuevas funcionalidades.     | Should   |
+| Seleccionar un proyecto de customización ||||Permitir registrar tiempos de análisis, diseño y desarrollo. | Must     |
+| Estimar tiempos iniciales         |                                            | Estimar por fase o por tarea.            | Estimación no proporcionada por el usuario.           |                                                          | Should   |
+| Identificar las fases             | El sistema sugiera fases predeterminadas (análisis, diseño, desarrollo).                                   | Incluir fases adicionales (pruebas).     |                                                      |                                                          | Must     |
+| Registrar el tiempo invertido     | El sistema permita ingresar tiempo manualmente o usar un temporizador.                                     | Registro por día o por semana.           | Tiempo no ingresado o inválido (negativo).           |      | Must     |
+| Guardar los datos registrados     | El sistema confirme el guardado, avise si hay datos incompletos y valide la sumatoria de horas con la estimación total. |                                          |                |                                                          | Must     |
+| Revisar o ajustar los tiempos     | El sistema muestre un historial de ajustes y permita ajustar la estimacion.                       |   | Sin permisos para modificar tiempos registrados.     | Revisión por cliente en lugar de gerente.                | Should   |
