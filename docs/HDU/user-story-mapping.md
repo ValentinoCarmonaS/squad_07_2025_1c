@@ -46,20 +46,18 @@ Visualizar un tablero de proyectos
 
 | Pasos                                                                                     | Actividades                   |
 |-------------------------------------------------------------------------------------------|-------------------------------|
-| 1. Ingresar al sistema<br>                                                                | Acceso al sistema             |
-| 2. Navegar al módulo de proyectos<br>                                                     | Navegación                    |
-| 3. Seleccionar la vista de tablero<br>                                                    | Selección de vista            |
-| 4. Ver el estado de los proyectos en columnas (inicio, desarrollo, transición)<br>       | Visualización del tablero     |
-| 5. Filtrar o buscar proyectos específicos<br>                                             | Filtrado y búsqueda           |
-| 6. Mover proyectos entre columnas<br>7. Ver detalles al hacer clic en un proyecto<br>    | Interacción con el tablero    |
+| 1. Navegar al módulo de proyectos<br>                                                     | Navegación                    |
+| 2. Seleccionar la vista de tablero<br>                                                    | Selección de vista            |
+| 3. Ver el estado de los proyectos en columnas (inicio, desarrollo, transición)<br>       | Visualización del tablero     |
+| 4. Filtrar o buscar proyectos específicos<br>                                             | Filtrado y búsqueda           |
+| 5. Mover proyectos entre columnas<br>7. Ver detalles de un proyecto específico<br>    | Interacción con el tablero    |
 
 
 | Pasos                             | Sería interesante que...                                                                                   | Variaciones                              | Excepciones                                          | Necesidades diferentes                                    | Priority |
 |-----------------------------------|------------------------------------------------------------------------------------------------------------|------------------------------------------|------------------------------------------------------|----------------------------------------------------------|----------|
-| Ingresar al sistema               ||                                          | Credenciales incorrectas, mostrar mensaje de error.  |                                                          | Must     |
 | Navegar al módulo de proyectos    | El sistema resalte el módulo de proyectos si hay proyectos críticos en riesgo.                             |                                          | Usuario sin permisos, mostrar mensaje de error.      |                                                          | Must     |
 | Seleccionar la vista de tablero   | El sistema permita cambiar entre vista Kanban, lista o calendario.                                         | Vista Kanban, lista o calendario.        |                                                      |                                                          | Must     |
 | Ver el estado de los proyectos    | Las tarjetas muestren información adicional como responsable y fecha estimada al pasar el cursor.         | Personalizar columnas del tablero.       | No hay proyectos en una columna.                     | Proyectos con riesgos podrían resaltarse en rojo.        | Must     |
 | Filtrar o buscar proyectos        | El sistema permita filtrar por cliente, responsable o tipo de proyecto, y buscar por nombre o ID.         | Filtrar por múltiples criterios.         | No hay resultados para el filtro/búsqueda.           |                                                          | Should   |
 | Mover proyectos entre columnas    | El sistema avise si el proyecto no cumple criterios para cambiar de estado (ej. tareas pendientes).       |                                          | Proyecto bloqueado por dependencias.                 |                                                          | Must     |
-| Ver detalles al hacer clic        | El sistema permita agregar comentarios o actualizar información directamente desde la vista de detalles.   |                                          |                                                      | Podría haber una vista simplificada para clientes.       | Should   |
+| Ver detalles de un proyecto específico        | El sistema permita agregar comentarios o actualizar información directamente desde la vista de detalles.   |                                          |                                                      | Podría haber una vista simplificada para clientes.       | Should   |
