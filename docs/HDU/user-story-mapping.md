@@ -129,3 +129,36 @@ Registrar tiempos de proyectos de customización
 	- **Como Gerente de Proyecto quiero definir las horas estimadas de una tarea para indicar cuánto tiempo se espera dedicarle.**
 	- **Como Gerente de Proyecto quiero asignar etiquetas a una tarea para filtrar y describir mejor a la tarea.**
 	- **Como Gerente de Proyecto quiero que el sistema valide que todos los campos obligatorios estén completos antes de guardar la tarea.**
+
+
+## 5. Asociar riesgos a proyectos con planes de mitigación y contingencia
+
+| Qué                                                               | Quién              | Por qué                                                                 |
+|-------------------------------------------------------------------|--------------------|-------------------------------------------------------------------------|
+| Asociar riesgos a los proyectos con planes de mitigación y contingencia | Maximiliano Gant   | Para que se gestione adecuadamente cualquier problema                   |
+
+**Como Maximiliano Gant, quiero asociar riesgos a cada proyecto con planes de mitigación y contingencia, para que se gestione adecuadamente cualquier problema.**
+
+### Asociar riesgos a proyectos
+
+| Pasos                                                                                      | Actividades                         |
+|--------------------------------------------------------------------------------------------|-------------------------------------|
+| 1. Ingresar al detalle de un proyecto                                                      | Navegación                          |
+| 2. Acceder a la sección de gestión de riesgos                                              | Visualización de módulo             |
+| 3. Registrar un nuevo riesgo identificado                                                  | Registro de información             |
+| 4. Ingresar descripción, categoría, impacto y probabilidad                                 | Carga de datos                      |
+| 5. Adjuntar plan de mitigación                                                             | Gestión de mitigación               |
+| 6. Adjuntar plan de contingencia                                                           | Gestión de contingencia             |
+| 7. Guardar y visualizar todos los riesgos registrados                                      | Confirmación y visualización        |
+| 8. Editar o eliminar riesgos existentes                                                    | Edición y mantenimiento             |
+
+| Pasos                             | Sería interesante que...                                                                 | Variaciones                                           | Excepciones                                       | Necesidades diferentes                                     | Priority |
+|-----------------------------------|------------------------------------------------------------------------------------------|-------------------------------------------------------|---------------------------------------------------|-------------------------------------------------------------|----------|
+| Ingresar al detalle de un proyecto| Se pueda acceder rápidamente desde el tablero o listado de proyectos.                   | Acceso desde diferentes vistas                        | Proyecto inexistente o sin permisos               | Acceso simplificado para perfiles de seguimiento.          | Must     |
+| Acceder a la sección de riesgos   | El sistema notifique si hay riesgos críticos sin plan de mitigación.                    | Vista de riesgos por estado o criticidad              | No existen riesgos cargados aún                   |                                                             | Should   |
+| Registrar un nuevo riesgo         | Se pueda duplicar un riesgo existente para acelerar carga.                              | Crear desde cero o duplicar                          | Falta de campos obligatorios                      |                                                             | Could    |
+| Ingresar descripción y detalles   | Los campos tengan ejemplos o ayudas contextuales.                                       | Campos de texto, listas desplegables, adjuntos       | Validación de campos vacíos                       | Riesgos generales que se heredan entre proyectos.          | Must     |
+| Adjuntar plan de mitigación       | Se sugieran estrategias comunes según el tipo de riesgo.                                | Texto libre o plantilla guiada                       | Riesgo no requiere mitigación (bajo impacto)      |                                                             | Should   |
+| Adjuntar plan de contingencia     | Permita vincular tareas o hitos del proyecto como parte de la contingencia.             | Relación con otras partes del sistema                | Contingencia aún no definida                      |                                                             | Should   |
+| Guardar y visualizar riesgos      | Se permita ordenar y filtrar por criticidad, impacto o estado.                          | Tabla de riesgos, indicadores visuales               | Ningún riesgo guardado                            | Poder exportar los riesgos en PDF/Excel para reuniones.    | Must     |
+| Editar o eliminar riesgos         | El sistema mantenga historial de cambios por auditoría.                                 | Registro de versiones de cada riesgo                 | Usuario sin permisos de edición                   |                                                             | Must     |
