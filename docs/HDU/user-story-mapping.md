@@ -1,5 +1,3 @@
-# Generales
-
 # Proyectos
 
 ## 1. Crear un proyecto de desarrollo
@@ -7,6 +5,7 @@
 | Qué                                    | Quién                | Por qué                                 |
 | -------------------------------------- | -------------------- | --------------------------------------- |
 | Se desea poder crear un proyecto nuevo | Gerente de Proyectos | Para poder comenzar un nuevo desarrollo |
+**Como Gerente de Proyectos quiero registrar un nuevo proyecto de un cliente para empezar el desarrollo.**
 
 | Pasos                                                                                                                                                                                                                      | Actividades                                     |
 | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------- |
@@ -27,19 +26,6 @@
 | Asignar un equipo de trabajo y responsables iniciales | Se pueda consultar al servicio externo de recursos que usa PSA para elegir los equipos de trabajo iniciales.<br>Se pueda editar luego los recursos y asignar más o menos.                                                                                   |                                                            | No se conocen los equipos disponibles.                                               |                                                                              | Could     |
 | Guardar el proyecto                                   | El sistema me advirtiera si alguna característica obligatoria no ha sido completada.<br>El sistema me advirtiera si alguna característica que no sea conveniente dejar en blanco no ha sido completada.                                                   |                                                            |                                                                                      |                                                                              | Must      |
 | Visitar la vista del proyecto con sus características |                                                                                                                                                                                                                                                            | Vista de gerente ≠ vista de cliente                        | Se puede querer omitir esta parte del flujo de esta actividad.                       |                                                                              | Could     |
-
-### US: Crear un proyecto en desarrollo
-- **Como Gerente de Proyectos quiero registrar un nuevo proyecto de un cliente para empezar el desarrollo.**
-	- **Como Gerente de Proyecto quiero consultar proyectos existentes para evitar duplicados y revisar trabajos previos con el cliente.**
-	- **Como Gerente de Proyecto quiero ver si el cliente es nuevo o no para decidir si necesito crear un registro de cliente.**
-	- **Como Gerente de Proyecto quiero crear un cliente si no existe o al menos usar su email para asignarlo a un proyecto.**
-	- **Como Gerente de Proyecto quiero definir un nombre para un nuevo proyecto para facilitar su identificación.**
-	- **Como Gerente de Proyecto quiero asignar el tipo de proyecto.** 
-	- **Como Gerente de Proyecto quiero definir una fecha de inicio y fin estimadas.**
-	- **Como Gerente de Proyecto quiero etiquetas a un proyecto para filtrar y describir mejor el proyecto.**
-	- **Como Gerente de Proyecto quiero asignar responsables a un proyecto para definir quiénes estarán involucrados en el proyecto de principio a fin.**
-	- - **Como Gerente de Proyecto quiero que el sistema valide que todos los campos obligatorios estén completos antes de guardar el proyecto.**
-	- **Como Gerente de Proyecto quiero acceder a la vista detallada del proyecto recién creado para verificar que la información sea correcta.**---
 
 ## 2. Visualizar un tablero de proyectos
 
@@ -102,6 +88,11 @@ Registrar tiempos de proyectos de customización
 
 ## 4. Crear una tarea desde un proyecto
 
+| Qué                                                    | Quién               | Por qué                                |
+| ------------------------------------------------------ | ------------------- | -------------------------------------- |
+| Se desea crear una tarea desde la vista de un proyecto | Gerente de Proyecto | Para organizar el trabajo del proyecto |
+**Como Gerente de Proyecto quiero asignar tareas a un proyecto para organizar el trabajo del mismo.**
+
 | Pasos                                                                                                                                                                                                                                 | Actividades                   |
 | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------- |
 | 1. Ver proyectos existentes<br>2. Elegir un proyecto                                                                                                                                                                                  | Revisar información existente |
@@ -117,18 +108,7 @@ Registrar tiempos de proyectos de customización
 | Definir horas estimadas      |                                                                                                                                                                                                         |                                                   |                                        |                        | Must      |
 | Asignar etiquetas a la tarea | Ofrezca las opciones existentes y la posibilidad de crear una nueva.                                                                                                                                    | Tipos de tag. Ejemplos: "BDD", "Docker", "DevOps" |                                        |                        | Must      |
 | Guardar la tarea             | El sistema me advirtiera si alguna característica obligatoria no ha sido completada.<br>El sistema me advirtiera si alguna característica que no sea conveniente dejar en blanco no ha sido completada. |                                                   |                                        |                        |           |
-|                              |                                                                                                                                                                                                         |                                                   |                                        |                        |           |
 
-### US: Crear una tarea desde un proyecto
-- **Como Gerente de Proyecto quiero asignar tareas a un proyecto para organizar el trabajo del mismo.**
-	- - **Como Gerente de Proyecto quiero consultar proyectos existentes para seleccionar el proyecto al cual asignar la nueva tarea.**
-	- **Como Gerente de Proyecto quiero seleccionar un proyecto específico para crear tareas dentro de él.**
-	- **Como Gerente de Proyecto quiero definir el nombre de una tarea a un proyecto para facilitar su identificación.**
-	- **Como Gerente de Proyecto quiero asignar recursos a una tarea a un proyecto para que se pueda distribuir y organizar la carga de trabajo.**
-	- **Como Gerente de Proyecto quiero definir el estado de una tarea para visualizar con facilidad cuánto falta para terminar un proyecto.**
-	- **Como Gerente de Proyecto quiero definir las horas estimadas de una tarea para indicar cuánto tiempo se espera dedicarle.**
-	- **Como Gerente de Proyecto quiero asignar etiquetas a una tarea para filtrar y describir mejor a la tarea.**
-	- **Como Gerente de Proyecto quiero que el sistema valide que todos los campos obligatorios estén completos antes de guardar la tarea.**
 
 
 ## 5. Asociar riesgos a proyectos con planes de mitigación y contingencia
@@ -191,3 +171,27 @@ Seguimiento de horas trabajadas contra tareas
 | Guardar los datos registrados     | El sistema valide que las horas registradas sumen correctamente con la estimación total del proyecto.      |                                          ||                                                          | Must     |
 | Revisar o ajustar las horas       | El sistema muestre un historial de cambios y permita ajustes por tarea con justificación.                  | Ajuste automático por desviación.        | Sin permisos para modificar horas registradas.       | Revisión por cliente en lugar de gerente.                | Should   |
 | Generar un reporte de horas       | El sistema permita exportar el reporte en formato PDF o CSV para facturación.                              | Reporte por proyecto o por cliente.      || Incluir costos asociados a servicios en la nube.         | Should   |
+
+
+
+## 7. Visualizar tareas de un proyecto
+
+| Qué                                                     | Quién                       | Por qué                                                                 |
+| ------------------------------------------------------- | --------------------------- | ----------------------------------------------------------------------- |
+| Se desea registrar visualizar las tareas de un proyecto | Cualquier miembro de PMTool | Para controlar el estado, la distribución de trabajo, tiempo y recursos |
+
+| Pasos                                                                                                                                                                     | Actividades             |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------- |
+| 1. Elegir un proyecto                                                                                                                                                     | Seleccionar el proyecto |
+| 2. Ver tareas en forma de listado<br>3. Filtrar y ordenar tareas por estado, fecha fin, etiquetas<br>4. Buscar tareas por nombre<br>5. Buscar tareas por recurso asignado | Visualizar la tarea     |
+
+| Pasos                                                     | Sería interesante que...                                                                                                                                                                                      | Variaciones                                  | Excepciones                 | Necesidades diferentes | Prioridad |
+| --------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------- | --------------------------- | ---------------------- | --------- |
+| Elegir un proyecto                                        |                                                                                                                                                                                                               |                                              | No existen proyectos.       |                        | Must      |
+| Ver tareas en forma de listado                            | Se pueda visualizar las tareas en una lista con su nombre, estado y demás atributos separados por columnas                                                                                                    |                                              |                             |                        | Must      |
+| Filtrar y ordenar tareas por estado, fecha fin, etiquetas | El sistema ordene alfanuméricamente y por fechas los campos que se decidan ordenar. <br>El sistema permita filtrar por estado, fecha fin y etiquetas para visualizar unicamente un subconjunto de las tareas. |                                              |                             |                        | Must      |
+| Buscar tareas por nombre                                  | El sistema permita filtrar tareas por nombre en un barra de búsqueda<br>                                                                                                                                      |                                              |                             |                        | Must      |
+| Buscar tareas por recurso asignado                        | El sistema permita filtrar tareas por recursos asignados (trabajadores) en un barra de búsqueda                                                                                                               | Nombre específico o "Sin recursos asignados" | No tiene recursos asignados |                        | Could     |
+
+
+
