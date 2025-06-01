@@ -9,7 +9,7 @@ CREATE TABLE tasks (
     assigned_resource_id INT, -- ID del recurso asignado del sistema externo (NO es FK)
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    due_date DATE,
+    due_date DATE
 );
 
 -- Tabla para relacionar tareas con tickets del módulo de soporte
