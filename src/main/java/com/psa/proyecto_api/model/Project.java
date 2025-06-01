@@ -159,6 +159,7 @@ public class Project {
      */
     public int getTotalEstimatedHoursFromTasks() {
         // Pendiente de implementación
+        return 1;
     }
     
     /**
