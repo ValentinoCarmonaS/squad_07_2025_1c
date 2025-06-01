@@ -19,11 +19,13 @@ import java.util.Objects;
            @Index(name = "idx_task_tags_task_id", columnList = "task_id"),
            @Index(name = "idx_task_tags_name", columnList = "tag_name")
        })
+@Getter // Revisar si es necesario
+@Setter // Revisar si es necesario
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @ToString(exclude = "task")
-class TaskTag {
+public class TaskTag {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

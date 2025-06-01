@@ -1,6 +1,5 @@
 package com.psa.proyecto_api.model;
 
-import com.psa.proyecto_api.model.enums.Priority;
 import com.psa.proyecto_api.model.enums.TaskStatus;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
@@ -24,9 +23,10 @@ import java.util.Objects;
     @Index(name = "idx_tasks_project_id", columnList = "project_id"),
     @Index(name = "idx_tasks_status", columnList = "status"),
     @Index(name = "idx_tasks_assigned_resource", columnList = "assigned_resource_id"),
-    @Index(name = "idx_tasks_priority", columnList = "priority"),
     @Index(name = "idx_tasks_due_date", columnList = "due_date")
 })
+@Getter // Revisar si es necesario
+@Setter // Revisar si es necesario
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder

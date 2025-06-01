@@ -19,6 +19,8 @@ import java.util.Objects;
            @Index(name = "idx_project_tags_project_id", columnList = "project_id"),
            @Index(name = "idx_project_tags_name", columnList = "tag_name")
        })
+@Getter // Revisar si es necesario
+@Setter // Revisar si es necesario
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder

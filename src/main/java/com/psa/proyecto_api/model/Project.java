@@ -32,6 +32,8 @@ import java.util.Objects;
     @Index(name = "idx_projects_leader_id", columnList = "leader_id"),
     @Index(name = "idx_projects_dates", columnList = "start_date, end_date")
 })
+@Getter // Revisar si es necesario
+@Setter // Revisar si es necesario
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -60,7 +62,7 @@ public class Project {
 
     @NotNull(message = "El tipo de facturación es obligatorio")
     @Enumerated(EnumType.STRING)
-    @Column(name = "billing_type", nullable = false)
+    @Column(name = "billingType", nullable = false)
     private ProjectBillingType billingType;
     
     @NotNull(message = "La fecha de inicio es obligatoria")
