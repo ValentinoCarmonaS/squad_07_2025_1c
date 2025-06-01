@@ -138,6 +138,7 @@ public class Task {
      */
     public boolean isOverdue() {
         // Pendiente de implementación ### (Y REVISAR SI ES NECESARIO) ###
+        return false;
     }
     
     /**
