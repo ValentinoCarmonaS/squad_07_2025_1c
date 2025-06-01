@@ -6,8 +6,6 @@ CREATE TABLE tasks (
     description TEXT,
     status VARCHAR(50) NOT NULL DEFAULT 'TO_DO' CHECK (status IN ('TO_DO', 'IN_PROGRESS', 'DONE', 'CANCELLED')),
     estimated_hours INT CHECK (estimated_hours > 0),
-    actual_hours INT DEFAULT 0 CHECK (actual_hours >= 0),
-    priority VARCHAR(20) DEFAULT 'MEDIUM' CHECK (priority IN ('LOW', 'MEDIUM', 'HIGH', 'CRITICAL')),
     assigned_resource_id INT, -- ID del recurso asignado del sistema externo (NO es FK)
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
