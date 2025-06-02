@@ -25,8 +25,8 @@ import java.util.Objects;
     @Index(name = "idx_tasks_assigned_resource", columnList = "assigned_resource_id"),
     @Index(name = "idx_tasks_due_date", columnList = "due_date")
 })
-@Getter // Revisar si es necesario
-@Setter // Revisar si es necesario
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -82,35 +82,80 @@ public class Task {
     @Builder.Default
     private List<TaskTicket> taskTickets = new ArrayList<>();
     
-    // Métodos
+    // Métodos de gestión de tags
     
     /**
      * Agrega un tag a la tarea evitando duplicados.
      */
     public void addTag(String tagName) {
-        // Pendiente de implementación
+        if (tagName == null || tagName.trim().isEmpty()) {
+            return;
+        }
+        
+        String normalizedTagName = tagName.trim();
+        
+        // Verificar si el tag ya existe
+        boolean tagExists = taskTags.stream()
+            .anyMatch(taskTag -> taskTag.hasTagName(normalizedTagName));
+            
+        if (!tagExists) {
+            TaskTag newTag = TaskTag.builder()
+                .tagName(normalizedTagName)
+                .task(this)
+                .build();
+            
+            taskTags.add(newTag);
+        }
     }
     
     /**
      * Remueve un tag de la tarea.
      */
     public void removeTag(String tagName) {
-        // Pendiente de implementación
+        if (tagName == null || tagName.trim().isEmpty()) {
+            return;
+        }
+        
+        String normalizedTagName = tagName.trim();
+        taskTags.removeIf(taskTag -> taskTag.hasTagName(normalizedTagName));
     }
+    
+    // Métodos de gestión de tickets
     
     /**
      * Asocia un ticket con la tarea evitando duplicados.
      */
     public void addTicket(Integer ticketId) {
-        // Pendiente de implementación
+        if (ticketId == null) {
+            return;
+        }
+        
+        // Verificar si el ticket ya está asociado
+        boolean ticketExists = taskTickets.stream()
+            .anyMatch(taskTicket -> taskTicket.belongsToTicket(ticketId));
+            
+        if (!ticketExists) {
+            TaskTicket newTaskTicket = TaskTicket.builder()
+                .ticketId(ticketId)
+                .task(this)
+                .build();
+            
+            taskTickets.add(newTaskTicket);
+        }
     }
     
     /**
      * Remueve la asociación con un ticket.
      */
     public void removeTicket(Integer ticketId) {
-        // Pendiente de implementación
+        if (ticketId == null) {
+            return;
+        }
+        
+        taskTickets.removeIf(taskTicket -> taskTicket.belongsToTicket(ticketId));
     }
+    
+    // Métodos de consulta de estado
     
     /**
      * Verifica si la tarea está pendiente por hacer.
@@ -137,8 +182,11 @@ public class Task {
      * Verifica si la tarea está atrasada (fecha vencida y no completada).
      */
     public boolean isOverdue() {
-        // Pendiente de implementación ### (Y REVISAR SI ES NECESARIO) ###
-        return false;
+        if (dueDate == null || isFinished()) {
+            return false;
+        }
+        
+        return LocalDate.now().isAfter(dueDate);
     }
     
     /**
@@ -155,6 +203,78 @@ public class Task {
         return this.id != null && this.id.equals(taskId);
     }
     
+    // Métodos auxiliares para cálculos (Tell, don't ask)
+    
+    /**
+     * Obtiene las horas estimadas o cero si es null.
+     */
+    public int getEstimatedHoursOrZero() {
+        return estimatedHours != null ? estimatedHours : 0;
+    }
+    
+    /**
+     * Retorna 1 si la tarea está finalizada, 0 en caso contrario.
+     * Útil para operaciones de suma en streams.
+     */
+    public long isFinishedAsLong() {
+        return isFinished() ? 1L : 0L;
+    }
+    
+    /**
+     * Retorna 1 si la tarea está activa, 0 en caso contrario.
+     * Útil para operaciones de suma en streams.
+     */
+    public long isActiveAsLong() {
+        return isActive() ? 1L : 0L;
+    }
+    
+    /**
+     * Verifica si la tarea tiene un tag específico.
+     */
+    public boolean hasTag(String tagName) {
+        if (tagName == null || tagName.trim().isEmpty()) {
+            return false;
+        }
+        
+        String normalizedTagName = tagName.trim();
+        return taskTags.stream()
+            .anyMatch(taskTag -> taskTag.hasTagName(normalizedTagName));
+    }
+    
+    /**
+     * Verifica si la tarea está asociada a un ticket específico.
+     */
+    public boolean hasTicket(Integer ticketId) {
+        if (ticketId == null) {
+            return false;
+        }
+        
+        return taskTickets.stream()
+            .anyMatch(taskTicket -> taskTicket.belongsToTicket(ticketId));
+    }
+    
+    /**
+     * Obtiene todos los IDs de tickets asociados a la tarea.
+     */
+    public List<Integer> getTicketIds() {
+        return taskTickets.stream()
+            .map(TaskTicket::getTicketId)
+            .sorted()
+            .toList();
+    }
+    
+    /**
+     * Obtiene todos los nombres de tags de la tarea.
+     */
+    public List<String> getTagNames() {
+        return taskTags.stream()
+            .map(TaskTag::getTagName)
+            .sorted()
+            .toList();
+    }
+    
+    // Métodos de transición de estado
+    
     /**
      * Inicia la tarea cambiando su estado a IN_PROGRESS.
      */
@@ -162,8 +282,6 @@ public class Task {
         if (status == TaskStatus.TO_DO) {
             this.status = TaskStatus.IN_PROGRESS;
         }
-
-        // ### Revisar si se debe hacer algo más al iniciar la tarea. ###
     }
     
     /**
@@ -173,8 +291,6 @@ public class Task {
         if (status == TaskStatus.IN_PROGRESS) {
             this.status = TaskStatus.DONE;
         }
-
-        // ### Revisar si se debe hacer algo más al completar la tarea. ###
     }
     
     // equals y hashCode basados en el ID

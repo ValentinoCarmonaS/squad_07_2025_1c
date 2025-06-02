@@ -19,8 +19,8 @@ import java.util.Objects;
            @Index(name = "idx_task_tags_task_id", columnList = "task_id"),
            @Index(name = "idx_task_tags_name", columnList = "tag_name")
        })
-@Getter // Revisar si es necesario
-@Setter // Revisar si es necesario
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -45,7 +45,24 @@ public class TaskTag {
     @JoinColumn(name = "task_id", nullable = false)
     private Task task;
 
-    // Métodos
+    // Métodos auxiliares
+    
+    /**
+     * Verifica si este tag tiene el nombre especificado (ignorando mayúsculas/minúsculas).
+     */
+    public boolean hasTagName(String name) {
+        if (name == null || this.tagName == null) {
+            return false;
+        }
+        return this.tagName.equalsIgnoreCase(name.trim());
+    }
+    
+    /**
+     * Verifica si este tag pertenece a la tarea especificada.
+     */
+    public boolean belongsToTask(Long taskId) {
+        return this.task != null && this.task.hasId(taskId);
+    }
     
     @Override
     public boolean equals(Object o) {
