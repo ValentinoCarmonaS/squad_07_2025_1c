@@ -1,63 +1,88 @@
 # Proyectos
 
+Las USM se han pensado y actualizado conforme al nuevo alcance de proyecto discutido hasta la reunión de minuta-07-po.
+
 ## 1. Crear un proyecto de desarrollo
 
 | Qué                                    | Quién                | Por qué                                 |
 | -------------------------------------- | -------------------- | --------------------------------------- |
 | Se desea poder crear un proyecto nuevo | Gerente de Proyectos | Para poder comenzar un nuevo desarrollo |
 **Como Gerente de Proyectos quiero registrar un nuevo proyecto de un cliente para empezar el desarrollo.**
-
+ 
 | Pasos                                                                                                                                                                                                                      | Actividades                                     |
 | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------- |
-| 1. Ver proyectos existentes<br>2. Ver listado de clientes<br>                                                                                                                                                              | Revisar información previa                      |
+| 1. Ver proyectos existentes<br>                                                                                                                                                                                            | Revisar información previa                      |
 | 3. Asignar el cliente<br>4. Proveer un nombre para el proyecto<br>5. Decidir el tipo de proyecto<br>6. Planificar las fechas de inicio y fin estimadas<br>                                                                 | Planificación del proyecto a partir del cliente |
 | 7. Asignar un tag<br>8. Asignar un equipo de trabajo y responsables iniciales<br>9. Guardar el proyecto una vez que se han proporcionado los datos necesarios<br>10. Visitar la vista del proyecto con sus características | Planificación interna del proyecto              |
 
-| Pasos                                                 | Sería interesante que...                                                                                                                                                                                                                                   | Variaciones                                                | Excepciones                                                                          | Necesidades diferentes                                                       | Prioridad |
-| ----------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------- | ------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------- | --------- |
-| Ver proyectos existentes                              | Se pueda ver proyectos existentes con el cliente interesado actual                                                                                                                                                                                         |                                                            |                                                                                      |                                                                              | Could     |
-| Ver listado de clientes                               | Se pueda revisar un listado con los clientes                                                                                                                                                                                                               |                                                            |                                                                                      |                                                                              | Could     |
-| Asignar el cliente                                    | Se pueda buscar clientes existentes por nombre o email.<br>El sistema me advirtiera si el cliente no existe.<br>Se pueda crear un cliente o al menos asignarle un email perteneciente al cliente de momento.                                               | Múltiples clientes.<br>Cliente es PSA (desarrollo interno) | No se conoce el cliente.                                                             |                                                                              | Should    |
-| Proveer un nombre para el proyecto                    | El sistema avise si el nombre ya está en uso o existe uno *muy similar*.                                                                                                                                                                                   |                                                            | Si no tiene nombre todavía, el sistema podría asignarle uno en forma de código único |                                                                              | Could     |
-| Decidir el tipo de proyecto                           | Ofrezca las opciones existentes.                                                                                                                                                                                                                           | Por *time and material* o *fixed price*.                   |                                                                                      |                                                                              | Must      |
-| Planificar las fechas de inicio y fin estimadas      | El sistema me advirtiera si las fechas no son compatibles.<br>                                                                                                                                                                                             |                                                            |                                                                                      | Proyectos time and material podrían ser menos estrictos con la fecha de fin. | Could     |
-| Asignar un tag                                        | Ofrezca las opciones existentes y la posibilidad de crear una nueva.                                                                                                                                                                                       | Tipos de tag                                               | No tiene tags.                                                                       |                                                                              | Must      |
-| Asignación de identificador único                     | El sistema asigne un identificador único automáticamente si uno no es provisto por el creador del proyecto. Si el identificador es numérico, use el siguiente número. Si es alfanumérico, puede formularlo a partir del cliente o el título del proyecto |                                                            |                                                                                      |                                                                              | Must      |
-| Asignar un equipo de trabajo y responsables iniciales | Se pueda consultar al servicio externo de recursos que usa PSA para elegir los equipos de trabajo iniciales.<br>Se pueda editar luego los recursos y asignar más o menos.                                                                                   |                                                            | No se conocen los equipos disponibles.                                               |                                                                              | Could     |
-| Guardar el proyecto                                   | El sistema me advirtiera si alguna característica obligatoria no ha sido completada.<br>El sistema me advirtiera si alguna característica que no sea conveniente dejar en blanco no ha sido completada.                                                   |                                                            |                                                                                      |                                                                              | Must      |
-| Visitar la vista del proyecto con sus características |                                                                                                                                                                                                                                                            | Vista de gerente ≠ vista de cliente                        | Se puede querer omitir esta parte del flujo de esta actividad.                       |                                                                              | Could     |
-
-## 2. Visualizar un tablero de proyectos
-
-| Qué                                          | Quién                | Por qué                                          |
-|----------------------------------------------|----------------------|--------------------------------------------------|
-| Se desea visualizar el estado de los proyectos | Maximiliano Gant     | Para seguir el progreso de manera clara          |
-
-**Como Maximiliano Gant, quiero visualizar un tablero de proyectos que muestre el estado de desarrollo, para que pueda seguir el progreso de manera clara.**
-
-Visualizar un tablero de proyectos
-
-| Pasos                                                                                     | Actividades                   |
-|-------------------------------------------------------------------------------------------|-------------------------------|
-| 1. Navegar al módulo de proyectos<br>                                                     | Navegación                    |
-| 2. Seleccionar la vista de tablero<br>                                                    | Selección de vista            |
-| 3. Ver el estado de los proyectos en columnas (inicio, desarrollo, transición)<br>       | Visualización del tablero     |
-| 4. Filtrar o buscar proyectos específicos<br>                                             | Filtrado y búsqueda           |
-| 5. Mover proyectos entre columnas<br>7. Ver detalles de un proyecto específico<br>    | Interacción con el tablero    |
-
-
-| Pasos                             | Sería interesante que...                                                                                   | Variaciones                              | Excepciones                                          | Necesidades diferentes                                    | Priority |
-|-----------------------------------|------------------------------------------------------------------------------------------------------------|------------------------------------------|------------------------------------------------------|----------------------------------------------------------|----------|
-| Navegar al módulo de proyectos    | El sistema resalte el módulo de proyectos si hay proyectos críticos en riesgo.                             |                                          | Usuario sin permisos, mostrar mensaje de error.      |                                                          | Could     |
-| Seleccionar la vista de tablero | <br/>Configurar nombre, orden y cantidad de columnas.<br>El sistema permita cambiar entre vista Kanban, lista o calendario. | Vista Kanban, lista o calendario.<br/>Elegir modelo Waterfall (fases secuenciales). ||| Must     |
-| Ver el estado de los proyectos    | Las tarjetas muestren información adicional como responsable y fecha estimada al pasar el cursor.         | Personalizar columnas del tablero.       | No hay proyectos en una columna.                     | Proyectos con riesgos podrían resaltarse en rojo.        | Must     |
-| Filtrar o buscar proyectos        | El sistema permita filtrar por cliente, responsable o tipo de proyecto, y buscar por nombre o ID.         | Filtrar por múltiples criterios.         | No hay resultados para el filtro/búsqueda.           |                                                          | Should   |
-| Mover proyectos entre columnas    | El sistema avise si el proyecto no cumple criterios para cambiar de estado (ej. tareas pendientes).       |                                          | Proyecto bloqueado por dependencias.                 |                                                          | Must     |
-| Ver detalles de un proyecto específico        | El sistema permita agregar comentarios o actualizar información directamente desde la vista de detalles.   |                                          |                                                      | Podría haber una vista simplificada para clientes.       | Should   |
+| Pasos                                                              | Sería interesante que...                                                                                                                                                                                                                                 | Variaciones                                                | Excepciones                                                                          | Necesidades diferentes                                                       | Prioridad |
+| ------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------- | ------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------- | --------- |
+| Ver proyectos existentes                                           | Se pueda ver proyectos existentes con el cliente interesado actual                                                                                                                                                                                       |                                                            |                                                                                      |                                                                              | Could     |
+| Asignar el cliente                                                 | Se pueda buscar clientes existentes por nombre o email.<br>El sistema me advirtiera si el cliente no existe.                                                                                                                                             | Múltiples clientes.<br>Cliente es PSA (desarrollo interno) | No se conoce el cliente.                                                             |                                                                              | Should    |
+| Proveer un nombre para el proyecto                                 | El sistema avise si el nombre ya está en uso.                                                                                                                                                                                                            |                                                            | Si no tiene nombre todavía, el sistema podría asignarle uno en forma de código único |                                                                              | Could     |
+| Decidir el tipo de proyecto                                        | Ofrezca las opciones existentes.                                                                                                                                                                                                                         | Por *time and material* o *fixed price*.                   |                                                                                      |                                                                              | Must      |
+| Planificar las fechas de inicio y fin estimadas                    | El sistema me advirtiera si las fechas no son compatibles.<br>                                                                                                                                                                                           |                                                            |                                                                                      | Proyectos time and material podrían ser menos estrictos con la fecha de fin. | Could     |
+| Asignar un tag *(opcional)*                                        | Ofrezca las opciones existentes y la posibilidad de crear una nueva.                                                                                                                                                                                     | Tipos de tag                                               | No tiene tags.                                                                       |                                                                              | Must      |
+| Asignación de identificador único                                  | El sistema asigne un identificador único automáticamente si uno no es provisto por el creador del proyecto. Si el identificador es numérico, use el siguiente número. Si es alfanumérico, puede formularlo a partir del cliente o el título del proyecto |                                                            |                                                                                      |                                                                              | Must      |
+| Asignar un equipo de trabajo y responsables iniciales              | Se pueda consultar al servicio externo de recursos que usa PSA para elegir los equipos de trabajo iniciales.<br>Se pueda editar luego los recursos y asignar más o menos.                                                                                |                                                            | No se conocen los equipos disponibles.                                               |                                                                              | Could     |
+| Guardar el proyecto                                                | El sistema me advirtiera si alguna característica obligatoria no ha sido completada.                                                                                                                                                                     |                                                            |                                                                                      |                                                                              | Must      |
+| Visitar la vista del proyecto con sus características *(opcional)* |                                                                                                                                                                                                                                                          | Vista de gerente ≠ vista de cliente                        | Se puede querer omitir esta parte del flujo de esta actividad.                       |                                                                              | Could     |
 
 ---
+## 2. Visualizar un tablero de proyectos
 
-## 3. Registrar tiempos de proyectos de customización
+| Qué                                                | Quién            | Por qué                                                   |
+| -------------------------------------------------- | ---------------- | --------------------------------------------------------- |
+| Se desea visualizar los proyectos en formato lista | Maximiliano Gant | Para revisar información detallada de múltiples proyectos |
+
+**Como Maximiliano Gant, quiero visualizar una lista de proyectos que muestre sus detalles, para revisar información detallada de múltiples proyectos.**
+
+Visualizar lista de proyectos
+
+| Pasos                                                                                                                                                          | Actividades                |
+| -------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------- |
+| 1. Navegar al módulo de proyectos<br>                                                                                                                          | Navegación                 |
+| 2. Seleccionar vista de lista<br>                                                                                                                              | Selección de vista         |
+| 3. Ver proyectos en formato tabla con columnas para cada campo/atributo<br>4. Filtrar o buscar proyectos específicos<br>5. Ordenar por diferentes columnas<br> | Visualizar                 |
+| 6. Ver detalles de un proyecto específico<br>                                                                                                                  | Interacción con el tablero |
+
+| Pasos                                                                | Sería interesante que...                                                                                 | Variaciones                      | Excepciones                                     | Necesidades diferentes                             | Priority |
+| -------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------- | -------------------------------- | ----------------------------------------------- | -------------------------------------------------- | -------- |
+| Navegar al módulo de proyectos<br>                                   |                                                                                                          |                                  | Usuario sin permisos, mostrar mensaje de error. |                                                    | Could    |
+| Seleccionar vista de lista<br>                                       | El sistema permita pasar al modo Kanban                                                                  | Kanban o lista.                  |                                                 |                                                    | Must     |
+| Ver proyectos en formato tabla con columnas para cada campo/atributo | Se puedan ver nombre, cliente, tipo, fechas, estado                                                      |                                  |                                                 |                                                    | Must     |
+| Filtrar o buscar proyectos específicos                               | El sistema permita filtrar por cliente, responsable o tipo de proyecto, y buscar por nombre o ID.        | Filtrar por múltiples criterios. | No hay resultados para el filtro/búsqueda.      |                                                    | Should   |
+| Ordenar por diferentes columnas                                      | El sistema avise si el proyecto no cumple criterios para cambiar de estado (ej. tareas pendientes).      |                                  | Proyecto bloqueado por dependencias.            |                                                    | Must     |
+| Ver detalles de un proyecto específico                               | El sistema permita agregar comentarios o actualizar información directamente desde la vista de detalles. |                                  |                                                 | Podría haber una vista simplificada para clientes. | Should   |
+
+---
+## 3. Visualizar un tablero de proyectos 
+
+| Qué                                                                 | Quién            | Por qué                                         |
+| ------------------------------------------------------------------- | ---------------- | ----------------------------------------------- |
+| Se desea visualizar el estado de los proyectos en un tablero Kanban | Maximiliano Gant | Para seguir el progreso visual de los proyectos |
+
+**Como Maximiliano Gant, quiero visualizar un tablero Kanban de proyectos que muestre su estado de desarrollo, para que pueda seguir el progreso de manera visual e intuitiva.**
+
+Visualizar lista de proyectos
+
+| Pasos                                                                                 | Actividades                |
+| ------------------------------------------------------------------------------------- | -------------------------- |
+| 1. Navegar al módulo de proyectos<br>                                                 | Navegación                 |
+| 2. Ver estadísticas de los proyectos en columnas (inicio, desarrollo, transición)<br> | Visualización del tablero  |
+| 3. Filtrar o buscar proyectos específicos<br>                                         | Filtrado y búsqueda        |
+| 4. Mover proyectos entre columnas<br>5. Ver detalles de un proyecto específico<br>    | Interacción con el tablero |
+
+| Pasos                                        | Sería interesante que...                                                                                                                                  | Variaciones                      | Excepciones                                     | Necesidades diferentes                                                     | Priority |
+| -------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------- | ----------------------------------------------- | -------------------------------------------------------------------------- | -------- |
+| Navegar al módulo de proyectos               |                                                                                                                                                           |                                  | Usuario sin permisos, mostrar mensaje de error. |                                                                            | Could    |
+| Seleccionar vista de tablero tipo Kanban     | <br>El sistema permita pasar al modo lista.                                                                                                               | Kanban o lista.                  |                                                 |                                                                            | Must     |
+| Ver proyectos en formato Kanban con columnas | Se muetren tarjetas en cada columna indicando el proyecto. Hayan columnas por cada estado del proyecto.<br>Las tarjetas muestren el nombre y cliente.<br> | Columnas personalizables.        | No hay proyectos en una columna.                | El sistema permita crear nuevas columnas populables al antojo del usuario. | Must     |
+| Filtrar o buscar proyectos                   | El sistema permita filtrar por cliente, responsable o tipo de proyecto, y buscar por nombre o ID.                                                         | Filtrar por múltiples criterios. | No hay resultados para el filtro/búsqueda.      |                                                                            | Should   |
+| Mover proyectos entre columnas               | El sistema avise si el proyecto no cumple criterios para cambiar de estado (ej. tareas pendientes).                                                       |                                  | Proyecto bloqueado por dependencias.            |                                                                            | Must     |
+| Ver detalles de un proyecto específico       | El sistema permita agregar comentarios o actualizar información directamente desde la vista de detalles.                                                  |                                  |                                                 | Podría haber una vista simplificada para clientes.                         | Should   |
+
+## 4. Registrar tiempos de proyectos de customización
 
 | Qué                                          | Quién                | Por qué                                          |
 |----------------------------------------------|----------------------|--------------------------------------------------|
@@ -86,7 +111,7 @@ Registrar tiempos de proyectos de customización
 | Revisar o ajustar los tiempos     | El sistema muestre un historial de ajustes y permita ajustar la estimacion.                       |   | Sin permisos para modificar tiempos registrados.     | Revisión por cliente en lugar de gerente.                | Should   |
 
 
-## 4. Crear una tarea desde un proyecto
+## 5. Crear una tarea desde un proyecto
 
 | Qué                                                    | Quién               | Por qué                                |
 | ------------------------------------------------------ | ------------------- | -------------------------------------- |
@@ -111,7 +136,7 @@ Registrar tiempos de proyectos de customización
 
 
 
-## 5. Asociar riesgos a proyectos con planes de mitigación y contingencia
+## 6. Asociar riesgos a proyectos con planes de mitigación y contingencia
 
 | Qué                                                               | Quién              | Por qué                                                                 |
 |-------------------------------------------------------------------|--------------------|-------------------------------------------------------------------------|
@@ -145,7 +170,7 @@ Registrar tiempos de proyectos de customización
 
 ---
 
-## 6. Seguimiento de horas trabajadas contra tareas
+## 7. Seguimiento de horas trabajadas contra tareas
 
 | Qué                                          | Quién                | Por qué                                          |
 |----------------------------------------------|----------------------|--------------------------------------------------|
@@ -174,7 +199,7 @@ Seguimiento de horas trabajadas contra tareas
 
 
 
-## 7. Visualizar tareas de un proyecto
+## 8. Visualizar tareas de un proyecto
 
 | Qué                                                     | Quién                       | Por qué                                                                 |
 | ------------------------------------------------------- | --------------------------- | ----------------------------------------------------------------------- |
