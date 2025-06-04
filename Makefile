@@ -1,5 +1,8 @@
 # Makefile para el proyecto PSA API
 
+include .env
+export $(shell sed 's/=.*//' .env)
+
 # Variables
 PROJECT_NAME := proyecto-api
 MAVEN := ./mvnw
@@ -36,13 +39,17 @@ flyway-clean: check-env  ## Limpia la base de datos (Flyway)
 	@echo "Limpiando la base de datos con Flyway..."
 	@$(MAVEN) flyway:clean
 
-flyway-migrate: check-env  ## Aplica migraciones (Flyway)
-	@echo "Aplicando migraciones con Flyway..."
-	@$(MAVEN) flyway:migrate
+flyway-repair: check-env
+	@echo "Reparando la base de datos con Flyway..."
+	@$(MAVEN) flyway:repair -Dflyway.url=jdbc:postgresql://${PGHOST}/${PGDATABASE}?sslmode=require -Dflyway.user=${PGUSER} -Dflyway.password=${PGPASSWORD}
 
-flyway-info: check-env  ## Muestra información de Flyway
+flyway-migrate: check-env
+	@echo "Aplicando migraciones con Flyway..."
+	@$(MAVEN) flyway:migrate -Dflyway.url=jdbc:postgresql://$(PGHOST)/$(PGDATABASE)?sslmode=require -Dflyway.user=$(PGUSER) -Dflyway.password=$(PGPASSWORD)
+
+flyway-info: check-env
 	@echo "Mostrando información de migraciones Flyway..."
-	@$(MAVEN) flyway:info
+	@$(MAVEN) flyway:info -Dflyway.url=jdbc:postgresql://$(PGHOST)/$(PGDATABASE)?sslmode=require -Dflyway.user=$(PGUSER) -Dflyway.password=$(PGPASSWORD)
 
 db-reset: flyway-clean flyway-migrate  ## Resetea la base de datos (limpia y migra)
 
