@@ -5,13 +5,14 @@
 ### US-01: Crear proyecto
 
 **Como** Gerente de Proyectos  
-**Quiero** crear un nuevo proyecto con información básica (nombre, cliente, tipo)  
+**Quiero** crear un nuevo proyecto con información básica (nombre, cliente, tipo, financiación)  
 **Para que** pueda comenzar un nuevo desarrollo
 
 **Criterios de Aceptación:**
 
 - Puedo asignar un cliente existente o marcarlo como interno (PSA)
-- Puedo definir tipo de proyecto (Time & Material o Fixed Price)
+- Puedo definir tipo de proyecto (Desarollo o Implementación)
+- Puedo definir financiación de proyecto (Time & Material o Fixed Price)
 - Puedo proveer un nombre único para el proyecto
 - El sistema asigna automáticamente un identificador único
 - El sistema valida que todos los campos obligatorios estén completos
@@ -218,7 +219,7 @@
 
 **Como** Gerente de Proyectos  
 **Quiero** crear una tarea dentro de un proyecto  
-**Para que** pueda organizar el trabajo en actividades manejables
+**Para que** pueda organizar el trabajo en unidades manejables
 
 **Criterios de Aceptación:**
 
@@ -395,7 +396,7 @@
 
 ---
 
-### US-26: Generar reporte de horas
+### US-25: Generar reporte de horas
 
 **Como** Maximiliano Gant  
 **Quiero** generar reportes de horas trabajadas  
