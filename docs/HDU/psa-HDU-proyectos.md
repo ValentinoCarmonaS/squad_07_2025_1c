@@ -208,7 +208,7 @@
 
 - El sistema solicita confirmación antes de eliminar
 
-**Prioridad:** Should
+**Prioridad:** Must
 
 ---
 
@@ -375,7 +375,7 @@
 - La tarea se elimina permanentemente tras confirmar
 - El total de horas del proyecto se actualiza automáticamente
 
-**Prioridad:** Should
+**Prioridad:** Must
 
 ---
 
