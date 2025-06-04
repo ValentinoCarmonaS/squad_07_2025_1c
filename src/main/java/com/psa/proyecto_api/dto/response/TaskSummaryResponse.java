@@ -4,6 +4,7 @@ import com.psa.proyecto_api.model.enums.TaskStatus;
 import lombok.Data;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Data
 public class TaskSummaryResponse {
@@ -13,5 +14,6 @@ public class TaskSummaryResponse {
     private TaskStatus status;
     private LocalDate dueDate;
     private Integer assignedResourceId;
+    private List<String> tagNames;
     private boolean isOverdue;
 }

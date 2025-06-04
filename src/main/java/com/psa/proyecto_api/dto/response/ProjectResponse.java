@@ -1,5 +1,6 @@
 package com.psa.proyecto_api.dto.response;
 
+import com.psa.proyecto_api.model.enums.ProjectBillingType;
 import com.psa.proyecto_api.model.enums.ProjectStatus;
 import com.psa.proyecto_api.model.enums.ProjectType;
 import lombok.Data;
@@ -15,9 +16,11 @@ public class ProjectResponse {
     private String description;
     private Integer clientId;
     private ProjectType type;
+    private ProjectBillingType billingType;
     private ProjectStatus status;
     private LocalDate startDate;
     private LocalDate endDate;
+    private Integer estimatedHours;
     private Integer leaderId;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;

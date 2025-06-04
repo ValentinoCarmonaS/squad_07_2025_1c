@@ -10,7 +10,7 @@ import java.util.List;
 public class CreateTaskRequest {
     
     @NotBlank(message = "El nombre de la tarea es obligatorio")
-    @Size(max = 100, message = "El nombre no puede exceder 255 caracteres")
+    @Size(max = 100, message = "El nombre no puede exceder 100 caracteres")
     private String name;
     
     @Size(max = 1000, message = "La descripción no puede exceder 1000 caracteres")
