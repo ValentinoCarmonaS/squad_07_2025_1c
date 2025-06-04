@@ -1,3 +1,10 @@
+
+// ================================================================================
+
+//    A REVISAR SI TICKETS ES COHERENTE Y CONGRUENTE EN EL MODULO DE PROYECTOS
+
+// ================================================================================
+
 package com.psa.proyecto_api.model;
 
 import jakarta.persistence.*;

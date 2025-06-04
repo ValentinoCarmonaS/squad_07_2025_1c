@@ -16,7 +16,7 @@ import java.util.Objects;
 /**
  * Entidad que representa una tarea dentro de un proyecto.
  * 
- * Una tarea pertenece a un proyecto y puede tener tickets y tags asociados.
+ * Una tarea pertenece a un proyecto y tags asociados.
  */
 @Entity
 @Table(name = "tasks", indexes = {
@@ -30,7 +30,7 @@ import java.util.Objects;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@ToString(exclude = {"project", "taskTags", "taskTickets"})
+@ToString(exclude = {"project", "taskTags"}) // Agregar "taskTickets" si realmente son necesarios los tickets
 public class Task {
     
     @Id
@@ -51,7 +51,7 @@ public class Task {
     @Builder.Default
     private TaskStatus status = TaskStatus.TO_DO;
     
-    @Positive(message = "Las horas estimadas deben ser positivas")
+    @Min(value = 0, message = "Las horas estimadas no pueden ser negativas")
     @Column(name = "estimated_hours")
     private Integer estimatedHours;
     
@@ -78,9 +78,9 @@ public class Task {
     @Builder.Default
     private List<TaskTag> taskTags = new ArrayList<>();
     
-    @OneToMany(mappedBy = "task", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    @Builder.Default
-    private List<TaskTicket> taskTickets = new ArrayList<>();
+    // @OneToMany(mappedBy = "task", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    // @Builder.Default
+    // private List<TaskTicket> taskTickets = new ArrayList<>();
     
     // Métodos de gestión de tags
     
@@ -120,40 +120,40 @@ public class Task {
         taskTags.removeIf(taskTag -> taskTag.hasTagName(normalizedTagName));
     }
     
-    // Métodos de gestión de tickets
+    // // Métodos de gestión de tickets
     
-    /**
-     * Asocia un ticket con la tarea evitando duplicados.
-     */
-    public void addTicket(Integer ticketId) {
-        if (ticketId == null) {
-            return;
-        }
+    // /**
+    //  * Asocia un ticket con la tarea evitando duplicados.
+    //  */
+    // public void addTicket(Integer ticketId) {
+    //     if (ticketId == null) {
+    //         return;
+    //     }
         
-        // Verificar si el ticket ya está asociado
-        boolean ticketExists = taskTickets.stream()
-            .anyMatch(taskTicket -> taskTicket.belongsToTicket(ticketId));
+    //     // Verificar si el ticket ya está asociado
+    //     boolean ticketExists = taskTickets.stream()
+    //         .anyMatch(taskTicket -> taskTicket.belongsToTicket(ticketId));
             
-        if (!ticketExists) {
-            TaskTicket newTaskTicket = TaskTicket.builder()
-                .ticketId(ticketId)
-                .task(this)
-                .build();
+    //     if (!ticketExists) {
+    //         TaskTicket newTaskTicket = TaskTicket.builder()
+    //             .ticketId(ticketId)
+    //             .task(this)
+    //             .build();
             
-            taskTickets.add(newTaskTicket);
-        }
-    }
+    //         taskTickets.add(newTaskTicket);
+    //     }
+    // }
     
-    /**
-     * Remueve la asociación con un ticket.
-     */
-    public void removeTicket(Integer ticketId) {
-        if (ticketId == null) {
-            return;
-        }
+    // /**
+    //  * Remueve la asociación con un ticket.
+    //  */
+    // public void removeTicket(Integer ticketId) {
+    //     if (ticketId == null) {
+    //         return;
+    //     }
         
-        taskTickets.removeIf(taskTicket -> taskTicket.belongsToTicket(ticketId));
-    }
+    //     taskTickets.removeIf(taskTicket -> taskTicket.belongsToTicket(ticketId));
+    // }
     
     // Métodos de consulta de estado
     
@@ -241,27 +241,27 @@ public class Task {
             .anyMatch(taskTag -> taskTag.hasTagName(normalizedTagName));
     }
     
-    /**
-     * Verifica si la tarea está asociada a un ticket específico.
-     */
-    public boolean hasTicket(Integer ticketId) {
-        if (ticketId == null) {
-            return false;
-        }
+    // /**
+    //  * Verifica si la tarea está asociada a un ticket específico.
+    //  */
+    // public boolean hasTicket(Integer ticketId) {
+    //     if (ticketId == null) {
+    //         return false;
+    //     }
         
-        return taskTickets.stream()
-            .anyMatch(taskTicket -> taskTicket.belongsToTicket(ticketId));
-    }
+    //     return taskTickets.stream()
+    //         .anyMatch(taskTicket -> taskTicket.belongsToTicket(ticketId));
+    // }
     
-    /**
-     * Obtiene todos los IDs de tickets asociados a la tarea.
-     */
-    public List<Integer> getTicketIds() {
-        return taskTickets.stream()
-            .map(TaskTicket::getTicketId)
-            .sorted()
-            .toList();
-    }
+    // /**
+    //  * Obtiene todos los IDs de tickets asociados a la tarea.
+    //  */
+    // public List<Integer> getTicketIds() {
+    //     return taskTickets.stream()
+    //         .map(TaskTicket::getTicketId)
+    //         .sorted()
+    //         .toList();
+    // }
     
     /**
      * Obtiene todos los nombres de tags de la tarea.
