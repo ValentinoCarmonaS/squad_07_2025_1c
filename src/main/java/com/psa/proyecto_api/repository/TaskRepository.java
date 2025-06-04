@@ -16,15 +16,14 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
     // Consultas básicas por proyecto
     List<Task> findByProjectId(Long projectId);
     List<Task> findByProjectIdOrderByCreatedAtAsc(Long projectId);
-    List<Task> findByProjectIdOrderByPriorityDesc(Long projectId);
     
     // Consultas por estado
     List<Task> findByStatus(TaskStatus status);
     List<Task> findByProjectIdAndStatus(Long projectId, TaskStatus status);
         
     // Consultas por responsable
-    List<Task> findByAssignedToId(Integer assignedToId);
-    List<Task> findByAssignedToIdAndStatus(Integer assignedToId, TaskStatus status);
+    List<Task> findByAssignedResourceId(Integer assignedResourceId);
+    List<Task> findByAssignedResourceIdAndStatus(Integer assignedResourceId, TaskStatus status);
     
     // Consultas por fechas
     @Query("SELECT t FROM Task t WHERE t.dueDate BETWEEN :startDate AND :endDate")
@@ -54,8 +53,8 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
     @Query("SELECT COUNT(t) FROM Task t WHERE t.project.id = :projectId AND t.status = :status")
     Long countByProjectIdAndStatus(@Param("projectId") Long projectId, @Param("status") TaskStatus status);
     
-    @Query("SELECT COUNT(t) FROM Task t WHERE t.assignedToId = :assignedToId AND t.status = :status")
-    Long countByAssignedToIdAndStatus(@Param("assignedToId") Integer assignedToId, @Param("status") TaskStatus status);
+    @Query("SELECT COUNT(t) FROM Task t WHERE t.assignedResourceId = :assignedResourceId AND t.status = :status")
+    Long countByAssignedResourceIdAndStatus(@Param("assignedResourceId") Integer assignedResourceId, @Param("status") TaskStatus status);
     
     // Búsqueda por nombre/descripción
     @Query("SELECT t FROM Task t WHERE LOWER(t.name) LIKE LOWER(CONCAT('%', :searchTerm, '%')) " +
@@ -63,6 +62,6 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
     List<Task> findByNameOrDescriptionContainingIgnoreCase(@Param("searchTerm") String searchTerm);
     
     // Tareas sin asignar
-    List<Task> findByAssignedToIdIsNull();
-    List<Task> findByProjectIdAndAssignedToIdIsNull(Long projectId);
+    List<Task> findByAssignedResourceIdIsNull();
+    List<Task> findByProjectIdAndAssignedResourceIdIsNull(Long projectId);
 }
