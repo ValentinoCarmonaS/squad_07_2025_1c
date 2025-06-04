@@ -17,6 +17,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 /**
  * Entidad que representa un proyecto en el sistema.
@@ -32,8 +33,8 @@ import java.util.Objects;
     @Index(name = "idx_projects_leader_id", columnList = "leader_id"),
     @Index(name = "idx_projects_dates", columnList = "start_date, end_date")
 })
-@Getter // Revisar si es necesario
-@Setter // Revisar si es necesario
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -103,35 +104,72 @@ public class Project {
     @Builder.Default
     private List<ProjectTag> projectTags = new ArrayList<>();
     
-    // Métodos
+    // Métodos de gestión de tareas
     
     /**
-     * Agrega una tarea al proyecto.
+     * Agrega una tarea al proyecto estableciendo la relación bidireccional.
      */
     public void addTask(Task task) {
+        if (task == null) {
+            return;
+        }
+        
         tasks.add(task);
+        task.setProject(this);
     }
     
     /**
      * Remueve una tarea del proyecto.
      */
     public void removeTask(Task task) {
+        if (task == null) {
+            return;
+        }
+        
         tasks.remove(task);
+        task.setProject(null);
     }
+    
+    // Métodos de gestión de tags
     
     /**
      * Agrega un tag al proyecto evitando duplicados.
      */
     public void addTag(String tagName) {
-        // Pendiente de implementación
+        if (tagName == null || tagName.trim().isEmpty()) {
+            return;
+        }
+        
+        String normalizedTagName = tagName.trim();
+        
+        // Verificar si el tag ya existe
+        boolean tagExists = projectTags.stream()
+            .anyMatch(projectTag -> projectTag.hasTagName(normalizedTagName));
+            
+        if (!tagExists) {
+            ProjectTag newTag = ProjectTag.builder()
+                .tagName(normalizedTagName)
+                .project(this)
+                .build();
+            
+            projectTags.add(newTag);
+        }
     }
     
     /**
      * Remueve un tag del proyecto.
      */
     public void removeTag(String tagName) {
-        // Pendiente de implementación
+        if (tagName == null || tagName.trim().isEmpty()) {
+            return;
+        }
+        
+        String normalizedTagName = tagName.trim();
+        
+        projectTags.removeIf(projectTag -> projectTag.hasTagName(normalizedTagName));
     }
+    
+    // Métodos de consulta de estado
     
     /**
      * Verifica si el proyecto está iniciado.
@@ -141,25 +179,114 @@ public class Project {
     }
 
     /**
-     * Verifica si el proyecto está activo (no completado) .
+     * Verifica si el proyecto está activo (no completado).
      */
     public boolean isActive() {
         return this.status.isActive();
     }
     
     /**
-     * Verifica si el proyecto está en transición.
+     * Verifica si el proyecto está finalizado.
      */
     public boolean isFinished() {
         return this.status.isTransition();
     }
     
+    // Métodos de cálculo
+    
     /**
      * Calcula el total de horas estimadas en todas las tareas del proyecto.
      */
     public int getTotalEstimatedHoursFromTasks() {
-        // Pendiente de implementación
-        return 1;
+        return tasks.stream()
+            .mapToInt(Task::getEstimatedHoursOrZero)
+            .sum();
+    }
+    
+    /**
+     * Obtiene el porcentaje de progreso del proyecto basado en las tareas completadas.
+     */
+    public double getProgressPercentage() {
+        if (tasks.isEmpty()) {
+            return 0.0;
+        }
+        
+        long completedTasks = tasks.stream()
+            .mapToLong(Task::isFinishedAsLong)
+            .sum();
+            
+        return (double) completedTasks / tasks.size() * 100.0;
+    }
+    
+    /**
+     * Obtiene la cantidad de tareas activas en el proyecto.
+     */
+    public long getActiveTasksCount() {
+        return tasks.stream()
+            .mapToLong(Task::isActiveAsLong)
+            .sum();
+    }
+    
+    /**
+     * Obtiene la cantidad de tareas completadas en el proyecto.
+     */
+    public long getCompletedTasksCount() {
+        return tasks.stream()
+            .mapToLong(Task::isFinishedAsLong)
+            .sum();
+    }
+    
+    /**
+     * Verifica si el proyecto tiene tareas vencidas.
+     */
+    public boolean hasOverdueTasks() {
+        return tasks.stream()
+            .anyMatch(Task::isOverdue);
+    }
+    
+    /**
+     * Obtiene las tareas no asignadas del proyecto.
+     */
+    public List<Task> getUnassignedTasks() {
+        return tasks.stream()
+            .filter(task -> !task.isAssigned())
+            .toList();
+    }
+    
+    /**
+     * Verifica si el proyecto tiene un tag específico.
+     */
+    public boolean hasTag(String tagName) {
+        if (tagName == null || tagName.trim().isEmpty()) {
+            return false;
+        }
+        
+        String normalizedTagName = tagName.trim();
+        return projectTags.stream()
+            .anyMatch(projectTag -> projectTag.hasTagName(normalizedTagName));
+    }
+    
+    /**
+     * Obtiene todos los nombres de tags del proyecto.
+     */
+    public List<String> getTagNames() {
+        return projectTags.stream()
+            .map(ProjectTag::getTagName)
+            .sorted()
+            .toList();
+    }
+    
+    /**
+     * Busca una tarea por su ID.
+     */
+    public Optional<Task> findTaskById(Long taskId) {
+        if (taskId == null) {
+            return Optional.empty();
+        }
+        
+        return tasks.stream()
+            .filter(task -> task.hasId(taskId))
+            .findFirst();
     }
     
     /**

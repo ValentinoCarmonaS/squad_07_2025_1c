@@ -19,8 +19,8 @@ import java.util.Objects;
            @Index(name = "idx_project_tags_project_id", columnList = "project_id"),
            @Index(name = "idx_project_tags_name", columnList = "tag_name")
        })
-@Getter // Revisar si es necesario
-@Setter // Revisar si es necesario
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -41,12 +41,30 @@ public class ProjectTag {
     private LocalDateTime createdAt;
 
     // Relaciones
-
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "project_id", nullable = false)
     private Project project;
     
-    // Metodos
+    // Métodos auxiliares
+    
+    /**
+     * Verifica si este tag tiene el nombre especificado (ignorando mayúsculas/minúsculas).
+     */
+    public boolean hasTagName(String name) {
+        if (name == null || this.tagName == null) {
+            return false;
+        }
+        return this.tagName.equalsIgnoreCase(name.trim());
+    }
+    
+    /**
+     * Verifica si este tag pertenece al proyecto especificado.
+     */
+    public boolean belongsToProject(Long projectId) {
+        return this.project != null && 
+               this.project.getId() != null && 
+               this.project.getId().equals(projectId);
+    }
 
     @Override
     public boolean equals(Object o) {
