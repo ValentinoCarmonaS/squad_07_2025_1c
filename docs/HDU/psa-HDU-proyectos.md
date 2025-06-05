@@ -5,7 +5,7 @@
 ### US-01: Crear proyecto
 
 **Como** Gerente de Proyectos  
-**Quiero** crear un nuevo proyecto con información básica (nombre, cliente, tipo, financiación)  
+**Quiero** crear un nuevo proyecto con información básica (nombre, cliente, tipo, financiación, fechas estimadas)  
 **Para que** pueda comenzar un nuevo desarrollo
 
 **Criterios de Aceptación:**
@@ -13,6 +13,8 @@
 - Puedo asignar un cliente existente o marcarlo como interno (PSA)
 - Puedo definir tipo de proyecto (Desarollo o Implementación)
 - Puedo definir financiación de proyecto (Time & Material o Fixed Price)
+- Puedo definir fecha de inicio
+- Puedo definir fecha de fin 
 - Puedo proveer un nombre único para el proyecto
 - El sistema asigna automáticamente un identificador único
 - El sistema valida que todos los campos obligatorios estén completos
@@ -213,9 +215,24 @@
 
 ---
 
+### US-14: Calcular duración estimada de proyecto
+
+**Como** Gerente de Proyectos  
+**Quiero** calcular la duración estimada de un proyecto en base a sus tareas  
+**Para que** pueda controlar el tiempo estimado de un proyecto
+
+**Criterios de Aceptación:**
+
+- Puedo calcular la duración estimada de un proyecto en base a la suma de las horas estimadas de sus tareas
+- Un proyecto sin tareas y con fecha de fin estimada, calculará la duración estimada en base a la fecha de fin estimada
+
+**Prioridad:** Must
+
+---
+
 ## Tema: Tareas
 
-### US-14: Crear tarea básica
+### US-15: Crear tarea básica
 
 **Como** Gerente de Proyectos  
 **Quiero** crear una tarea dentro de un proyecto  
@@ -228,13 +245,14 @@
 - Puedo asignar etiquetas existentes o crear nuevas
 - Puedo asignar un recurso para la tarea (opcional)
 - El estado inicial es "No Iniciada" por defecto
+- La tarea debe saber a qué proyecto pertenece
 - El sistema valida campos obligatorios antes de guardar
 
 **Prioridad:** Must
 
 ---
 
-### US-15: Asignar recurso a tarea
+### US-16: Asignar recurso a tarea
 
 **Como** Gerente de Proyectos  
 **Quiero** asignar un recurso a una tarea  
@@ -251,7 +269,7 @@
 
 ---
 
-### US-16: Ver lista de tareas de proyecto
+### US-17: Ver lista de tareas de proyecto
 
 **Como** miembro del equipo  
 **Quiero** visualizar las tareas de un proyecto en formato lista  
@@ -268,7 +286,7 @@
 
 ---
 
-### US-17: Ordenar tareas
+### US-18: Ordenar tareas
 
 **Como** usuario del sistema  
 **Quiero** filtrar y ordenar las tareas de un proyecto  
@@ -285,7 +303,7 @@
 
 ---
 
-### US-18: Buscar tareas por nombre
+### US-19: Buscar tareas por nombre
 
 **Como** usuario del sistema  
 **Quiero** buscar tareas por nombre usando una barra de búsqueda  
@@ -300,7 +318,7 @@
 
 ---
 
-### US-19: Ver detalles completos de tarea
+### US-20: Ver detalles completos de tarea
 
 **Como** Maximiliano Gant  
 **Quiero** acceder a una vista detallada de una tarea  
@@ -316,7 +334,7 @@
 
 ---
 
-### US-20: Modificar horas estimadas de tarea
+### US-21: Modificar horas estimadas de tarea
 
 **Como** Gerente de Proyectos  
 **Quiero** cambiar las horas estimadas de una tarea  
@@ -333,7 +351,7 @@
 
 ---
 
-### US-21: Cambiar estado de tarea
+### US-22: Cambiar estado de tarea
 
 **Como** miembro del equipo  
 **Quiero** actualizar el estado de una tarea  
@@ -348,7 +366,7 @@
 
 ---
 
-### US-22: Modificar recurso de tarea
+### US-23: Modificar recurso de tarea
 
 **Como** Gerente de Proyectos  
 **Quiero** cambiar el recurso asignado a una tarea  
@@ -363,7 +381,7 @@
 
 ---
 
-### US-23: Eliminar tarea
+### US-24: Eliminar tarea
 
 **Como** Gerente de Proyectos  
 **Quiero** eliminar una tarea de un proyecto  
@@ -380,35 +398,3 @@
 
 ---
 
-### US-24: Registrar horas trabajadas
-
-**Como** miembro del equipo  
-**Quiero** registrar las horas que trabajé en una tarea específica  
-**Para que** se pueda hacer seguimiento preciso del tiempo invertido
-
-**Criterios de Aceptación:**
-
-- Puedo seleccionar un proyecto y una tarea específica
-- Puedo ingresar horas trabajadas manualmente
-- El sistema valida que sean valores positivos
-
-**Prioridad:** Must
-
----
-
-### US-25: Generar reporte de horas
-
-**Como** Maximiliano Gant  
-**Quiero** generar reportes de horas trabajadas  
-**Para que** pueda validar costos y analizar el tiempo invertido
-
-**Criterios de Aceptación:**
-
-- Puedo generar reportes por proyecto o por cliente
-- Puedo exportar el reporte en formato PDF o CSV
-- El reporte incluye información relevante para facturación
-- El sistema genera el reporte basado en datos actuales
-
-**Prioridad:** Could
-
----
