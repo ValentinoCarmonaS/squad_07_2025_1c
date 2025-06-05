@@ -23,7 +23,7 @@
 
 ---
 
-### US-02: Planificar fechas de proyecto
+### US-02: Planificar fecha de fin de un proyecto
 
 **Como** Gerente de Proyectos  
 **Quiero** establecer fechas de inicio y fin estimadas para un proyecto  
