@@ -5,16 +5,17 @@
 ### US-01: Crear proyecto
 
 **Como** Gerente de Proyectos  
-**Quiero** crear un nuevo proyecto con información básica (nombre, cliente, tipo, financiación, fechas estimadas)  
+**Quiero** crear un nuevo proyecto con información básica (nombre, cliente, lider de proyecto, tipo, tipo de financiación, fechas estimadas)  
 **Para que** pueda comenzar un nuevo desarrollo
 
 **Criterios de Aceptación:**
 
 - Puedo asignar un cliente existente o marcarlo como interno (PSA)
-- Puedo definir tipo de proyecto (Desarollo o Implementación)
-- Puedo definir financiación de proyecto (Time & Material o Fixed Price)
+- Puedo asignar un líder de proyecto
+- Puedo definir tipo de proyecto (Desarrollo o Implementación)
+- Puedo definir tipo de financiación de proyecto (Time & Material o Fixed Price)
 - Puedo definir fecha de inicio
-- Puedo definir fecha de fin 
+- Puedo definir fecha de fin (opcional para proyectos Time & Material)
 - Puedo proveer un nombre único para el proyecto
 - El sistema asigna automáticamente un identificador único
 - El sistema valida que todos los campos obligatorios estén completos
@@ -146,7 +147,8 @@
 - Las columnas no poseen restricción alguna respecto al estado del proyecto
 - Puedo eliminar columnas personalizadas (no las estándar)
 
-**Prioridad:** Must
+**Prioridad:** Won't 
+**Razón:** No es necesario para el MVP (fuera de alcance)
 
 ---
 
@@ -224,7 +226,6 @@
 **Criterios de Aceptación:**
 
 - Puedo calcular la duración estimada de un proyecto en base a la suma de las horas estimadas de sus tareas
-- Un proyecto sin tareas y con fecha de fin estimada, calculará la duración estimada en base a la fecha de fin estimada
 
 **Prioridad:** Must
 
@@ -247,6 +248,7 @@
 - El estado inicial es "No Iniciada" por defecto
 - La tarea debe saber a qué proyecto pertenece
 - El sistema valida campos obligatorios antes de guardar
+- El sistema actualiza **automáticamente** el total de horas del proyecto
 
 **Prioridad:** Must
 
@@ -392,9 +394,38 @@
 - El sistema solicita confirmación antes de eliminar
 - Puedo cancelar la operación de eliminación
 - La tarea se elimina permanentemente tras confirmar
-- El total de horas del proyecto se actualiza automáticamente
+- El sistema actualiza **automáticamente** el total de horas del proyecto
 
 **Prioridad:** Must
 
 ---
 
+## Tema: Etiquetas
+
+### US-25: Crear etiqueta
+
+**Como** Gerente de Proyectos  
+**Quiero** crear una nueva etiqueta  
+**Para que** pueda categorizar proyectos y tareas
+
+**Criterios de Aceptación:**
+
+- Puedo ingresar un nombre no vacío para la etiqueta
+- El sistema le asigna un identificador único y un slug
+- El sistema valida que el slug sea único
+
+**Prioridad:** Must
+
+### US-26: Asignar etiqueta
+
+**Como** Gerente de Proyectos  
+**Quiero** asignar una etiqueta a un proyecto o tarea  
+**Para que** pueda categorizar proyectos y tareas
+
+**Criterios de Aceptación:**
+
+- Puedo seleccionar una etiqueta existente o crear una nueva
+
+**Prioridad:** Must
+
+---
