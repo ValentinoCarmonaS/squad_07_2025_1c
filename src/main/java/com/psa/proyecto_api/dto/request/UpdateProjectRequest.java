@@ -12,7 +12,7 @@ import java.util.List;
 @Data
 public class UpdateProjectRequest {
     @NotBlank(message = "El nombre del proyecto es obligatorio")
-    @Size(max = 100, message = "El nombre no puede exceder 100 caracteres") // Fixed
+    @Size(max = 100, message = "El nombre no puede exceder 100 caracteres") 
     private String name;
     
     @Size(max = 1000, message = "La descripción no puede exceder 1000 caracteres")

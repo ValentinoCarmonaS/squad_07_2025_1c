@@ -14,6 +14,7 @@ import java.util.List;
 public interface TaskRepository extends JpaRepository<Task, Long> {
     
     // Consultas básicas por proyecto
+    List<Task> findAll();
     List<Task> findByProjectId(Long projectId);
     List<Task> findByProjectIdOrderByCreatedAtAsc(Long projectId);
     

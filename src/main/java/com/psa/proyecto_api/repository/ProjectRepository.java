@@ -1,7 +1,6 @@
 package com.psa.proyecto_api.repository;
 
 import com.psa.proyecto_api.model.Project;
-import com.psa.proyecto_api.model.Task;
 import com.psa.proyecto_api.model.enums.ProjectStatus;
 import com.psa.proyecto_api.model.enums.ProjectType;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -16,6 +15,7 @@ import java.util.List;
 public interface ProjectRepository extends JpaRepository<Project, Long> {
     
     // Consultas básicas por campos simples
+    List<Project> findAll();
     List<Project> findByClientId(Integer clientId);
     List<Project> findByStatus(ProjectStatus status);
     List<Project> findByLeaderId(Integer leaderId);
