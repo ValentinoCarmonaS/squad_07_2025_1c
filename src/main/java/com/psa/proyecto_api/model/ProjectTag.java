@@ -36,10 +36,6 @@ public class ProjectTag {
     @Size(max = 50, message = "El nombre del tag no puede exceder los 50 caracteres")
     @Column(name = "tag_name", nullable = false)
     private String tagName;
-    
-    @CreationTimestamp
-    @Column(name = "created_at", nullable = false, updatable = false)
-    private LocalDateTime createdAt;
 
     // Relaciones
     @NotNull(message = "El proyecto es obligatorio")

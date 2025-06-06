@@ -9,11 +9,7 @@ import jakarta.validation.constraints.*;
 
 import lombok.*;
 
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
-
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -49,9 +45,6 @@ public class Project {
     @Size(max = 100, message = "El nombre no puede exceder los 100 caracteres")
     @Column(name = "name", nullable = false)
     private String name;
-    
-    @Column(name = "description", columnDefinition = "TEXT")
-    private String description;
     
     @NotNull(message = "El tipo de proyecto es obligatorio")
     @Enumerated(EnumType.STRING)

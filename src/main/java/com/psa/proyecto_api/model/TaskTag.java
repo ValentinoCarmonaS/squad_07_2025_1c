@@ -5,9 +5,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
-import org.hibernate.annotations.CreationTimestamp;
 
-import java.time.LocalDateTime;
 import java.util.Objects;
 
 /**
@@ -36,10 +34,6 @@ public class TaskTag {
     @Size(max = 50, message = "El nombre del tag no puede exceder los 50 caracteres")
     @Column(name = "tag_name", nullable = false)
     private String tagName;
-    
-    @CreationTimestamp
-    @Column(name = "created_at", nullable = false, updatable = false)
-    private LocalDateTime createdAt;
 
     // Relaciones
     @NotNull(message = "La tarea es obligatoria")
