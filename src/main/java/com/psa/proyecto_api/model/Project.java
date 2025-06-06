@@ -74,6 +74,7 @@ public class Project {
     private ProjectStatus status = ProjectStatus.INITIATED;
     
     // Relaciones externas
+    @NotNull(message = "El cliente es obligatorio")
     @Column(name = "client_id")
     private Integer clientId;
 
@@ -95,8 +96,9 @@ public class Project {
     /**
      * Constructor para crear un proyecto con los campos obligatorios.
      */
-    public Project(String name, ProjectType type, ProjectBillingType billingType, LocalDate startDate) {
+    public Project(String name, Integer clientId, ProjectType type, ProjectBillingType billingType, LocalDate startDate) {
         this.name = name;
+        this.clientId = clientId;
         this.type = type;
         this.billingType = billingType;
         this.startDate = startDate;

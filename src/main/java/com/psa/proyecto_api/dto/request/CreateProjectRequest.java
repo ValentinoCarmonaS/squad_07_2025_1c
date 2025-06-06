@@ -14,9 +14,6 @@ public class CreateProjectRequest {
     @Size(max = 100, message = "El nombre no puede exceder 100 caracteres")
     private String name;
     
-    @Size(max = 1000, message = "La descripción no puede exceder 1000 caracteres")
-    private String description;
-    
     @NotNull(message = "El cliente es obligatorio")
     private Integer clientId;
     
@@ -32,9 +29,6 @@ public class CreateProjectRequest {
     
     @Future(message = "La fecha de fin debe ser futura")
     private LocalDate endDate;
-    
-    @Positive(message = "Las horas estimadas deben ser positivas")
-    private Integer estimatedHours;
     
     private Integer leaderId;
     

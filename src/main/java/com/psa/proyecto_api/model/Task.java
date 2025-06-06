@@ -19,7 +19,6 @@ import java.util.Objects;
     @Index(name = "idx_tasks_project_id", columnList = "project_id"),
     @Index(name = "idx_tasks_status", columnList = "status"),
     @Index(name = "idx_tasks_assigned_resource", columnList = "assigned_resource_id"),
-    @Index(name = "idx_tasks_due_date", columnList = "due_date")
 })
 @Getter
 @Setter

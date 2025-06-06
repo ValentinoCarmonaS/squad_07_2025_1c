@@ -6,24 +6,20 @@ import com.psa.proyecto_api.model.enums.ProjectType;
 import lombok.Data;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
 public class ProjectResponse {
     private Long id;
     private String name;
-    private String description;
     private Integer clientId;
+    private Integer leaderId;
     private ProjectType type;
     private ProjectBillingType billingType;
     private ProjectStatus status;
     private LocalDate startDate;
     private LocalDate endDate;
     private Integer estimatedHours;
-    private Integer leaderId;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
     
     private List<String> tagNames;
     private List<TaskSummaryResponse> tasks;
