@@ -53,9 +53,6 @@ public class Project {
     @Column(name = "description", columnDefinition = "TEXT")
     private String description;
     
-    @Column(name = "client_id")
-    private Integer clientId;
-    
     @NotNull(message = "El tipo de proyecto es obligatorio")
     @Enumerated(EnumType.STRING)
     @Column(name = "type", nullable = false)
@@ -83,19 +80,14 @@ public class Project {
     @Builder.Default
     private ProjectStatus status = ProjectStatus.INITIATED;
     
+    // Relaciones externas
+    @Column(name = "client_id")
+    private Integer clientId;
+
     @Column(name = "leader_id")
     private Integer leaderId;
     
-    @CreationTimestamp
-    @Column(name = "created_at", nullable = false, updatable = false)
-    @Builder.Default
-    private LocalDateTime createdAt = LocalDateTime.now();
-    
-    @UpdateTimestamp
-    @Column(name = "updated_at", nullable = false)
-    private LocalDateTime updatedAt;
-    
-    // Relaciones
+    // Relaciones internas
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @Builder.Default
     private List<Task> tasks = new ArrayList<>();
@@ -104,6 +96,20 @@ public class Project {
     @Builder.Default
     private List<ProjectTag> projectTags = new ArrayList<>();
     
+
+    // Constructor
+    
+    /**
+     * Constructor para crear un proyecto con los campos obligatorios.
+     */
+    public Project(String name, ProjectType type, ProjectBillingType billingType, LocalDate startDate) {
+        this.name = name;
+        this.type = type;
+        this.billingType = billingType;
+        this.startDate = startDate;
+        this.status = ProjectStatus.INITIATED;
+    }
+
     // Métodos de gestión de tareas
     
     /**
@@ -113,9 +119,11 @@ public class Project {
         if (task == null) {
             return;
         }
-        
         tasks.add(task);
         task.setProject(this);
+
+        // Actualizar las horas estimadas del proyecto al agregar una tarea
+        this.estimatedHours = getTotalEstimatedHoursFromTasks();
     }
     
     /**
@@ -125,9 +133,11 @@ public class Project {
         if (task == null) {
             return;
         }
-        
         tasks.remove(task);
         task.setProject(null);
+
+        // Actualizar las horas estimadas del proyecto al agregar una tarea
+        this.estimatedHours = getTotalEstimatedHoursFromTasks();
     }
     
     // Métodos de gestión de tags
@@ -234,14 +244,6 @@ public class Project {
         return tasks.stream()
             .mapToLong(Task::isFinishedAsLong)
             .sum();
-    }
-    
-    /**
-     * Verifica si el proyecto tiene tareas vencidas.
-     */
-    public boolean hasOverdueTasks() {
-        return tasks.stream()
-            .anyMatch(Task::isOverdue);
     }
     
     /**
