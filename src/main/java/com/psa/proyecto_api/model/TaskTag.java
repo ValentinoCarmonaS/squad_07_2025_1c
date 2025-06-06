@@ -2,6 +2,7 @@ package com.psa.proyecto_api.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -41,10 +42,17 @@ public class TaskTag {
     private LocalDateTime createdAt;
 
     // Relaciones
+    @NotNull(message = "La tarea es obligatoria")
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "task_id", nullable = false)
     private Task task;
 
+    // Consturctor
+    public TaskTag(String tagName, Task task) {
+        this.tagName = tagName;
+        this.task = task;
+    }
+    
     // Métodos auxiliares
     
     /**

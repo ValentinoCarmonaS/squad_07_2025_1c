@@ -2,6 +2,7 @@ package com.psa.proyecto_api.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -41,9 +42,16 @@ public class ProjectTag {
     private LocalDateTime createdAt;
 
     // Relaciones
+    @NotNull(message = "El proyecto es obligatorio")
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "project_id", nullable = false)
     private Project project;
+
+    // Consturctor
+    public ProjectTag(String tagName, Project project) {
+        this.tagName = tagName;
+        this.project = project;
+    }
     
     // Métodos auxiliares
     

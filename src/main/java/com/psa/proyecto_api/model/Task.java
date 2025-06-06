@@ -4,11 +4,7 @@ import com.psa.proyecto_api.model.enums.TaskStatus;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.*;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -16,7 +12,7 @@ import java.util.Objects;
 /**
  * Entidad que representa una tarea dentro de un proyecto.
  * 
- * Una tarea pertenece a un proyecto y tags asociados.
+ * Una tarea pertenece a un proyecto y tiene tags asociados.
  */
 @Entity
 @Table(name = "tasks", indexes = {
@@ -42,9 +38,6 @@ public class Task {
     @Column(name = "name", nullable = false)
     private String name;
     
-    @Column(name = "description", columnDefinition = "TEXT")
-    private String description;
-    
     @NotNull
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
@@ -55,21 +48,12 @@ public class Task {
     @Column(name = "estimated_hours")
     private Integer estimatedHours;
     
+    // Relaciones externas
     @Column(name = "assigned_resource_id")
     private Integer assignedResourceId;
     
-    @CreationTimestamp
-    @Column(name = "created_at", nullable = false, updatable = false)
-    private LocalDateTime createdAt;
-    
-    @UpdateTimestamp
-    @Column(name = "updated_at", nullable = false)
-    private LocalDateTime updatedAt;
-
-    @Column(name = "due_date")
-    private LocalDate dueDate;
-    
-    // Relaciones
+    // Relaciones internas
+    @NotNull(message = "El proyecto es obligatorio")
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "project_id", nullable = false)
     private Project project;
@@ -78,10 +62,36 @@ public class Task {
     @Builder.Default
     private List<TaskTag> taskTags = new ArrayList<>();
     
-    // @OneToMany(mappedBy = "task", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    // @Builder.Default
-    // private List<TaskTicket> taskTickets = new ArrayList<>();
+    // Constructor
+    public Task(String name, Project project) {
+        this.name = name;
+        this.project = project;
+        this.status = TaskStatus.TO_DO;
+    }
+
+    // Metodos de gestion de proyecto
+    /**
+     * Establece el proyecto al que pertenece la tarea
+     */
+    public void setProject(Project project) {
+        if (project == null) {
+            throw new IllegalArgumentException("El proyecto no puede ser nulo");
+        }
+        this.project = project;
+    }
+
+    // Metodos de gestion de horas
     
+    /**
+     * Establece las horas estimadas de la tarea.
+     */
+    public void setEstimatedHours(Integer estimatedHours) {
+        if (estimatedHours != null && estimatedHours < 0) {
+            throw new IllegalArgumentException("Las horas estimadas no pueden ser negativas");
+        }
+        this.estimatedHours = estimatedHours;
+    }
+
     // Métodos de gestión de tags
     
     /**
@@ -91,7 +101,6 @@ public class Task {
         if (tagName == null || tagName.trim().isEmpty()) {
             return;
         }
-        
         String normalizedTagName = tagName.trim();
         
         // Verificar si el tag ya existe
@@ -115,46 +124,21 @@ public class Task {
         if (tagName == null || tagName.trim().isEmpty()) {
             return;
         }
-        
         String normalizedTagName = tagName.trim();
         taskTags.removeIf(taskTag -> taskTag.hasTagName(normalizedTagName));
     }
     
-    // // Métodos de gestión de tickets
-    
-    // /**
-    //  * Asocia un ticket con la tarea evitando duplicados.
-    //  */
-    // public void addTicket(Integer ticketId) {
-    //     if (ticketId == null) {
-    //         return;
-    //     }
-        
-    //     // Verificar si el ticket ya está asociado
-    //     boolean ticketExists = taskTickets.stream()
-    //         .anyMatch(taskTicket -> taskTicket.belongsToTicket(ticketId));
-            
-    //     if (!ticketExists) {
-    //         TaskTicket newTaskTicket = TaskTicket.builder()
-    //             .ticketId(ticketId)
-    //             .task(this)
-    //             .build();
-            
-    //         taskTickets.add(newTaskTicket);
-    //     }
-    // }
-    
-    // /**
-    //  * Remueve la asociación con un ticket.
-    //  */
-    // public void removeTicket(Integer ticketId) {
-    //     if (ticketId == null) {
-    //         return;
-    //     }
-        
-    //     taskTickets.removeIf(taskTicket -> taskTicket.belongsToTicket(ticketId));
-    // }
-    
+    // Metodos de gestion de recursos
+    /**
+     * Asigna un recurso a la tarea.
+     */
+    public void assignResource(Integer resourceId) {
+        if (resourceId != null && resourceId < 0) {
+            throw new IllegalArgumentException("El ID del recurso no puede ser negativo");
+        }
+        this.assignedResourceId = resourceId;
+    }
+
     // Métodos de consulta de estado
     
     /**
@@ -179,17 +163,6 @@ public class Task {
     }
     
     /**
-     * Verifica si la tarea está atrasada (fecha vencida y no completada).
-     */
-    public boolean isOverdue() {
-        if (dueDate == null || isFinished()) {
-            return false;
-        }
-        
-        return LocalDate.now().isAfter(dueDate);
-    }
-    
-    /**
      * Verifica si la tarea está asignada a un recurso.
      */
     public boolean isAssigned() {
@@ -203,7 +176,7 @@ public class Task {
         return this.id != null && this.id.equals(taskId);
     }
     
-    // Métodos auxiliares para cálculos (Tell, don't ask)
+    // Métodos auxiliares para cálculos
     
     /**
      * Obtiene las horas estimadas o cero si es null.
@@ -240,28 +213,6 @@ public class Task {
         return taskTags.stream()
             .anyMatch(taskTag -> taskTag.hasTagName(normalizedTagName));
     }
-    
-    // /**
-    //  * Verifica si la tarea está asociada a un ticket específico.
-    //  */
-    // public boolean hasTicket(Integer ticketId) {
-    //     if (ticketId == null) {
-    //         return false;
-    //     }
-        
-    //     return taskTickets.stream()
-    //         .anyMatch(taskTicket -> taskTicket.belongsToTicket(ticketId));
-    // }
-    
-    // /**
-    //  * Obtiene todos los IDs de tickets asociados a la tarea.
-    //  */
-    // public List<Integer> getTicketIds() {
-    //     return taskTickets.stream()
-    //         .map(TaskTicket::getTicketId)
-    //         .sorted()
-    //         .toList();
-    // }
     
     /**
      * Obtiene todos los nombres de tags de la tarea.
