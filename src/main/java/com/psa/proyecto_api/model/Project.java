@@ -53,7 +53,7 @@ public class Project {
 
     @NotNull(message = "El tipo de facturación es obligatorio")
     @Enumerated(EnumType.STRING)
-    @Column(name = "billingType", nullable = false)
+    @Column(name = "billing_type", nullable = false)
     private ProjectBillingType billingType;
     
     @NotNull(message = "La fecha de inicio es obligatoria")
@@ -103,6 +103,22 @@ public class Project {
         this.billingType = billingType;
         this.startDate = startDate;
         this.status = ProjectStatus.INITIATED;
+        this.tasks = new ArrayList<>();
+        this.projectTags = new ArrayList<>();
+    }
+
+    // Metodos de gestion de datos basicos
+
+    public void addEndDate(LocalDate endDate) {
+        if (endDate != null && ((endDate.isAfter(this.startDate)) || endDate.isEqual(this.startDate))) {
+            this.endDate = endDate;
+        }
+    }
+
+    public void addLeader(Integer leaderId) {
+        if (leaderId != null && leaderId > 0) {
+            this.leaderId = leaderId;
+        }
     }
 
     // Métodos de gestión de tareas
@@ -144,16 +160,14 @@ public class Project {
         if (tagName == null || tagName.trim().isEmpty()) {
             return;
         }
-        
-        String normalizedTagName = tagName.trim();
-        
+                
         // Verificar si el tag ya existe
         boolean tagExists = projectTags.stream()
-            .anyMatch(projectTag -> projectTag.hasTagName(normalizedTagName));
+            .anyMatch(projectTag -> projectTag.hasTagName(tagName));
             
         if (!tagExists) {
             ProjectTag newTag = ProjectTag.builder()
-                .tagName(normalizedTagName)
+                .tagName(tagName)
                 .project(this)
                 .build();
             
@@ -165,17 +179,69 @@ public class Project {
      * Remueve un tag del proyecto.
      */
     public void removeTag(String tagName) {
-        if (tagName == null || tagName.trim().isEmpty()) {
+        if (tagName == null || tagName.isEmpty()) {
             return;
         }
-        
-        String normalizedTagName = tagName.trim();
-        
-        projectTags.removeIf(projectTag -> projectTag.hasTagName(normalizedTagName));
+                
+        projectTags.removeIf(projectTag -> projectTag.hasTagName(tagName));
+    }
+
+    public void updateProjectTag(String oldTag, String newTag) {
+        if (oldTag == null || oldTag.isEmpty() || newTag == null || newTag.isEmpty()) {
+            return;
+        }
+
+        for (ProjectTag projectTag : projectTags) {
+            if (projectTag.hasTagName(oldTag)) {
+                projectTag.updateTagName(newTag);
+                return;
+            }
+        }
     }
     
+    // Metodos de actualizacion
+
+    /**
+     * Actualiza los detalles del proyecto.
+     */
+    public void updateDetails(String name, Integer clientId, Integer leaderId) {
+        if (name != null && !name.trim().isEmpty()) {
+            this.name = name;
+        }
+        if (clientId != null) {
+            this.clientId = clientId;
+        }
+        if (leaderId != null) {
+            this.leaderId = leaderId;
+        }
+    }
+
+    /**
+     * Actualiza los tipos del proyecto.
+     */
+    public void updateTypes(ProjectType type, ProjectBillingType billingType) {
+        if (type != null) {
+            this.type = type;
+        }
+        if (billingType != null) {
+            this.billingType = billingType;
+        }
+    }
+
+    /**
+     * Actualiza las fechas del proyecto.
+     */
+    public void updateDates(LocalDate startDate, LocalDate endDate) {
+        if (startDate != null) {
+            this.startDate = startDate;
+        }
+        if (endDate != null && ((endDate.isAfter(this.startDate)) || endDate.isEqual(this.startDate))) {
+                this.endDate = endDate;
+        } 
+    }
+
     // Métodos de consulta de estado
-    
+
     /**
      * Verifica si el proyecto está iniciado.
      */

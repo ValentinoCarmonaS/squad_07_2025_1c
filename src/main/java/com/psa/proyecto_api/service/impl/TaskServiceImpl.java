@@ -1,0 +1,98 @@
+package com.psa.proyecto_api.service.impl;
+
+import com.psa.proyecto_api.service.TaskService;
+import com.psa.proyecto_api.dto.request.CreateTaskRequest;
+import com.psa.proyecto_api.dto.request.UpdateTaskRequest;
+import com.psa.proyecto_api.dto.response.ProjectResponse;
+import com.psa.proyecto_api.dto.response.TaskResponse;
+import com.psa.proyecto_api.dto.response.TaskSummaryResponse;
+import com.psa.proyecto_api.mapper.TaskMapper;
+import com.psa.proyecto_api.model.Task;
+import com.psa.proyecto_api.model.Project;
+import com.psa.proyecto_api.repository.TaskRepository;
+import com.psa.proyecto_api.repository.ProjectRepository;
+import com.psa.proyecto_api.repository.TaskTagRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+@Service
+@RequiredArgsConstructor
+public class TaskServiceImpl implements TaskService {
+
+    private final TaskRepository taskRepository;
+    private final ProjectRepository projectRepository;
+    private final TaskMapper taskMapper;
+
+    // Task Methods
+
+    @Override
+    public TaskResponse createTask(Long projectId, CreateTaskRequest request) {
+        Project project = projectRepository.findById(projectId)
+                .orElseThrow(() -> new RuntimeException("Proyecto no encontrado"));
+        Task task = taskMapper.toEntity(request, project);
+        project.addTask(task);
+        task = taskRepository.save(task);
+        return taskMapper.toResponse(task);
+    }
+
+    @Override
+    public TaskResponse updateTask(Long taskId, UpdateTaskRequest request) {
+        Task task = taskRepository.findById(taskId)
+                .orElseThrow(() -> new RuntimeException("Tarea no encontrada"));
+        taskMapper.updateEntity(task, request);
+        task = taskRepository.save(task);
+        return taskMapper.toResponse(task);
+    }
+
+    @Override
+    public TaskResponse getTaskById(Long taskId) {
+        Task task = taskRepository.findById(taskId)
+                .orElseThrow(() -> new RuntimeException("Tarea no encontrada"));
+        return taskMapper.toResponse(task);
+    }
+
+    @Override
+    public void deleteTask(Long taskId) {
+        if (!taskRepository.existsById(taskId)) throw new RuntimeException("Tarea no encontrada");
+        taskRepository.deleteById(taskId);
+    }
+
+    // TaskTag Methods
+
+    @Override
+    public TaskResponse addTagToTask(Long id, String tag) {
+        Task task = taskRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Proyecto no encontrado"));
+        task.addTag(tag);
+        task = taskRepository.save(task);
+        return taskMapper.toResponse(task);
+    }
+
+    @Override
+    public TaskResponse removeTagFromTask(Long id, String tag) {
+        Task task = taskRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Proyecto no encontrado"));
+        task.removeTag(tag);
+        task = taskRepository.save(task);
+        return taskMapper.toResponse(task);
+    }
+
+    @Override
+    public TaskResponse updateTaskTag(Long id, String oldTag, String newTag) {
+        Task task = taskRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Proyecto no encontrado"));
+        task.updateTaskTag(oldTag, newTag);
+        task = taskRepository.save(task);
+        return taskMapper.toResponse(task);
+    }
+
+    @Override
+    public List<String> getTaskTags(Long id) {
+        Task task = taskRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Proyecto no encontrado"));
+        return task.getTagNames();
+    }
+
+}

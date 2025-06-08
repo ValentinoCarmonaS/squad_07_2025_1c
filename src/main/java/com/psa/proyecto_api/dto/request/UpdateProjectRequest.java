@@ -25,6 +25,4 @@ public class UpdateProjectRequest {
     private LocalDate endDate;
     
     private Integer leaderId;
-    
-    private List<String> tagNames;
 }

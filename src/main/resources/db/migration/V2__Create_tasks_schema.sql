@@ -4,6 +4,6 @@ CREATE TABLE tasks (
     project_id INT NOT NULL REFERENCES projects(id) ON DELETE CASCADE,
     name VARCHAR(100) NOT NULL,
     status VARCHAR(50) NOT NULL DEFAULT 'TO_DO' CHECK (status IN ('TO_DO', 'IN_PROGRESS', 'DONE')),
-    estimated_hours INT CHECK (estimated_hours > 0),
-    assigned_resource_id INT, -- ID del recurso asignado del sistema externo (NO es FK)
+    estimated_hours INT NOT NULL CHECK (estimated_hours > 0),
+    assigned_resource_id INT -- ID del recurso asignado (referencia a un ID en sistema externo, no es FK)
 );

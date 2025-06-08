@@ -56,7 +56,17 @@ public class ProjectTag {
         if (name == null || this.tagName == null) {
             return false;
         }
-        return this.tagName.equalsIgnoreCase(name.trim());
+        return this.tagName.trim().equalsIgnoreCase(name.trim());
+    }
+
+    /**
+     * Actualiza el nombre del tag.
+     */
+    public void updateTagName(String newTagName) {
+        if (newTagName == null || newTagName.trim().isEmpty()) {
+            throw new IllegalArgumentException("El nuevo nombre del tag no puede ser nulo o vacio");
+        }
+        this.tagName = newTagName;
     }
     
     /**

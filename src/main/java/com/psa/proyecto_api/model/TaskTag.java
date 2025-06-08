@@ -58,6 +58,16 @@ public class TaskTag {
         }
         return this.tagName.equalsIgnoreCase(name.trim());
     }
+
+    /**
+     * Actualiza el nombre del tag.
+     */
+    public void updateTagName(String newTagName) {
+        if (newTagName == null || newTagName.trim().isEmpty()) {
+            throw new IllegalArgumentException("El nuevo nombre del tag no puede ser nulo o vacio");
+        }
+        this.tagName = newTagName;
+    }
     
     /**
      * Verifica si este tag pertenece a la tarea especificada.

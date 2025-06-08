@@ -43,7 +43,8 @@ public class Task {
     @Builder.Default
     private TaskStatus status = TaskStatus.TO_DO;
     
-    @Min(value = 0, message = "Las horas estimadas no pueden ser negativas")
+    @NotNull(message = "Las horas estimadas son obligatorias")
+    @Min(value = 1, message = "Las horas estimadas no pueden ser negativas o cero")
     @Column(name = "estimated_hours")
     private Integer estimatedHours;
     
@@ -62,10 +63,17 @@ public class Task {
     private List<TaskTag> taskTags = new ArrayList<>();
     
     // Constructor
-    public Task(String name, Project project) {
+    public Task(String name, Project project, Integer estimatedHours) {
         this.name = name;
         this.project = project;
-        this.status = TaskStatus.TO_DO;
+        this.estimatedHours = estimatedHours;
+        this.taskTags = new ArrayList<>();
+    }
+
+    public void addAssignedResource(Integer assignedResourceId) {
+        if (assignedResourceId != null && assignedResourceId > 0) {
+            this.assignedResourceId = assignedResourceId;
+        }
     }
 
     // Metodos de gestion de proyecto
@@ -115,7 +123,38 @@ public class Task {
             taskTags.add(newTag);
         }
     }
-    
+
+    /**
+     * Actualiza los detalles de una tarea.
+     */
+    public void updateDetails(String name, Integer estimatedHours, Integer assignedResourceId) {
+        if (name != null && !name.trim().isEmpty()) {
+            this.name = name;
+        
+        } else if (estimatedHours != null && estimatedHours > 0) {
+            this.estimatedHours = estimatedHours;
+
+        } else if (assignedResourceId != null && assignedResourceId >=0) {
+            this.assignedResourceId = assignedResourceId;
+        }
+    }
+
+    /**
+     * Actualiza un tag de la tarea.
+     */
+    public void updateTaskTag(String oldTag, String newTag) {
+        if (oldTag == null || oldTag.isEmpty() || newTag == null || newTag.isEmpty()) {
+            return;
+        }
+
+        for (TaskTag taskTag : this.taskTags) {
+            if (taskTag.hasTagName(oldTag)) {
+                taskTag.updateTagName(newTag);
+                return;
+            }
+        }
+    }
+
     /**
      * Remueve un tag de la tarea.
      */

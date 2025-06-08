@@ -11,11 +11,9 @@ public class CreateTaskRequest {
     @NotBlank(message = "El nombre de la tarea es obligatorio")
     @Size(max = 100, message = "El nombre no puede exceder 100 caracteres")
     private String name;
-
-    @NotNull(message = "El proyecto es obligatorio")
-    private Long projectId;
     
-    @Min(value = 0, message = "Las horas estimadas no pueden ser negativas")
+    @NotNull(message = "Las horas estimadas son obligatorias")
+    @Min(value = 1, message = "Las horas estimadas no pueden ser negativas o cero")
     private Integer estimatedHours;
     
     private Integer assignedResourceId;

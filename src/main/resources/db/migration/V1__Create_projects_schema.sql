@@ -4,7 +4,7 @@ CREATE TABLE projects (
     name VARCHAR(100) NOT NULL,
     client_id INT, -- ID del cliente del sistema externo (NO es FK)
     type VARCHAR(50) NOT NULL CHECK (type IN ('DEVELOPMENT', 'IMPLEMENTATION')),
-    billingType VARCHAR(50) NOT NULL CHECK (billingType IN ('TIME_AND_MATERIAL', 'FIXED_PRICE')),
+    billing_type VARCHAR(50) NOT NULL CHECK (billing_type IN ('TIME_AND_MATERIAL', 'FIXED_PRICE')),
     start_date DATE NOT NULL,
     end_date DATE,
     estimated_hours INT CHECK (estimated_hours > 0),

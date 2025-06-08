@@ -37,7 +37,7 @@ check-env:  ## Verifica que el archivo .env exista
 
 flyway-clean: check-env  ## Limpia la base de datos (Flyway)
 	@echo "Limpiando la base de datos con Flyway..."
-	@$(MAVEN) flyway:clean
+	@$(MAVEN) flyway:clean -Dflyway.url=jdbc:postgresql://${PGHOST}/${PGDATABASE}?sslmode=require -Dflyway.user=${PGUSER} -Dflyway.password=${PGPASSWORD}
 
 flyway-repair: check-env
 	@echo "Reparando la base de datos con Flyway..."

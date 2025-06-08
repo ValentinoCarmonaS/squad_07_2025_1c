@@ -1,0 +1,20 @@
+package com.psa.proyecto_api.service;
+
+import com.psa.proyecto_api.dto.request.CreateProjectRequest;
+import com.psa.proyecto_api.dto.request.UpdateProjectRequest;
+import com.psa.proyecto_api.dto.response.ProjectResponse;
+import com.psa.proyecto_api.dto.response.ProjectSummaryResponse;
+
+import java.util.List;
+
+public interface ProjectService {
+    ProjectResponse createProject(CreateProjectRequest request);
+    ProjectResponse updateProject(Long id, UpdateProjectRequest request);
+    ProjectResponse getProjectById(Long id);
+    void deleteProject(Long id);
+
+    ProjectResponse addTagToProject(Long id, String tag);
+    ProjectResponse removeTagFromProject(Long id, String tag);
+    ProjectResponse updateProjectTag(Long id, String oldTag, String newTag);
+    List<String> getProjectTags(Long id);
+}

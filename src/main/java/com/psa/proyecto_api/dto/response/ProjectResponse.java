@@ -3,11 +3,14 @@ package com.psa.proyecto_api.dto.response;
 import com.psa.proyecto_api.model.enums.ProjectBillingType;
 import com.psa.proyecto_api.model.enums.ProjectStatus;
 import com.psa.proyecto_api.model.enums.ProjectType;
+
+import lombok.Builder;
 import lombok.Data;
 
 import java.time.LocalDate;
 import java.util.List;
 
+@Builder
 @Data
 public class ProjectResponse {
     private Long id;
@@ -22,10 +25,5 @@ public class ProjectResponse {
     private Integer estimatedHours;
     
     private List<String> tagNames;
-    private List<TaskSummaryResponse> tasks;
-
-    // Información adicional calculada
-    private Long totalTasks;
-    private Long completedTasks;
-    private Double progressPercentage;
+    private List<TaskResponse> tasks;
 }

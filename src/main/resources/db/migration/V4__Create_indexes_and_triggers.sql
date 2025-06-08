@@ -21,9 +21,3 @@ CREATE INDEX idx_project_tags_project_id ON project_tags(project_id);
 CREATE INDEX idx_project_tags_name ON project_tags(tag_name);
 CREATE INDEX idx_task_tags_task_id ON task_tags(task_id);
 CREATE INDEX idx_task_tags_name ON task_tags(tag_name);
-
--- ========================================
--- ÍNDICES PARA TASK_TICKETS
--- ========================================
-CREATE INDEX idx_task_tickets_task_id ON task_tickets(task_id);
-CREATE INDEX idx_task_tickets_ticket_id ON task_tickets(ticket_id);
