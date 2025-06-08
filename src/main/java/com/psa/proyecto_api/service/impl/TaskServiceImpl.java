@@ -32,7 +32,6 @@ public class TaskServiceImpl implements TaskService {
         Project project = projectRepository.findById(projectId)
                 .orElseThrow(() -> new RuntimeException("Proyecto no encontrado"));
         Task task = taskMapper.toEntity(request, project);
-        project.addTask(task);
         task = taskRepository.save(task);
         return taskMapper.toResponse(task);
     }
@@ -42,6 +41,24 @@ public class TaskServiceImpl implements TaskService {
         Task task = taskRepository.findById(taskId)
                 .orElseThrow(() -> new RuntimeException("Tarea no encontrada"));
         taskMapper.updateEntity(task, request);
+        task = taskRepository.save(task);
+        return taskMapper.toResponse(task);
+    }   
+
+    @Override
+    public TaskResponse activateTask(Long id) {
+        Task task = taskRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Tarea no encontrada"));
+        task.start();
+        task = taskRepository.save(task);
+        return taskMapper.toResponse(task);
+    }
+    
+    @Override
+    public TaskResponse deactivateTask(Long id) {
+        Task task = taskRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Tarea no encontrada"));
+        task.complete();
         task = taskRepository.save(task);
         return taskMapper.toResponse(task);
     }
@@ -55,7 +72,9 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public void deleteTask(Long taskId) {
-        if (!taskRepository.existsById(taskId)) throw new RuntimeException("Tarea no encontrada");
+        Task task = taskRepository.findById(taskId)
+                .orElseThrow(() -> new RuntimeException("Tarea no encontrada"));
+        task.removeFromProject();
         taskRepository.deleteById(taskId);
     }
 

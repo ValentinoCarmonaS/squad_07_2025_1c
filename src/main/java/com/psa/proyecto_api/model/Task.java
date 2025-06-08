@@ -68,6 +68,10 @@ public class Task {
         this.project = project;
         this.estimatedHours = estimatedHours;
         this.taskTags = new ArrayList<>();
+        this.status = TaskStatus.TO_DO;
+
+        // Establecer la relacion bidireccional con el proyecto
+        this.project.addTask(this);
     }
 
     public void addAssignedResource(Integer assignedResourceId) {
@@ -85,6 +89,13 @@ public class Task {
             throw new IllegalArgumentException("El proyecto no puede ser nulo");
         }
         this.project = project;
+    }
+
+    /**
+     * Eliminarme del proyecto al que pertenezco.
+     */
+    public void removeFromProject() {
+        this.project.removeTask(this);
     }
 
     // Metodos de gestion de horas
@@ -270,6 +281,7 @@ public class Task {
     public void start() {
         if (status == TaskStatus.TO_DO) {
             this.status = TaskStatus.IN_PROGRESS;
+            this.project.statusSwitch();
         }
     }
     
@@ -279,6 +291,7 @@ public class Task {
     public void complete() {
         if (status == TaskStatus.IN_PROGRESS) {
             this.status = TaskStatus.DONE;
+            this.project.statusSwitch();
         }
     }
     

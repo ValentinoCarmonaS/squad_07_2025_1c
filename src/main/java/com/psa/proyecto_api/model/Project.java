@@ -121,34 +121,45 @@ public class Project {
         }
     }
 
+    public void statusSwitch() {
+        if (!this.tasks.isEmpty()) {
+            // Si hay almenos una tarea activa, el proyecto esta en progreso
+            if (this.tasks.stream().anyMatch(Task::isActive)) {
+                this.status = ProjectStatus.IN_PROGRESS;
+
+            } else if (this.tasks.stream().allMatch(Task::isFinished)) {
+                this.status = ProjectStatus.TRANSITION;
+            }
+
+        } else {
+            this.status = ProjectStatus.INITIATED;
+        }
+    }
+
     // Métodos de gestión de tareas
     
     /**
      * Agrega una tarea al proyecto estableciendo la relación bidireccional.
      */
     public void addTask(Task task) {
-        if (task == null) {
+        if (task == null || this.tasks.contains(task)) {
             return;
         }
         tasks.add(task);
-        task.setProject(this);
-
-        // Actualizar las horas estimadas del proyecto al agregar una tarea
-        this.estimatedHours = getTotalEstimatedHoursFromTasks();
+        
+        this.updateProjectStatusAndHours();
     }
-    
+
     /**
      * Remueve una tarea del proyecto.
      */
     public void removeTask(Task task) {
-        if (task == null) {
+        if (task == null || !this.tasks.contains(task)) {
             return;
         }
-        tasks.remove(task);
-        task.setProject(null);
+        this.tasks.remove(task);
 
-        // Actualizar las horas estimadas del proyecto al agregar una tarea
-        this.estimatedHours = getTotalEstimatedHoursFromTasks();
+        this.updateProjectStatusAndHours();
     }
     
     // Métodos de gestión de tags
@@ -200,6 +211,19 @@ public class Project {
     }
     
     // Metodos de actualizacion
+
+    /**
+     * Actualizar del proyecto
+     */
+    public void updateProjectStatusAndHours() {
+
+        // Actualizar las horas estimadas del proyecto al agregar una tarea
+        Integer newEstimatedHours = this.getTotalEstimatedHoursFromTasks();
+        this.estimatedHours = newEstimatedHours == -1 ? null : newEstimatedHours;
+
+        // Actualizar el estado del proyecto si es necesario
+        this.statusSwitch();        
+    }
 
     /**
      * Actualiza los detalles del proyecto.
@@ -269,6 +293,9 @@ public class Project {
      * Calcula el total de horas estimadas en todas las tareas del proyecto.
      */
     public int getTotalEstimatedHoursFromTasks() {
+        if (this.tasks.isEmpty()) {
+            return -1;
+        }
         return tasks.stream()
             .mapToInt(Task::getEstimatedHoursOrZero)
             .sum();

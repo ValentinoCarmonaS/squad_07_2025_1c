@@ -13,6 +13,8 @@ public interface TaskService {
     TaskResponse updateTask(Long taskId, UpdateTaskRequest request);
     TaskResponse getTaskById(Long taskId);
     void deleteTask(Long taskId);
+    TaskResponse activateTask(Long id);
+    TaskResponse deactivateTask(Long id);
 
     TaskResponse addTagToTask(Long id, String tag);
     TaskResponse removeTagFromTask(Long id, String tag);

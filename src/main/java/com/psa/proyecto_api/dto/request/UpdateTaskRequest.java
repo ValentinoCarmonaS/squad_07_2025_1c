@@ -15,6 +15,4 @@ public class UpdateTaskRequest {
     private Integer estimatedHours;
     
     private Integer assignedResourceId;
-    
-    private List<String> tagNames;
 }

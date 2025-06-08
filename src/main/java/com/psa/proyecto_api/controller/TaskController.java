@@ -41,6 +41,20 @@ public class TaskController {
         return ResponseEntity.ok(response);
     }
 
+    // PUT /tareas/{id}/activar - Activar una tarea
+    @PutMapping("/tareas/{id}/activar")
+    public ResponseEntity<TaskResponse> activateTask(@PathVariable Long id) {
+        TaskResponse response = taskService.activateTask(id);
+        return ResponseEntity.ok(response);
+    }
+
+    // PUT /tareas/{id}/desactivar - Desactivar una tarea (cambiar estado a TO_DO)
+    @PutMapping("/tareas/{id}/desactivar")
+    public ResponseEntity<TaskResponse> deactivateTask(@PathVariable Long id) {
+        TaskResponse response = taskService.deactivateTask(id);
+        return ResponseEntity.ok(response);
+    }
+
     // GET /proyectos/{id}/tareas - Consultar tareas de un proyecto ===================================================
 
     // GET /tareas/{id} - Obtener detalles de una tarea específica
