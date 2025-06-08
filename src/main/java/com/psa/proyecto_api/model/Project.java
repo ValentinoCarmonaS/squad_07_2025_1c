@@ -9,11 +9,7 @@ import jakarta.validation.constraints.*;
 
 import lombok.*;
 
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
-
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -50,12 +46,6 @@ public class Project {
     @Column(name = "name", nullable = false)
     private String name;
     
-    @Column(name = "description", columnDefinition = "TEXT")
-    private String description;
-    
-    @Column(name = "client_id")
-    private Integer clientId;
-    
     @NotNull(message = "El tipo de proyecto es obligatorio")
     @Enumerated(EnumType.STRING)
     @Column(name = "type", nullable = false)
@@ -63,7 +53,7 @@ public class Project {
 
     @NotNull(message = "El tipo de facturación es obligatorio")
     @Enumerated(EnumType.STRING)
-    @Column(name = "billingType", nullable = false)
+    @Column(name = "billing_type", nullable = false)
     private ProjectBillingType billingType;
     
     @NotNull(message = "La fecha de inicio es obligatoria")
@@ -83,19 +73,15 @@ public class Project {
     @Builder.Default
     private ProjectStatus status = ProjectStatus.INITIATED;
     
+    // Relaciones externas
+    @NotNull(message = "El cliente es obligatorio")
+    @Column(name = "client_id")
+    private Integer clientId;
+
     @Column(name = "leader_id")
     private Integer leaderId;
     
-    @CreationTimestamp
-    @Column(name = "created_at", nullable = false, updatable = false)
-    @Builder.Default
-    private LocalDateTime createdAt = LocalDateTime.now();
-    
-    @UpdateTimestamp
-    @Column(name = "updated_at", nullable = false)
-    private LocalDateTime updatedAt;
-    
-    // Relaciones
+    // Relaciones internas
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @Builder.Default
     private List<Task> tasks = new ArrayList<>();
@@ -104,30 +90,76 @@ public class Project {
     @Builder.Default
     private List<ProjectTag> projectTags = new ArrayList<>();
     
+
+    // Constructor
+    
+    /**
+     * Constructor para crear un proyecto con los campos obligatorios.
+     */
+    public Project(String name, Integer clientId, ProjectType type, ProjectBillingType billingType, LocalDate startDate) {
+        this.name = name;
+        this.clientId = clientId;
+        this.type = type;
+        this.billingType = billingType;
+        this.startDate = startDate;
+        this.status = ProjectStatus.INITIATED;
+        this.tasks = new ArrayList<>();
+        this.projectTags = new ArrayList<>();
+    }
+
+    // Metodos de gestion de datos basicos
+
+    public void addEndDate(LocalDate endDate) {
+        if (endDate != null && ((endDate.isAfter(this.startDate)) || endDate.isEqual(this.startDate))) {
+            this.endDate = endDate;
+        }
+    }
+
+    public void addLeader(Integer leaderId) {
+        if (leaderId != null && leaderId > 0) {
+            this.leaderId = leaderId;
+        }
+    }
+
+    public void statusSwitch() {
+        if (!this.tasks.isEmpty()) {
+            // Si hay almenos una tarea activa, el proyecto esta en progreso
+            if (this.tasks.stream().anyMatch(Task::isActive)) {
+                this.status = ProjectStatus.IN_PROGRESS;
+
+            } else if (this.tasks.stream().allMatch(Task::isFinished)) {
+                this.status = ProjectStatus.TRANSITION;
+            }
+
+        } else {
+            this.status = ProjectStatus.INITIATED;
+        }
+    }
+
     // Métodos de gestión de tareas
     
     /**
      * Agrega una tarea al proyecto estableciendo la relación bidireccional.
      */
     public void addTask(Task task) {
-        if (task == null) {
+        if (task == null || this.tasks.contains(task)) {
             return;
         }
-        
         tasks.add(task);
-        task.setProject(this);
+        
+        this.updateProjectStatusAndHours();
     }
-    
+
     /**
      * Remueve una tarea del proyecto.
      */
     public void removeTask(Task task) {
-        if (task == null) {
+        if (task == null || !this.tasks.contains(task)) {
             return;
         }
-        
-        tasks.remove(task);
-        task.setProject(null);
+        this.tasks.remove(task);
+
+        this.updateProjectStatusAndHours();
     }
     
     // Métodos de gestión de tags
@@ -139,16 +171,14 @@ public class Project {
         if (tagName == null || tagName.trim().isEmpty()) {
             return;
         }
-        
-        String normalizedTagName = tagName.trim();
-        
+                
         // Verificar si el tag ya existe
         boolean tagExists = projectTags.stream()
-            .anyMatch(projectTag -> projectTag.hasTagName(normalizedTagName));
+            .anyMatch(projectTag -> projectTag.hasTagName(tagName));
             
         if (!tagExists) {
             ProjectTag newTag = ProjectTag.builder()
-                .tagName(normalizedTagName)
+                .tagName(tagName)
                 .project(this)
                 .build();
             
@@ -160,17 +190,82 @@ public class Project {
      * Remueve un tag del proyecto.
      */
     public void removeTag(String tagName) {
-        if (tagName == null || tagName.trim().isEmpty()) {
+        if (tagName == null || tagName.isEmpty()) {
             return;
         }
-        
-        String normalizedTagName = tagName.trim();
-        
-        projectTags.removeIf(projectTag -> projectTag.hasTagName(normalizedTagName));
+                
+        projectTags.removeIf(projectTag -> projectTag.hasTagName(tagName));
+    }
+
+    public void updateProjectTag(String oldTag, String newTag) {
+        if (oldTag == null || oldTag.isEmpty() || newTag == null || newTag.isEmpty()) {
+            return;
+        }
+
+        for (ProjectTag projectTag : projectTags) {
+            if (projectTag.hasTagName(oldTag)) {
+                projectTag.updateTagName(newTag);
+                return;
+            }
+        }
     }
     
+    // Metodos de actualizacion
+
+    /**
+     * Actualizar del proyecto
+     */
+    public void updateProjectStatusAndHours() {
+
+        // Actualizar las horas estimadas del proyecto al agregar una tarea
+        Integer newEstimatedHours = this.getTotalEstimatedHoursFromTasks();
+        this.estimatedHours = newEstimatedHours == -1 ? null : newEstimatedHours;
+
+        // Actualizar el estado del proyecto si es necesario
+        this.statusSwitch();        
+    }
+
+    /**
+     * Actualiza los detalles del proyecto.
+     */
+    public void updateDetails(String name, Integer clientId, Integer leaderId) {
+        if (name != null && !name.trim().isEmpty()) {
+            this.name = name;
+        }
+        if (clientId != null) {
+            this.clientId = clientId;
+        }
+        if (leaderId != null) {
+            this.leaderId = leaderId;
+        }
+    }
+
+    /**
+     * Actualiza los tipos del proyecto.
+     */
+    public void updateTypes(ProjectType type, ProjectBillingType billingType) {
+        if (type != null) {
+            this.type = type;
+        }
+        if (billingType != null) {
+            this.billingType = billingType;
+        }
+    }
+
+    /**
+     * Actualiza las fechas del proyecto.
+     */
+    public void updateDates(LocalDate startDate, LocalDate endDate) {
+        if (startDate != null) {
+            this.startDate = startDate;
+        }
+        if (endDate != null && ((endDate.isAfter(this.startDate)) || endDate.isEqual(this.startDate))) {
+                this.endDate = endDate;
+        } 
+    }
+
     // Métodos de consulta de estado
-    
+
     /**
      * Verifica si el proyecto está iniciado.
      */
@@ -198,6 +293,9 @@ public class Project {
      * Calcula el total de horas estimadas en todas las tareas del proyecto.
      */
     public int getTotalEstimatedHoursFromTasks() {
+        if (this.tasks.isEmpty()) {
+            return -1;
+        }
         return tasks.stream()
             .mapToInt(Task::getEstimatedHoursOrZero)
             .sum();
@@ -234,14 +332,6 @@ public class Project {
         return tasks.stream()
             .mapToLong(Task::isFinishedAsLong)
             .sum();
-    }
-    
-    /**
-     * Verifica si el proyecto tiene tareas vencidas.
-     */
-    public boolean hasOverdueTasks() {
-        return tasks.stream()
-            .anyMatch(Task::isOverdue);
     }
     
     /**

@@ -14,8 +14,8 @@ import java.util.List;
 public interface TaskRepository extends JpaRepository<Task, Long> {
     
     // Consultas básicas por proyecto
-    List<Task> findByProjectId(Long projectId);
-    List<Task> findByProjectIdOrderByCreatedAtAsc(Long projectId);
+    List<Task> findAll();
+    List<Task> findByProjectId(Long projectId);    
     
     // Consultas por estado
     List<Task> findByStatus(TaskStatus status);
@@ -24,19 +24,6 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
     // Consultas por responsable
     List<Task> findByAssignedResourceId(Integer assignedResourceId);
     List<Task> findByAssignedResourceIdAndStatus(Integer assignedResourceId, TaskStatus status);
-    
-    // Consultas por fechas
-    @Query("SELECT t FROM Task t WHERE t.dueDate BETWEEN :startDate AND :endDate")
-    List<Task> findByDueDateRange(@Param("startDate") LocalDate startDate, 
-                                  @Param("endDate") LocalDate endDate);
-    
-    // Tareas vencidas
-    @Query("SELECT t FROM Task t WHERE t.dueDate < CURRENT_DATE AND t.status != 'DONE'")
-    List<Task> findOverdueTasks();
-    
-    // Tareas por vencer (próximos N días)
-    @Query("SELECT t FROM Task t WHERE t.dueDate BETWEEN CURRENT_DATE AND :endDate AND t.status != 'DONE'")
-    List<Task> findTasksDueSoon(@Param("endDate") LocalDate endDate);
         
     // Consultas por etiquetas
     @Query("SELECT t FROM Task t JOIN t.taskTags tag WHERE tag.tagName = :tagName")
@@ -55,11 +42,6 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
     
     @Query("SELECT COUNT(t) FROM Task t WHERE t.assignedResourceId = :assignedResourceId AND t.status = :status")
     Long countByAssignedResourceIdAndStatus(@Param("assignedResourceId") Integer assignedResourceId, @Param("status") TaskStatus status);
-    
-    // Búsqueda por nombre/descripción
-    @Query("SELECT t FROM Task t WHERE LOWER(t.name) LIKE LOWER(CONCAT('%', :searchTerm, '%')) " +
-           "OR LOWER(t.description) LIKE LOWER(CONCAT('%', :searchTerm, '%'))")
-    List<Task> findByNameOrDescriptionContainingIgnoreCase(@Param("searchTerm") String searchTerm);
     
     // Tareas sin asignar
     List<Task> findByAssignedResourceIdIsNull();

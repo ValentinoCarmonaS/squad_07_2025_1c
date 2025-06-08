@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 public interface TaskTagRepository extends JpaRepository<TaskTag, Long> {
     
     // Consultas básicas por campos simples
+    List<TaskTag> findAll();
     List<TaskTag> findByTaskId(Long taskId);
     Optional<TaskTag> findByTaskIdAndTagName(Long taskId, String tagName);
     void deleteByTaskIdAndTagName(Long taskId, String tagName);

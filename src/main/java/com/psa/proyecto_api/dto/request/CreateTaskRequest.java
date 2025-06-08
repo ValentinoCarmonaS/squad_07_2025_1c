@@ -3,7 +3,6 @@ package com.psa.proyecto_api.dto.request;
 import jakarta.validation.constraints.*;
 import lombok.Data;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @Data
@@ -13,12 +12,8 @@ public class CreateTaskRequest {
     @Size(max = 100, message = "El nombre no puede exceder 100 caracteres")
     private String name;
     
-    @Size(max = 1000, message = "La descripción no puede exceder 1000 caracteres")
-    private String description;
-    
-    private LocalDate dueDate;
-    
-    @Min(value = 0, message = "Las horas estimadas no pueden ser negativas")
+    @NotNull(message = "Las horas estimadas son obligatorias")
+    @Min(value = 1, message = "Las horas estimadas no pueden ser negativas o cero")
     private Integer estimatedHours;
     
     private Integer assignedResourceId;

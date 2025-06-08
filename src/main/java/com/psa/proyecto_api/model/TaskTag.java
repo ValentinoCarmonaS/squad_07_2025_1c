@@ -2,11 +2,10 @@ package com.psa.proyecto_api.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
-import org.hibernate.annotations.CreationTimestamp;
 
-import java.time.LocalDateTime;
 import java.util.Objects;
 
 /**
@@ -35,16 +34,19 @@ public class TaskTag {
     @Size(max = 50, message = "El nombre del tag no puede exceder los 50 caracteres")
     @Column(name = "tag_name", nullable = false)
     private String tagName;
-    
-    @CreationTimestamp
-    @Column(name = "created_at", nullable = false, updatable = false)
-    private LocalDateTime createdAt;
 
     // Relaciones
+    @NotNull(message = "La tarea es obligatoria")
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "task_id", nullable = false)
     private Task task;
 
+    // Consturctor
+    public TaskTag(String tagName, Task task) {
+        this.tagName = tagName;
+        this.task = task;
+    }
+    
     // Métodos auxiliares
     
     /**
@@ -55,6 +57,16 @@ public class TaskTag {
             return false;
         }
         return this.tagName.equalsIgnoreCase(name.trim());
+    }
+
+    /**
+     * Actualiza el nombre del tag.
+     */
+    public void updateTagName(String newTagName) {
+        if (newTagName == null || newTagName.trim().isEmpty()) {
+            throw new IllegalArgumentException("El nuevo nombre del tag no puede ser nulo o vacio");
+        }
+        this.tagName = newTagName;
     }
     
     /**
