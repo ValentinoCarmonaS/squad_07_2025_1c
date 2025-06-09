@@ -1,7 +1,6 @@
 package com.psa.proyecto_api.dto.response;
 
 import com.psa.proyecto_api.model.enums.ProjectStatus;
-
 import lombok.Builder;
 import lombok.Data;
 
