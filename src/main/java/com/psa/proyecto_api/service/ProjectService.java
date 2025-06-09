@@ -1,6 +1,7 @@
 package com.psa.proyecto_api.service;
 
 import com.psa.proyecto_api.dto.request.CreateProjectRequest;
+import com.psa.proyecto_api.dto.request.ProjectFilterRequest;
 import com.psa.proyecto_api.dto.request.UpdateProjectRequest;
 import com.psa.proyecto_api.dto.response.ProjectResponse;
 import com.psa.proyecto_api.dto.response.ProjectSummaryResponse;
@@ -10,8 +11,7 @@ import java.util.List;
 public interface ProjectService {
     ProjectResponse createProject(CreateProjectRequest request);
     ProjectResponse updateProject(Long id, UpdateProjectRequest request);
-    List<ProjectSummaryResponse> getAllProjects(
-        Integer clientId, String status, String type, Integer leaderId, String startDate, String endDate);
+    List<ProjectSummaryResponse> getProjects(ProjectFilterRequest filterRequest);
     ProjectResponse getProjectById(Long id);
     void deleteProject(Long id);
 
