@@ -3,6 +3,8 @@ package com.psa.proyecto_api.model;
 import com.psa.proyecto_api.model.enums.ProjectBillingType;
 import com.psa.proyecto_api.model.enums.ProjectStatus;
 import com.psa.proyecto_api.model.enums.ProjectType;
+import com.psa.proyecto_api.exception.OperationNotAllowedException;
+import com.psa.proyecto_api.exception.ResourceConflictException;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
@@ -142,11 +144,15 @@ public class Project {
      * Agrega una tarea al proyecto estableciendo la relación bidireccional.
      */
     public void addTask(Task task) {
-        if (task == null || this.tasks.contains(task)) {
-            return;
+        if (task == null) {
+            throw new OperationNotAllowedException("No se puede agregar una tarea nula al proyecto");
         }
-        tasks.add(task);
         
+        if (this.tasks.contains(task)) {
+            throw new ResourceConflictException("La tarea ya está asociada a este proyecto");
+        }
+        
+        tasks.add(task);
         this.updateProjectStatusAndHours();
     }
 
@@ -154,11 +160,15 @@ public class Project {
      * Remueve una tarea del proyecto.
      */
     public void removeTask(Task task) {
-        if (task == null || !this.tasks.contains(task)) {
-            return;
+        if (task == null) {
+            throw new OperationNotAllowedException("No se puede remover una tarea nula del proyecto");
         }
+        
+        if (!this.tasks.contains(task)) {
+            throw new OperationNotAllowedException("La tarea no pertenece a este proyecto");
+        }
+        
         this.tasks.remove(task);
-
         this.updateProjectStatusAndHours();
     }
     
@@ -169,21 +179,23 @@ public class Project {
      */
     public void addTag(String tagName) {
         if (tagName == null || tagName.trim().isEmpty()) {
-            return;
+            throw new OperationNotAllowedException("El nombre del tag no puede ser nulo o vacío");
         }
                 
         // Verificar si el tag ya existe
         boolean tagExists = projectTags.stream()
             .anyMatch(projectTag -> projectTag.hasTagName(tagName));
             
-        if (!tagExists) {
-            ProjectTag newTag = ProjectTag.builder()
-                .tagName(tagName)
-                .project(this)
-                .build();
-            
-            projectTags.add(newTag);
+        if (tagExists) {
+            throw new ResourceConflictException("El tag '" + tagName + "' ya existe en este proyecto");
         }
+        
+        ProjectTag newTag = ProjectTag.builder()
+            .tagName(tagName)
+            .project(this)
+            .build();
+        
+        projectTags.add(newTag);
     }
     
     /**
@@ -191,15 +203,31 @@ public class Project {
      */
     public void removeTag(String tagName) {
         if (tagName == null || tagName.isEmpty()) {
-            return;
+            throw new OperationNotAllowedException("El nombre del tag no puede ser nulo o vacío");
         }
-                
-        projectTags.removeIf(projectTag -> projectTag.hasTagName(tagName));
+        
+        boolean removed = projectTags.removeIf(projectTag -> projectTag.hasTagName(tagName));
+        
+        if (!removed) {
+            throw new OperationNotAllowedException("El tag '" + tagName + "' no existe en este proyecto");
+        }
     }
 
     public void updateProjectTag(String oldTag, String newTag) {
-        if (oldTag == null || oldTag.isEmpty() || newTag == null || newTag.isEmpty()) {
-            return;
+        if (oldTag == null || oldTag.isEmpty()) {
+            throw new OperationNotAllowedException("El nombre del tag actual no puede ser nulo o vacío");
+        }
+        
+        if (newTag == null || newTag.isEmpty()) {
+            throw new OperationNotAllowedException("El nombre del nuevo tag no puede ser nulo o vacío");
+        }
+
+        // Verificar si el nuevo tag ya existe (evitar duplicados)
+        boolean newTagExists = projectTags.stream()
+            .anyMatch(projectTag -> projectTag.hasTagName(newTag));
+            
+        if (newTagExists) {
+            throw new ResourceConflictException("El tag '" + newTag + "' ya existe en este proyecto");
         }
 
         for (ProjectTag projectTag : projectTags) {
@@ -208,6 +236,8 @@ public class Project {
                 return;
             }
         }
+        
+        throw new OperationNotAllowedException("El tag '" + oldTag + "' no existe en este proyecto");
     }
     
     // Metodos de actualizacion

@@ -1,6 +1,10 @@
 package com.psa.proyecto_api.model;
 
 import com.psa.proyecto_api.model.enums.TaskStatus;
+import com.psa.proyecto_api.exception.OperationNotAllowedException;
+import com.psa.proyecto_api.exception.ResourceConflictException;
+import com.psa.proyecto_api.exception.InvalidProjectStatusException;
+
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.*;
@@ -25,7 +29,7 @@ import java.util.Objects;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@ToString(exclude = {"project", "taskTags"}) // Agregar "taskTickets" si realmente son necesarios los tickets
+@ToString(exclude = {"project", "taskTags"})
 public class Task {
     
     @Id
@@ -86,7 +90,7 @@ public class Task {
      */
     public void setProject(Project project) {
         if (project == null) {
-            throw new IllegalArgumentException("El proyecto no puede ser nulo");
+            throw new OperationNotAllowedException("El proyecto no puede ser nulo");
         }
         this.project = project;
     }
@@ -99,16 +103,6 @@ public class Task {
     }
 
     // Metodos de gestion de horas
-    
-    /**
-     * Establece las horas estimadas de la tarea.
-     */
-    public void setEstimatedHours(Integer estimatedHours) {
-        if (estimatedHours != null && estimatedHours < 0) {
-            throw new IllegalArgumentException("Las horas estimadas no pueden ser negativas");
-        }
-        this.estimatedHours = estimatedHours;
-    }
 
     // Métodos de gestión de tags
     
@@ -117,7 +111,7 @@ public class Task {
      */
     public void addTag(String tagName) {
         if (tagName == null || tagName.trim().isEmpty()) {
-            return;
+            throw new OperationNotAllowedException("El nombre del tag no puede ser nulo o vacío");
         }
         String normalizedTagName = tagName.trim();
         
@@ -125,14 +119,16 @@ public class Task {
         boolean tagExists = taskTags.stream()
             .anyMatch(taskTag -> taskTag.hasTagName(normalizedTagName));
             
-        if (!tagExists) {
-            TaskTag newTag = TaskTag.builder()
-                .tagName(normalizedTagName)
-                .task(this)
-                .build();
-            
-            taskTags.add(newTag);
+        if (tagExists) {
+            throw new ResourceConflictException("El tag '" + tagName + "' ya existe en esta tarea");
         }
+        
+        TaskTag newTag = TaskTag.builder()
+            .tagName(normalizedTagName)
+            .task(this)
+            .build();
+        
+        taskTags.add(newTag);
     }
 
     /**
@@ -144,6 +140,7 @@ public class Task {
         
         } else if (estimatedHours != null && estimatedHours > 0) {
             this.estimatedHours = estimatedHours;
+            this.project.updateProjectStatusAndHours();
 
         } else if (assignedResourceId != null && assignedResourceId >=0) {
             this.assignedResourceId = assignedResourceId;
@@ -154,8 +151,20 @@ public class Task {
      * Actualiza un tag de la tarea.
      */
     public void updateTaskTag(String oldTag, String newTag) {
-        if (oldTag == null || oldTag.isEmpty() || newTag == null || newTag.isEmpty()) {
-            return;
+        if (oldTag == null || oldTag.isEmpty()) {
+            throw new OperationNotAllowedException("El nombre del tag actual no puede ser nulo o vacío");
+        }
+        
+        if (newTag == null || newTag.isEmpty()) {
+            throw new OperationNotAllowedException("El nombre del nuevo tag no puede ser nulo o vacío");
+        }
+
+        // Verificar si el nuevo tag ya existe (evitar duplicados)
+        boolean newTagExists = taskTags.stream()
+            .anyMatch(taskTag -> taskTag.hasTagName(newTag));
+            
+        if (newTagExists) {
+            throw new ResourceConflictException("El tag '" + newTag + "' ya existe en esta tarea");
         }
 
         for (TaskTag taskTag : this.taskTags) {
@@ -164,6 +173,8 @@ public class Task {
                 return;
             }
         }
+        
+        throw new OperationNotAllowedException("El tag '" + oldTag + "' no existe en esta tarea");
     }
 
     /**
@@ -171,10 +182,15 @@ public class Task {
      */
     public void removeTag(String tagName) {
         if (tagName == null || tagName.trim().isEmpty()) {
-            return;
+            throw new OperationNotAllowedException("El nombre del tag no puede ser nulo o vacío");
         }
         String normalizedTagName = tagName.trim();
-        taskTags.removeIf(taskTag -> taskTag.hasTagName(normalizedTagName));
+        
+        boolean removed = taskTags.removeIf(taskTag -> taskTag.hasTagName(normalizedTagName));
+        
+        if (!removed) {
+            throw new OperationNotAllowedException("El tag '" + tagName + "' no existe en esta tarea");
+        }
     }
     
     // Metodos de gestion de recursos
@@ -183,7 +199,7 @@ public class Task {
      */
     public void assignResource(Integer resourceId) {
         if (resourceId != null && resourceId < 0) {
-            throw new IllegalArgumentException("El ID del recurso no puede ser negativo");
+            throw new OperationNotAllowedException("El ID del recurso no puede ser negativo");
         }
         this.assignedResourceId = resourceId;
     }
@@ -279,20 +295,24 @@ public class Task {
      * Inicia la tarea cambiando su estado a IN_PROGRESS.
      */
     public void start() {
-        if (status == TaskStatus.TO_DO) {
-            this.status = TaskStatus.IN_PROGRESS;
-            this.project.statusSwitch();
+        if (status != TaskStatus.TO_DO) {
+            throw new InvalidProjectStatusException("No se puede iniciar una tarea que no esté en estado TO_DO. Estado actual: " + status);
         }
+        
+        this.status = TaskStatus.IN_PROGRESS;
+        this.project.statusSwitch();
     }
     
     /**
      * Completa la tarea cambiando su estado a DONE.
      */
     public void complete() {
-        if (status == TaskStatus.IN_PROGRESS) {
-            this.status = TaskStatus.DONE;
-            this.project.statusSwitch();
+        if (status != TaskStatus.IN_PROGRESS) {
+            throw new InvalidProjectStatusException("No se puede completar una tarea que no esté en estado IN_PROGRESS. Estado actual: " + status);
         }
+        
+        this.status = TaskStatus.DONE;
+        this.project.statusSwitch();
     }
     
     // equals y hashCode basados en el ID
