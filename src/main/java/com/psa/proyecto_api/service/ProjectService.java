@@ -12,6 +12,7 @@ public interface ProjectService {
     ProjectResponse createProject(CreateProjectRequest request);
     ProjectResponse updateProject(Long id, UpdateProjectRequest request);
     List<ProjectSummaryResponse> getProjects(ProjectFilterRequest filterRequest);
+    List<ProjectSummaryResponse> searchProjects(String name);
     ProjectResponse getProjectById(Long id);
     void deleteProject(Long id);
 

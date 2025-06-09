@@ -68,6 +68,14 @@ public class ProjectController {
         return ResponseEntity.ok(filteredProjects);
     }
 
+    // GET /proyectos/buscar - Buscar proyectos por nombre
+    @GetMapping("/buscar")
+    public ResponseEntity<List<ProjectSummaryResponse>> searchProjects(
+            @RequestParam String name) {
+        List<ProjectSummaryResponse> filteredProjects = projectService.searchProjects(name);
+        return ResponseEntity.ok(filteredProjects);
+    }
+
     // GET /proyectos/{id} - Ver detalles de un proyecto específico
     @GetMapping("/{id}")
     public ResponseEntity<ProjectResponse> getProjectById(@PathVariable Long id) {

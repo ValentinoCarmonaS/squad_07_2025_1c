@@ -53,6 +53,12 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
+    public List<ProjectSummaryResponse> searchProjects(String name) {
+        List<Project> projects = projectRepository.findByNameContainingIgnoreCase(name);
+        return projectMapper.toSummaryList(projects);
+    }
+
+    @Override
     public ProjectResponse getProjectById(Long id) {
         Project project = projectRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Proyecto no encontrado"));
