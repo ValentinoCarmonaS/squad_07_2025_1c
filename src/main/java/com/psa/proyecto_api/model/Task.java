@@ -140,12 +140,15 @@ public class Task {
      */
     public void updateDetails(String name, Integer estimatedHours, Integer assignedResourceId) {
         if (name != null && !name.trim().isEmpty()) {
-            this.name = name;
-        
-        } else if (estimatedHours != null && estimatedHours > 0) {
+            this.name = name;        
+        }
+        if (estimatedHours != null && estimatedHours > 0) {
+            System.out.println("Actualizando horas estimadas de la tarea: " + this.name + " de " + this.estimatedHours + " a " + estimatedHours);
             this.estimatedHours = estimatedHours;
+            this.project.updateProjectStatusAndHours();
+        }
 
-        } else if (assignedResourceId != null && assignedResourceId >=0) {
+        if (assignedResourceId != null && assignedResourceId >=0) {
             this.assignedResourceId = assignedResourceId;
         }
     }
