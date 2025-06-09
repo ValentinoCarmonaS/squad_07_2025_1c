@@ -47,20 +47,19 @@ public class ProjectController {
     }
 
     // GET /proyectos - Listar todos los proyectos con filtros
-    // @GetMapping
-    // public ResponseEntity<Page<ProjectSummaryResponse>> getAllProjects(
-    //         @RequestParam(required = false) Integer clientId,
-    //         @RequestParam(required = false) String status,
-    //         @RequestParam(required = false) String type,
-    //         @RequestParam(required = false) Integer leaderId,
-    //         @RequestParam(required = false) String startDate,
-    //         @RequestParam(required = false) String endDate,
-    //         Pageable pageable) {
+    @GetMapping
+    public ResponseEntity<List<ProjectSummaryResponse>> getAllProjects(
+            @RequestParam(required = false) Integer clientId,
+            @RequestParam(required = false) String status,
+            @RequestParam(required = false) String type,
+            @RequestParam(required = false) Integer leaderId,
+            @RequestParam(required = false) String startDate,
+            @RequestParam(required = false) String endDate) {
         
-    //     Page<ProjectSummaryResponse> projects = projectService.getAllProjects(
-    //         clientId, status, type, leaderId, startDate, endDate, pageable);
-    //     return ResponseEntity.ok(projects);
-    // }
+        List<ProjectSummaryResponse> filteredProjects = projectService.getAllProjects(
+            clientId, status, type, leaderId, startDate, endDate);
+        return ResponseEntity.ok(filteredProjects);
+    }
 
     // GET /proyectos/{id} - Ver detalles de un proyecto específico
     @GetMapping("/{id}")

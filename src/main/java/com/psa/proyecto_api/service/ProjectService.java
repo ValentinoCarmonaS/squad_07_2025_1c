@@ -10,6 +10,8 @@ import java.util.List;
 public interface ProjectService {
     ProjectResponse createProject(CreateProjectRequest request);
     ProjectResponse updateProject(Long id, UpdateProjectRequest request);
+    List<ProjectSummaryResponse> getAllProjects(
+        Integer clientId, String status, String type, Integer leaderId, String startDate, String endDate);
     ProjectResponse getProjectById(Long id);
     void deleteProject(Long id);
 

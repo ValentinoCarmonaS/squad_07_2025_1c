@@ -9,6 +9,8 @@ import com.psa.proyecto_api.repository.ProjectRepository;
 import com.psa.proyecto_api.service.ProjectService;
 import com.psa.proyecto_api.mapper.ProjectMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -36,6 +38,21 @@ public class ProjectServiceImpl implements ProjectService {
         projectMapper.updateEntity(project, request);
         project = projectRepository.save(project);
         return projectMapper.toResponse(project);
+    }
+
+    @Override
+    public List<ProjectSummaryResponse> getAllProjects(
+        Integer clientId,
+        String status,
+        String type,
+        Integer leaderId,
+        String startDate,
+        String endDate) {
+
+        List<Project> projects = projectRepository.findAll();
+        return projects.stream()
+            .map(projectMapper::toSummary)
+            .toList();
     }
 
     @Override
