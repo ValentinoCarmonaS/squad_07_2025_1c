@@ -10,6 +10,9 @@ import com.psa.proyecto_api.exception.ProjectNotFoundException;
 import com.psa.proyecto_api.exception.TaskNotFoundException;
 import com.psa.proyecto_api.mapper.TaskMapper;
 import com.psa.proyecto_api.model.Task;
+import com.psa.proyecto_api.model.enums.ProjectStatus;
+import com.psa.proyecto_api.model.enums.ProjectType;
+import com.psa.proyecto_api.model.enums.TaskStatus;
 import com.psa.proyecto_api.model.Project;
 import com.psa.proyecto_api.repository.TaskRepository;
 import com.psa.proyecto_api.repository.ProjectRepository;
@@ -78,6 +81,16 @@ public class TaskServiceImpl implements TaskService {
                 .orElseThrow(() -> new TaskNotFoundException(taskId));
         task.removeFromProject();
         taskRepository.deleteById(taskId);
+    }
+
+    @Override
+    public List<TaskSummaryResponse> getProjectTasksFiltered(Long projectId, String status, String tag, String name) {
+        TaskStatus taskStatus = TaskStatus.fromString(status);
+
+        List<Task> tasks = taskRepository.findByProgressiveFilters(projectId, taskStatus, tag, name);
+        return tasks.stream()
+                .map(taskMapper::toSummary)
+                .toList();
     }
 
     // TaskTag Methods

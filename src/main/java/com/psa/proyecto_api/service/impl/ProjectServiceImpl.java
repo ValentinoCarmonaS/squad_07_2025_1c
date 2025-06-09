@@ -6,6 +6,8 @@ import com.psa.proyecto_api.dto.response.ProjectResponse;
 import com.psa.proyecto_api.dto.response.ProjectSummaryResponse;
 import com.psa.proyecto_api.exception.ProjectNotFoundException;
 import com.psa.proyecto_api.model.Project;
+import com.psa.proyecto_api.model.enums.ProjectStatus;
+import com.psa.proyecto_api.model.enums.ProjectType;
 import com.psa.proyecto_api.repository.ProjectRepository;
 import com.psa.proyecto_api.service.ProjectService;
 import com.psa.proyecto_api.mapper.ProjectMapper;
@@ -44,6 +46,17 @@ public class ProjectServiceImpl implements ProjectService {
         Project project = projectRepository.findById(id)
                 .orElseThrow(() -> new ProjectNotFoundException(id));
         return projectMapper.toResponse(project);
+    }
+
+    @Override
+    public List<ProjectSummaryResponse> getProjectsFiltered(String nombre, String tipo, String estado, String tag) {
+        ProjectType projectType = ProjectType.fromString(tipo);
+        ProjectStatus projectStatus = ProjectStatus.fromString(estado);
+
+        List<Project> projects = projectRepository.findByProgressiveFilters(nombre, projectType, projectStatus, tag);
+        return projects.stream()
+                .map(projectMapper::toSummary)
+                .toList();
     }
 
     @Override

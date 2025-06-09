@@ -55,7 +55,17 @@ public class TaskController {
         return ResponseEntity.ok(response);
     }
 
-    // GET /proyectos/{id}/tareas - Consultar tareas de un proyecto ===================================================
+    // GET /proyectos/{id}/tareas?estado=&etiqueta=&nombre=
+    @GetMapping("/{id}/tareas")
+    public ResponseEntity<List<TaskSummaryResponse>> getProjectTasks(
+            @PathVariable Long id,
+            @RequestParam(required = false) String estado,
+            @RequestParam(required = false) String etiqueta,
+            @RequestParam(required = false) String nombre
+    ) {
+        List<TaskSummaryResponse> tareas = taskService.getProjectTasksFiltered(id, estado, etiqueta, nombre);
+        return ResponseEntity.ok(tareas);
+    }
 
     // GET /tareas/{id} - Obtener detalles de una tarea específica
     @GetMapping("/tareas/{id}")

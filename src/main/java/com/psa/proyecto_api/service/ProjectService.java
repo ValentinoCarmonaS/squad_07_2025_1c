@@ -11,6 +11,7 @@ public interface ProjectService {
     ProjectResponse createProject(CreateProjectRequest request);
     ProjectResponse updateProject(Long id, UpdateProjectRequest request);
     ProjectResponse getProjectById(Long id);
+    List<ProjectSummaryResponse> getProjectsFiltered(String nombre, String tipo, String estado, String tag);
     void deleteProject(Long id);
 
     ProjectResponse addTagToProject(Long id, String tag);

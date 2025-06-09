@@ -1,5 +1,7 @@
 package com.psa.proyecto_api.model.enums;
 
+import com.psa.proyecto_api.exception.OperationNotAllowedException;
+
 /**
  * Enumeración que define los posibles estados de una tarea.
  */
@@ -27,6 +29,20 @@ public enum TaskStatus {
     
     public String getDisplayName() {
         return displayName;
+    }
+
+        public static TaskStatus fromString(String value) {
+        if (value == null) {
+            return null;
+        }
+        
+        for (TaskStatus type : TaskStatus.values()) {
+            if (type.displayName.equalsIgnoreCase(value.trim())) {
+                return type;
+            }
+        }
+        
+        throw new OperationNotAllowedException("Tipo de estado no válido: " + value);
     }
     
     /**

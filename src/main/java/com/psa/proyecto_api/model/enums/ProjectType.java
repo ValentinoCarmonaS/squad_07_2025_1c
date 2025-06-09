@@ -1,5 +1,7 @@
 package com.psa.proyecto_api.model.enums;
 
+import com.psa.proyecto_api.exception.OperationNotAllowedException;
+
 /**
  * Enumeración que define los tipos de proyecto.
  */
@@ -19,6 +21,21 @@ public enum ProjectType {
     ProjectType(String displayName) {
         this.displayName = displayName;
     }
+
+    public static ProjectType fromString(String value) {
+        if (value == null) {
+            return null;
+        }
+        
+        for (ProjectType type : ProjectType.values()) {
+            if (type.displayName.equalsIgnoreCase(value.trim())) {
+                return type;
+            }
+        }
+        
+        throw new OperationNotAllowedException("Tipo de proyecto no válido: " + value);
+    }
+
     
     public String getDisplayName() {
         return displayName;

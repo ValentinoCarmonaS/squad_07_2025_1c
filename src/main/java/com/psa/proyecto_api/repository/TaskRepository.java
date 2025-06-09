@@ -46,4 +46,17 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
     // Tareas sin asignar
     List<Task> findByAssignedResourceIdIsNull();
     List<Task> findByProjectIdAndAssignedResourceIdIsNull(Long projectId);
+
+    @Query("SELECT DISTINCT t FROM Task t " +
+           "LEFT JOIN t.taskTags tag " + // Usamos LEFT JOIN para incluir tareas sin tags cuando no se filtra por tag
+           "WHERE t.project.id = :projectId " + // Este es un filtro obligatorio: siempre se filtrará por proyecto
+           "AND (:status IS NULL OR t.status = :status) " +
+           "AND (:tagName IS NULL OR :tagName = '' OR LOWER(tag.tagName) LIKE LOWER(CONCAT('%', :tagName, '%')) OR (SIZE(t.taskTags) = 0 AND :tagName IS NOT NULL AND :tagName = '')) " +
+           "AND (:taskName IS NULL OR :taskName = '' OR LOWER(t.name) LIKE LOWER(CONCAT('%', :taskName, '%')))")
+    List<Task> findByProgressiveFilters(
+            @Param("projectId") Long projectId,
+            @Param("status") TaskStatus status,
+            @Param("tagName") String tagName,
+            @Param("taskName") String taskName
+    );
 }

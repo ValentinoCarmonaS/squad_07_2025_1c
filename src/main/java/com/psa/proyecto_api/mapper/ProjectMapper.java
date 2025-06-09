@@ -1,15 +1,10 @@
 package com.psa.proyecto_api.mapper;
 
-import com.psa.proyecto_api.mapper.TaskMapper;
 import com.psa.proyecto_api.dto.request.CreateProjectRequest;
 import com.psa.proyecto_api.dto.request.UpdateProjectRequest;
 import com.psa.proyecto_api.dto.response.ProjectResponse;
 import com.psa.proyecto_api.dto.response.ProjectSummaryResponse;
 import com.psa.proyecto_api.model.Project;
-import com.psa.proyecto_api.model.enums.ProjectStatus;
-
-import java.time.LocalDate;
-import java.util.List;
 
 import org.springframework.stereotype.Component;
 
