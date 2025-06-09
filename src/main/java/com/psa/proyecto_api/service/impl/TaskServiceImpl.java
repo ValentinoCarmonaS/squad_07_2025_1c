@@ -49,7 +49,9 @@ public class TaskServiceImpl implements TaskService {
     public TaskResponse activateTask(Long id) {
         Task task = taskRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Tarea no encontrada"));
-        task.start();
+        if (!task.start()) {
+            throw new RuntimeException("No se puede iniciar una tarea en estado " + task.getStatus());
+        }
         task = taskRepository.save(task);
         return taskMapper.toResponse(task);
     }
@@ -58,7 +60,9 @@ public class TaskServiceImpl implements TaskService {
     public TaskResponse deactivateTask(Long id) {
         Task task = taskRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Tarea no encontrada"));
-        task.complete();
+        if (!task.complete()) {
+            throw new RuntimeException("No se puede completar una tarea en estado " + task.getStatus());
+        }
         task = taskRepository.save(task);
         return taskMapper.toResponse(task);
     }

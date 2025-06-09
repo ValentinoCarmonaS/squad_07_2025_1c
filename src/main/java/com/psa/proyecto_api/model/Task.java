@@ -278,22 +278,27 @@ public class Task {
     
     /**
      * Inicia la tarea cambiando su estado a IN_PROGRESS.
+     * @return true si la tarea fue iniciada exitosamente, false si la tarea no está en estado TO_DO
      */
-    public void start() {
-        if (status == TaskStatus.TO_DO) {
-            this.status = TaskStatus.IN_PROGRESS;
-            this.project.statusSwitch();
+    public boolean start() {
+        if (status != TaskStatus.TO_DO) {
+            return false;
         }
+        this.status = TaskStatus.IN_PROGRESS;
+        this.project.statusSwitch();
+        return true;
     }
     
     /**
      * Completa la tarea cambiando su estado a DONE.
      */
-    public void complete() {
-        if (status == TaskStatus.IN_PROGRESS) {
-            this.status = TaskStatus.DONE;
-            this.project.statusSwitch();
+    public boolean complete() {
+        if (status != TaskStatus.IN_PROGRESS) { 
+            return false;
         }
+        this.status = TaskStatus.DONE;
+        this.project.statusSwitch();
+        return true;
     }
     
     // equals y hashCode basados en el ID
