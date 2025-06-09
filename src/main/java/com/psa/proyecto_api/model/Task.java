@@ -139,16 +139,14 @@ public class Task {
      * Actualiza los detalles de una tarea.
      */
     public void updateDetails(String name, Integer estimatedHours, Integer assignedResourceId) {
-        if (name != null && !name.trim().isEmpty()) {
+        if (name != null && !name.trim().isEmpty() && !name.equals(this.name)) {
             this.name = name;        
         }
-        if (estimatedHours != null && estimatedHours > 0) {
-            System.out.println("Actualizando horas estimadas de la tarea: " + this.name + " de " + this.estimatedHours + " a " + estimatedHours);
+        if (estimatedHours != null && estimatedHours > 0 && !estimatedHours.equals(this.estimatedHours)) {
             this.estimatedHours = estimatedHours;
             this.project.updateProjectStatusAndHours();
         }
-
-        if (assignedResourceId != null && assignedResourceId >=0) {
+        if (assignedResourceId != null && assignedResourceId >= 0 && !assignedResourceId.equals(this.assignedResourceId)) {
             this.assignedResourceId = assignedResourceId;
         }
     }
