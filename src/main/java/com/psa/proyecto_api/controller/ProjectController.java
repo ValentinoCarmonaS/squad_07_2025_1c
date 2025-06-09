@@ -1,10 +1,15 @@
 package com.psa.proyecto_api.controller;
 
 import com.psa.proyecto_api.dto.request.CreateProjectRequest;
+import com.psa.proyecto_api.dto.request.ProjectFilterRequest;
 import com.psa.proyecto_api.dto.request.UpdateProjectRequest;
 import com.psa.proyecto_api.dto.response.ProjectResponse;
 import com.psa.proyecto_api.dto.response.ProjectSummaryResponse;
+import com.psa.proyecto_api.model.enums.ProjectStatus;
+import com.psa.proyecto_api.model.enums.ProjectType;
 import com.psa.proyecto_api.service.ProjectService;
+
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -47,20 +52,29 @@ public class ProjectController {
     }
 
     // GET /proyectos - Listar todos los proyectos con filtros
-    // @GetMapping
-    // public ResponseEntity<Page<ProjectSummaryResponse>> getAllProjects(
-    //         @RequestParam(required = false) Integer clientId,
-    //         @RequestParam(required = false) String status,
-    //         @RequestParam(required = false) String type,
-    //         @RequestParam(required = false) Integer leaderId,
-    //         @RequestParam(required = false) String startDate,
-    //         @RequestParam(required = false) String endDate,
-    //         Pageable pageable) {
+    @GetMapping
+    public ResponseEntity<List<ProjectSummaryResponse>> getProjects(
+            @RequestParam(required = false) ProjectStatus status,
+            @RequestParam(required = false) ProjectType type,
+            @RequestParam(required = false) String tag) {
         
-    //     Page<ProjectSummaryResponse> projects = projectService.getAllProjects(
-    //         clientId, status, type, leaderId, startDate, endDate, pageable);
-    //     return ResponseEntity.ok(projects);
-    // }
+        ProjectFilterRequest filterRequest = ProjectFilterRequest.builder()
+            .status(status)
+            .type(type)
+            .tag(tag)
+            .build();
+            
+        List<ProjectSummaryResponse> filteredProjects = projectService.getProjects(filterRequest);
+        return ResponseEntity.ok(filteredProjects);
+    }
+
+    // GET /proyectos/buscar - Buscar proyectos por nombre
+    @GetMapping("/buscar")
+    public ResponseEntity<List<ProjectSummaryResponse>> searchProjects(
+            @RequestParam String name) {
+        List<ProjectSummaryResponse> filteredProjects = projectService.searchProjects(name);
+        return ResponseEntity.ok(filteredProjects);
+    }
 
     // GET /proyectos/{id} - Ver detalles de un proyecto específico
     @GetMapping("/{id}")
