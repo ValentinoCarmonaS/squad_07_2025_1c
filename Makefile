@@ -53,6 +53,44 @@ flyway-info: check-env
 
 db-reset: flyway-clean flyway-migrate  ## Resetea la base de datos (limpia y migra)
 
+setup:
+	@if [ ! -f .env ]; then \
+		cp .env.example .env; \
+		echo "Archivo .env creado. Por favor, edítalo con tus valores reales antes de continuar."; \
+	else \
+		echo "El archivo .env ya existe."; \
+	fi
+
+# Construir la imagen Docker
+build:
+	@if [ ! -f .env ]; then \
+		echo "Error: Archivo .env no encontrado. Ejecuta 'make setup' primero."; \
+		exit 1; \
+	fi
+	docker-compose build
+
+# Levantar los servicios
+up:
+	@if [ ! -f .env ]; then \
+		echo "Error: Archivo .env no encontrado. Ejecuta 'make setup' primero."; \
+		exit 1; \
+	fi
+	docker-compose up -d
+
+# Detener los servicios
+down:
+	docker-compose down
+
+# Reiniciar los servicios
+restart:
+	docker-compose restart
+
+# Reconstruir y levantar (útil para cambios en código)
+rebuild:
+	docker-compose down
+	docker-compose build --no-cache
+	docker-compose up -d
+
 format:  ## Formatea el código con Spotless (si lo configuras)
 	@echo "Pendiente de implementación..."
 

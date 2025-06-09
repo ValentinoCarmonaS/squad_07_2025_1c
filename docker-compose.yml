@@ -1,0 +1,56 @@
+version: '3.8'
+
+services:
+  proyecto-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: proyecto-api
+    ports:
+      - "${PORT:-8080}:8080"
+    environment:
+      # Indicador de que estamos en Docker
+      - DOCKER_ENV=true
+      
+      # Configuración de la base de datos PostgreSQL
+      - PGHOST=${PGHOST}
+      - PGDATABASE=${PGDATABASE}
+      - PGUSER=${PGUSER}
+      - PGPASSWORD=${PGPASSWORD}
+      
+      # Configuración de Spring Boot para PostgreSQL
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://${PGHOST}:5432/${PGDATABASE}
+      - SPRING_DATASOURCE_USERNAME=${PGUSER}
+      - SPRING_DATASOURCE_PASSWORD=${PGPASSWORD}
+      - SPRING_DATASOURCE_DRIVER_CLASS_NAME=org.postgresql.Driver
+      
+      # Configuración de Hibernate/JPA
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=${SPRING_JPA_HIBERNATE_DDL_AUTO:-update}
+      - SPRING_JPA_SHOW_SQL=${SPRING_JPA_SHOW_SQL:-true}
+      - SPRING_JPA_DATABASE_PLATFORM=org.hibernate.dialect.PostgreSQLDialect
+      
+      # Configuración de Flyway
+      - SPRING_FLYWAY_ENABLED=${SPRING_FLYWAY_ENABLED:-true}
+      
+      # Configuración de servidor
+      - SERVER_PORT=8080
+      
+      # URLs de las APIs externas
+      - RECURSOS_API_URL=${RECURSOS_API_URL:-}
+      - CLIENTES_API_URL=${CLIENTES_API_URL:-}
+      - SOPORTE_API_URL=${SOPORTE_API_URL:-}
+    
+    # Carga variables de entorno desde el archivo .env
+    env_file:
+      - .env
+    
+    # Reinicia automáticamente el contenedor si falla
+    restart: unless-stopped
+    
+    # Red personalizada
+    networks:
+      - proyecto-network
+
+networks:
+  proyecto-network:
+    driver: bridge

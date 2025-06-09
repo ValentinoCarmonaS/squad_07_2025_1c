@@ -1,0 +1,8 @@
+target/
+docs/
+img/
+coverage/
+.git/
+.env
+.gitignore
+Makefile
