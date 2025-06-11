@@ -18,7 +18,7 @@ public interface ProjectRepository extends JpaRepository<Project, Long> {
     List<Project> findAll();
     List<Project> findByClientId(Integer clientId);
     List<Project> findByStatus(ProjectStatus status);
-    List<Project> findByLeaderId(Integer leaderId);
+    List<Project> findByLeaderId(String leaderId);
     List<Project> findByType(ProjectType type);
     
     // Consulta por rango de fechas
@@ -29,7 +29,7 @@ public interface ProjectRepository extends JpaRepository<Project, Long> {
     // Consultas combinadas para filtros más específicos
     List<Project> findByClientIdAndStatus(Integer clientId, ProjectStatus status);
     List<Project> findByTypeAndStatus(ProjectType type, ProjectStatus status);
-    List<Project> findByLeaderIdAndStatus(Integer leaderId, ProjectStatus status);
+    List<Project> findByLeaderIdAndStatus(String leaderId, ProjectStatus status);
     
     // Consulta para proyectos activos (no finalizados ni cancelados)
     @Query("SELECT p FROM Project p WHERE p.status NOT IN ('INITIATED', 'TRANSITION')")

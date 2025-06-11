@@ -7,7 +7,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @Repository
@@ -22,8 +21,8 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
     List<Task> findByProjectIdAndStatus(Long projectId, TaskStatus status);
         
     // Consultas por responsable
-    List<Task> findByAssignedResourceId(Integer assignedResourceId);
-    List<Task> findByAssignedResourceIdAndStatus(Integer assignedResourceId, TaskStatus status);
+    List<Task> findByAssignedResourceId(String assignedResourceId);
+    List<Task> findByAssignedResourceIdAndStatus(String assignedResourceId, TaskStatus status);
         
     // Consultas por etiquetas
     @Query("SELECT t FROM Task t JOIN t.taskTags tag WHERE tag.tagName = :tagName")
@@ -41,7 +40,7 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
     Long countByProjectIdAndStatus(@Param("projectId") Long projectId, @Param("status") TaskStatus status);
     
     @Query("SELECT COUNT(t) FROM Task t WHERE t.assignedResourceId = :assignedResourceId AND t.status = :status")
-    Long countByAssignedResourceIdAndStatus(@Param("assignedResourceId") Integer assignedResourceId, @Param("status") TaskStatus status);
+    Long countByAssignedResourceIdAndStatus(@Param("assignedResourceId") String assignedResourceId, @Param("status") TaskStatus status);
     
     // Tareas sin asignar
     List<Task> findByAssignedResourceIdIsNull();

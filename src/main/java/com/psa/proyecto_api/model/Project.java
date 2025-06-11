@@ -81,7 +81,8 @@ public class Project {
     private Integer clientId;
 
     @Column(name = "leader_id")
-    private Integer leaderId;
+    @Size(min = 36, max = 36, message = "El id del lider debe tener 36 caracteres")
+    private String leaderId;
     
     // Relaciones internas
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
@@ -117,8 +118,8 @@ public class Project {
         }
     }
 
-    public void addLeader(Integer leaderId) {
-        if (leaderId != null && leaderId > 0) {
+    public void addLeader(String leaderId) {
+        if (leaderId != null && !leaderId.trim().isEmpty()) {
             this.leaderId = leaderId;
         }
     }
@@ -258,14 +259,14 @@ public class Project {
     /**
      * Actualiza los detalles del proyecto.
      */
-    public void updateDetails(String name, Integer clientId, Integer leaderId) {
+    public void updateDetails(String name, Integer clientId, String leaderId) {
         if (name != null && !name.trim().isEmpty()) {
             this.name = name;
         }
         if (clientId != null) {
             this.clientId = clientId;
         }
-        if (leaderId != null) {
+        if (leaderId != null && !leaderId.trim().isEmpty()) {
             this.leaderId = leaderId;
         }
     }

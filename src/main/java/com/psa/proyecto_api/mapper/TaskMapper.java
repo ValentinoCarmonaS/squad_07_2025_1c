@@ -1,7 +1,5 @@
 package com.psa.proyecto_api.mapper;
 
-import java.util.List;
-
 import org.springframework.stereotype.Component;
 
 import com.psa.proyecto_api.dto.request.CreateTaskRequest;
@@ -10,7 +8,6 @@ import com.psa.proyecto_api.dto.response.TaskResponse;
 import com.psa.proyecto_api.dto.response.TaskSummaryResponse;
 import com.psa.proyecto_api.model.Project;
 import com.psa.proyecto_api.model.Task;
-import com.psa.proyecto_api.model.enums.TaskStatus;
 
 @Component 
 public class TaskMapper {

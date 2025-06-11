@@ -16,7 +16,7 @@ public class ProjectResponse {
     private Long id;
     private String name;
     private Integer clientId;
-    private Integer leaderId;
+    private String leaderId;
     private ProjectType type;
     private ProjectBillingType billingType;
     private ProjectStatus status;

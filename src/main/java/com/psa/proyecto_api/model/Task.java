@@ -54,7 +54,8 @@ public class Task {
     
     // Relaciones externas
     @Column(name = "assigned_resource_id")
-    private Integer assignedResourceId;
+    @Size(min = 36, max = 36, message = "El id del recurso debe tener 36 caracteres")
+    private String assignedResourceId;
     
     // Relaciones internas
     @NotNull(message = "El proyecto es obligatorio")
@@ -78,10 +79,11 @@ public class Task {
         this.project.addTask(this);
     }
 
-    public void addAssignedResource(Integer assignedResourceId) {
-        if (assignedResourceId != null && assignedResourceId > 0) {
-            this.assignedResourceId = assignedResourceId;
+    public void addAssignedResource(String assignedResourceId) {
+        if (assignedResourceId == null || assignedResourceId.trim().isEmpty()) {
+            throw new OperationNotAllowedException("El ID del recurso no puede ser nulo o vacio.");
         }
+        this.assignedResourceId = assignedResourceId;
     }
 
     // Metodos de gestion de proyecto
@@ -134,7 +136,7 @@ public class Task {
     /**
      * Actualiza los detalles de una tarea.
      */
-    public void updateDetails(String name, Integer estimatedHours, Integer assignedResourceId) {
+    public void updateDetails(String name, Integer estimatedHours, String assignedResourceId) {
         if (name != null && !name.trim().isEmpty()) {
             this.name = name;
         
@@ -142,7 +144,7 @@ public class Task {
             this.estimatedHours = estimatedHours;
             this.project.updateProjectStatusAndHours();
 
-        } else if (assignedResourceId != null && assignedResourceId >=0) {
+        } else if (assignedResourceId != null && !assignedResourceId.trim().isEmpty()) {
             this.assignedResourceId = assignedResourceId;
         }
     }
@@ -193,17 +195,6 @@ public class Task {
         }
     }
     
-    // Metodos de gestion de recursos
-    /**
-     * Asigna un recurso a la tarea.
-     */
-    public void assignResource(Integer resourceId) {
-        if (resourceId != null && resourceId < 0) {
-            throw new OperationNotAllowedException("El ID del recurso no puede ser negativo");
-        }
-        this.assignedResourceId = resourceId;
-    }
-
     // Métodos de consulta de estado
     
     /**

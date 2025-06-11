@@ -16,7 +16,8 @@ public class CreateTaskRequest {
     @Min(value = 1, message = "Las horas estimadas no pueden ser negativas o cero")
     private Integer estimatedHours;
     
-    private Integer assignedResourceId;
+    @Size(min = 36, max = 36, message = "El id del recurso debe tener 36 caracteres")
+    private String assignedResourceId;
     
     private List<String> tagNames;
 }

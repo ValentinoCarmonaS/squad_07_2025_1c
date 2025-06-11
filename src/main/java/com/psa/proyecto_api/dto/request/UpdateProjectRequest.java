@@ -6,7 +6,6 @@ import jakarta.validation.constraints.*;
 import lombok.Data;
 
 import java.time.LocalDate;
-import java.util.List;
 
 @Data
 public class UpdateProjectRequest {
@@ -24,5 +23,6 @@ public class UpdateProjectRequest {
     @FutureOrPresent(message = "La fecha de fin debe ser futura")
     private LocalDate endDate;
     
-    private Integer leaderId;
+    @Size(min = 36, max = 36, message = "El id del lider debe tener 36 caracteres")
+    private String leaderId;
 }
