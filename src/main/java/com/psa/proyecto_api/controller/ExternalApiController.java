@@ -18,30 +18,30 @@ public class ExternalApiController {
 
     // GET /recursos - Consultar recursos disponibles (pool de desarrolladores)
     @GetMapping("/recursos")
-    public ResponseEntity<List<Map<String, Object>>> getRecursos(
-            @RequestParam(required = false) String skill,
-            @RequestParam(required = false) String availability,
-            @RequestParam(required = false) String role) {
-        
-        List<Map<String, Object>> recursos = externalApiService.getRecursos(skill, availability, role);
+    public ResponseEntity<List<Map<String, Object>>> getRecursos() {
+        List<Map<String, Object>> recursos = externalApiService.getResources();
         return ResponseEntity.ok(recursos);
+    }
+
+    // GET /recursos/{id} - Consultar clientes disponibles
+    @GetMapping("/recursos/{id}")
+    public ResponseEntity<Map<String, Object>> getResourceById(@PathVariable String id) {
+        Map<String, Object> client = externalApiService.getResourceById(id);
+        return ResponseEntity.ok(client);
     }
 
     // GET /clientes - Consultar clientes disponibles
     @GetMapping("/clientes")
-    public ResponseEntity<List<Map<String, Object>>> getClientes(
-            @RequestParam(required = false) String status,
-            @RequestParam(required = false) String type) {
-        
-        List<Map<String, Object>> clientes = externalApiService.getClientes(status, type);
+    public ResponseEntity<List<Map<String, Object>>> getClientes() {
+        List<Map<String, Object>> clientes = externalApiService.getClients();
         return ResponseEntity.ok(clientes);
     }
 
-    // GET /clientes/{id} - Obtener información de un cliente específico
+    // GET /clientes/{id} - Consultar clientes disponibles
     @GetMapping("/clientes/{id}")
-    public ResponseEntity<Map<String, Object>> getClienteById(@PathVariable Integer id) {
-        Map<String, Object> cliente = externalApiService.getClienteById(id);
-        return ResponseEntity.ok(cliente);
+    public ResponseEntity<Map<String, Object>> getClientById(@PathVariable Integer id) {
+        Map<String, Object> client = externalApiService.getClientById(id);
+        return ResponseEntity.ok(client);
     }
 
     // GET /soporte/tickets - Consultar tickets asociados a una tarea
@@ -51,12 +51,5 @@ public class ExternalApiController {
         
         List<Map<String, Object>> tickets = externalApiService.getTicketsByTaskId(taskId);
         return ResponseEntity.ok(tickets);
-    }
-
-    // GET /recursos/{id} - Obtener información de un recurso específico
-    @GetMapping("/recursos/{id}")
-    public ResponseEntity<Map<String, Object>> getRecursoById(@PathVariable Integer id) {
-        Map<String, Object> recurso = externalApiService.getRecursoById(id);
-        return ResponseEntity.ok(recurso);
     }
 }

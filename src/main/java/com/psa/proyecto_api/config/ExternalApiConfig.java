@@ -7,25 +7,25 @@ import org.springframework.context.annotation.Configuration;
 public class ExternalApiConfig {
 
     // URLs de las APIs externas (desde application.properties o .env)
-    @Value("${RECURSOS_API_URL}")
-    private String recursosApiUrl;
+    @Value("${RESOURCES_API_URL}")
+    private String resourcesApiUrl;
 
-    @Value("${CLIENTES_API_URL}")
-    private String clientesApiUrl;
+    @Value("${CLIENTS_API_URL}")
+    private String clientsApiUrl;
 
-    @Value("${SOPORTE_API_URL}")
-    private String soporteApiUrl;
+    @Value("${SUPPORT_API_URL}")
+    private String supportApiUrl;
 
     // Getters para usar en los servicios
-    public String getRecursosApiUrl() {
-        return recursosApiUrl;
+    public String getResourceApiUrl() {
+        return resourcesApiUrl;
     }
 
-    public String getClientesApiUrl() {
-        return clientesApiUrl;
+    public String getClientsApiUrl() {
+        return clientsApiUrl;
     }
 
-    public String getSoporteApiUrl() {
-        return soporteApiUrl;
+    public String getSupportApiUrl() {
+        return supportApiUrl;
     }
 }

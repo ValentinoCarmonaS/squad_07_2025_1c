@@ -29,6 +29,7 @@ public class ProjectServiceImpl implements ProjectService {
     public ProjectResponse createProject(CreateProjectRequest request) {
         Project project = projectMapper.toEntity(request);
         project = projectRepository.save(project);
+        
         return projectMapper.toResponse(project);
     }
 
