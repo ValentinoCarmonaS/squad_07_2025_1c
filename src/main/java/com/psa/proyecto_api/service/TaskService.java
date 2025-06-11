@@ -2,7 +2,6 @@ package com.psa.proyecto_api.service;
 
 import com.psa.proyecto_api.dto.request.CreateTaskRequest;
 import com.psa.proyecto_api.dto.request.UpdateTaskRequest;
-import com.psa.proyecto_api.dto.response.ProjectResponse;
 import com.psa.proyecto_api.dto.response.TaskResponse;
 import com.psa.proyecto_api.dto.response.TaskSummaryResponse;
 
