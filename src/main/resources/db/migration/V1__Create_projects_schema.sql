@@ -2,7 +2,7 @@
 CREATE TABLE projects (
     id SERIAL PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
-    client_id INT, -- ID del cliente del sistema externo (NO es FK)
+    client_id INTEGER, -- ID del cliente del sistema externo (NO es FK)
     type VARCHAR(50) NOT NULL CHECK (type IN ('DEVELOPMENT', 'IMPLEMENTATION')),
     billing_type VARCHAR(50) NOT NULL CHECK (billing_type IN ('TIME_AND_MATERIAL', 'FIXED_PRICE')),
     start_date DATE NOT NULL,

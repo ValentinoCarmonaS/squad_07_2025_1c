@@ -1,7 +1,7 @@
 -- Tabla para tareas
 CREATE TABLE tasks (
     id SERIAL PRIMARY KEY,
-    project_id INT NOT NULL REFERENCES projects(id) ON DELETE CASCADE,
+    project_id INTEGER NOT NULL REFERENCES projects(id) ON DELETE CASCADE,
     name VARCHAR(100) NOT NULL,
     status VARCHAR(50) NOT NULL DEFAULT 'TO_DO' CHECK (status IN ('TO_DO', 'IN_PROGRESS', 'DONE')),
     estimated_hours INT NOT NULL CHECK (estimated_hours > 0),
