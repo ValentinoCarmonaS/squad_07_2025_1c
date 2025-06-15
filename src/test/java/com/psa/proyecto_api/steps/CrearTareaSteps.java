@@ -1,6 +1,5 @@
 package com.psa.proyecto_api.steps;
 
-import com.psa.proyecto_api.BaseIntegrationTest;
 import com.psa.proyecto_api.dto.request.CreateProjectRequest;
 import com.psa.proyecto_api.dto.request.CreateTaskRequest;
 import com.psa.proyecto_api.dto.response.ProjectResponse;
@@ -10,12 +9,13 @@ import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.When;
 import io.cucumber.java.en.Then;
-import io.cucumber.java.en.And;
 import io.cucumber.java.Before;
+import io.cucumber.java.en.And;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.time.LocalDate;
@@ -31,27 +31,49 @@ import com.psa.proyecto_api.model.enums.TaskStatus;
 
 public class CrearTareaSteps {
 
-    private static String projectApiUrl;
-    private static String taskApiUrl;
-    private ResponseEntity<ProjectResponse> projectResponse;
-    private ProjectResponse project;
+    @LocalServerPort
+    private int port;
+
+    private String baseUrl;
+    private String projectApiUrl;
+    private String taskApiUrl;
+
+    private static ResponseEntity<ProjectResponse> projectResponse;
+    private static ProjectResponse project;
 
     private CreateTaskRequest taskRequest;
+    private ResponseEntity<TaskResponse> taskResponse;
+    private TaskResponse task;
+
     private List<CreateTaskRequest> taskRequests;
     private List<TaskResponse> tasks;
-    private ResponseEntity<TaskResponse> response;
-    private TaskResponse task;
+
+    @Autowired
+    private TestRestTemplate restTemplate;
 
     @Before
     public void setUp() {
+        baseUrl = "http://localhost:" + port;
         projectApiUrl = "/api/v1/proyectos";
+    }
 
+    private ProjectResponse updateProject(Long id) {
+        project = restTemplate.getForEntity(
+            baseUrl + projectApiUrl + "/" + id, ProjectResponse.class).getBody();
+        return project;
+    }
+
+    @Given("existe el proyecto con la siguiente información:")
+    public void existeElProyectoConLaSiguienteInformacion(DataTable dataTable) {
+        List<Map<String, String>> data = dataTable.asMaps(String.class, String.class);
+        var map = data.get(0);
+        
         CreateProjectRequest projectRequest = new CreateProjectRequest();
-        projectRequest.setName("Project 1");
-        projectRequest.setClientId(1);
-        projectRequest.setType(ProjectType.DEVELOPMENT);
-        projectRequest.setBillingType(ProjectBillingType.TIME_AND_MATERIAL);
-        projectRequest.setStartDate(LocalDate.now().plusDays(10));
+        projectRequest.setName(map.get("name"));
+        projectRequest.setClientId(Integer.parseInt(map.get("clientId")));
+        projectRequest.setType(ProjectType.valueOf(map.get("type")));
+        projectRequest.setBillingType(ProjectBillingType.valueOf(map.get("billingType")));
+        projectRequest.setStartDate(LocalDate.parse(map.get("startDate")));
 
         projectResponse = restTemplate.postForEntity(
             baseUrl + projectApiUrl, projectRequest, ProjectResponse.class);
@@ -60,18 +82,10 @@ public class CrearTareaSteps {
         if (project == null) {
             throw new RuntimeException("Project response body is null");
         }
-        
+
+        project = updateProject(project.getId());
+
         taskApiUrl = "/api/v1/proyectos/" + project.getId() + "/tareas";
-    }
-
-    @Given("existe un proyecto con nombre {string}, id {string} y con {int} horas estimadas")
-    public void existeUnProyectoConNombreIdYConHorasEstimadas(String name, String id, int estimatedHours) {
-        assertNotNull(projectResponse, "Project response should not be null");
-        assertNotNull(project, "Project should not be null");
-
-        assertEquals(Long.parseLong(id), project.getId(), "Project id should match");
-        assertEquals(name, project.getName(), "Project name should match");
-        assertEquals(estimatedHours, project.getEstimatedHours(), "Project estimated hours should match");
     }
 
     @Given("se tiene la siguiente información de una tarea:")
@@ -86,7 +100,16 @@ public class CrearTareaSteps {
 
     @Given("se tiene la siguiente información incompleta de una tarea:")
     public void seTieneLaSiguienteInformacionIncompletaDeUnaTarea(DataTable dataTable) {
+        List<Map<String, String>> data = dataTable.asMaps(String.class, String.class);
+        var map = data.get(0);
 
+        taskRequest = new CreateTaskRequest();
+        if (map.get("name") != null) {  
+            taskRequest.setName(map.get("name"));
+        }
+        if (map.get("estimatedHours") != null) {
+            taskRequest.setEstimatedHours(Integer.parseInt(map.get("estimatedHours")));
+        }
     }
 
     @Given("se tiene la siguiente información de tareas:")
@@ -115,8 +138,8 @@ public class CrearTareaSteps {
     @When("el usuario intenta crear una nueva tarea")
     public void elUsuarioIntentaCrearUnaNuevaTarea() {
         try {
-            response = restTemplate.postForEntity(baseUrl + taskApiUrl, taskRequest, TaskResponse.class);
-            task = response.getBody();
+            taskResponse = restTemplate.postForEntity(baseUrl + taskApiUrl, taskRequest, TaskResponse.class);
+            task = taskResponse.getBody();
         } catch (Exception e) {
             System.out.println("Error creating task: " + e.getMessage());
         }
@@ -127,8 +150,8 @@ public class CrearTareaSteps {
         tasks = new ArrayList<>();
         for (var request: taskRequests) {
             try {
-                response = restTemplate.postForEntity(baseUrl + taskApiUrl, request, TaskResponse.class);
-                tasks.add(response.getBody());
+                taskResponse = restTemplate.postForEntity(baseUrl + taskApiUrl, request, TaskResponse.class);
+                tasks.add(taskResponse.getBody());
             } catch (Exception e) {
                 System.out.println("Error creating task: " + e.getMessage());
             }
@@ -140,33 +163,36 @@ public class CrearTareaSteps {
         List<Map<String, String>> data = dataTable.asMaps(String.class, String.class);
         var map = data.get(0);
 
+        project = updateProject(project.getId());
         assertEquals(map.get("name"), task.getName());
         assertEquals(Integer.parseInt(map.get("estimatedHours")), task.getEstimatedHours());
         assertEquals(TaskStatus.valueOf(map.get("status")), task.getStatus());
-        assertEquals(Long.parseLong(map.get("projectId")), task.getProjectId());
+        assertEquals(project.getId(), task.getProjectId());
     }
 
     @Then("la tarea tiene asociado el proyecto con id {string}")
     public void laTareaTieneAsociadoElProyectoConId(String projectId) {
+        project = updateProject(project.getId());
         assertEquals(Long.parseLong(projectId), task.getProjectId());
     }
 
     @Then("el proyecto tiene una tarea")
     public void elProyectoTieneUnaTarea() {
-        assertEquals(1, project.getTasks().size());
         System.out.println(project.getTasks().stream().map(task -> task.getName()).collect(java.util.stream.Collectors.toList()));
         System.out.println(project.getTasks().size() + "=====================================================");
+        project = updateProject(project.getId());
+        assertEquals(1, project.getTasks().size());
     }
 
     @Then("el proyecto contiene la tarea {string}")
     public void elProyectoContieneLaTarea(String taskName) {
-        
-        
+        project = updateProject(project.getId());
         assertTrue(project.getTasks().stream().anyMatch(task -> task.getName().equals(taskName)));
     }
 
     @Then("el proyecto contiene las tareas {string} y {string}")
     public void elProyectoContieneLasTareas(String taskName1, String taskName2) {
+        project = updateProject(project.getId());
         assertTrue(project.getTasks().size() > 1);
         assertTrue(project.getTasks().stream().anyMatch(task -> task.getName().equals(taskName1)));
         assertTrue(project.getTasks().stream().anyMatch(task -> task.getName().equals(taskName2)));
@@ -184,35 +210,27 @@ public class CrearTareaSteps {
             assertEquals(map.get("name"), task.getName());
             assertEquals(Integer.parseInt(map.get("estimatedHours")), task.getEstimatedHours());
             assertEquals(map.get("assignedResourceId"), task.getAssignedResourceId());
-            assertEquals(Long.parseLong(map.get("projectId")), task.getProjectId());
+            assertEquals(project.getId(), task.getProjectId());
             assertEquals(TaskStatus.valueOf(map.get("status")), task.getStatus());
         }
     }
 
     @Then("el proyecto tiene {int} horas estimadas")
     public void elProyectoTieneHorasEstimadas(int estimatedHours) {
+        project = updateProject(project.getId());
         assertEquals(estimatedHours, project.getEstimatedHours());
     }
 
     @Then("se rechaza la creación de la tarea por información incompleta")
     public void elSistemaRechazaLaCreacionDeLaTareaPorInformacionIncompleta() {
-        // assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertNull(taskResponse);
+        assertNull(task);
     }
     
     @Then("se rechaza la creación de la tarea por horas negativas")
     public void elSistemaRechazaLaCreacionDeLaTareaPorHorasNegativas() {
-        // assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertNull(taskResponse);
+        assertNull(task);
     }
 
-    @Then("la tarea tiene los tags {string} y {string}")
-    public void laTareaTieneLosTags(String tag1, String tag2) {
-        // assertTrue(task.getTagNames().contains(tag1));
-        // assertTrue(task.getTagNames().contains(tag2));
-    }
-
-    @Then("se rechaza la creación de la tarea por proyecto inexistente")
-    public void elSistemaRechazaLaCreacionDeLaTareaPorProyectoInexistente() {
-        // assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
-        // assertFalse(true);
-    }
 }
