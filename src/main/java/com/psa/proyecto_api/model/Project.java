@@ -65,7 +65,7 @@ public class Project {
     @Column(name = "end_date")
     private LocalDate endDate;
     
-    @Positive(message = "Las horas estimadas deben ser positivas")
+    @PositiveOrZero(message = "Las horas estimadas no pueden ser negativas")
     @Column(name = "estimated_hours")
     private Integer estimatedHours;
     
@@ -251,7 +251,7 @@ public class Project {
 
         // Actualizar las horas estimadas del proyecto al agregar una tarea
         Integer newEstimatedHours = this.getTotalEstimatedHoursFromTasks();
-        this.estimatedHours = newEstimatedHours == -1 ? null : newEstimatedHours;
+        this.estimatedHours = newEstimatedHours.equals(this.estimatedHours) ? this.estimatedHours : newEstimatedHours;
 
         // Actualizar el estado del proyecto si es necesario
         this.statusSwitch();        
@@ -326,7 +326,7 @@ public class Project {
      */
     public int getTotalEstimatedHoursFromTasks() {
         if (this.tasks.isEmpty()) {
-            return -1;
+            return 0;
         }
         return tasks.stream()
             .mapToInt(Task::getEstimatedHoursOrZero)
