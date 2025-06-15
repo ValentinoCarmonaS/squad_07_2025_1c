@@ -108,6 +108,7 @@ public class Project {
         this.status = ProjectStatus.INITIATED;
         this.tasks = new ArrayList<>();
         this.projectTags = new ArrayList<>();
+        this.estimatedHours = 0;
     }
 
     // Metodos de gestion de datos basicos
