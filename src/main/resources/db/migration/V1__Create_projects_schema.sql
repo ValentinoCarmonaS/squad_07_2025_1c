@@ -7,7 +7,7 @@ CREATE TABLE projects (
     billing_type VARCHAR(50) NOT NULL CHECK (billing_type IN ('TIME_AND_MATERIAL', 'FIXED_PRICE')),
     start_date DATE NOT NULL,
     end_date DATE,
-    estimated_hours INT CHECK (estimated_hours > 0),
+    estimated_hours INT CHECK (estimated_hours >= 0),
     status VARCHAR(50) NOT NULL DEFAULT 'INITIATED' CHECK (status IN ('INITIATED', 'IN_PROGRESS', 'TRANSITION')),
     leader_id VARCHAR(36), -- ID del líder del proyecto del sistema externo de recursos (NO es FK)
     
