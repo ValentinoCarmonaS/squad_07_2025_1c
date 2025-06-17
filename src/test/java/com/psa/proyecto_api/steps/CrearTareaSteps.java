@@ -8,6 +8,7 @@ import com.psa.proyecto_api.dto.response.TaskResponse;
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.When;
+import jakarta.transaction.Transactional;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.Before;
 import io.cucumber.java.en.And;
@@ -17,6 +18,7 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.annotation.Rollback;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -29,6 +31,8 @@ import com.psa.proyecto_api.model.enums.ProjectBillingType;
 import com.psa.proyecto_api.model.enums.ProjectType;
 import com.psa.proyecto_api.model.enums.TaskStatus;
 
+@Transactional
+@Rollback
 public class CrearTareaSteps {
 
     @LocalServerPort
