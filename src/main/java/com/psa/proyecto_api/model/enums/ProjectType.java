@@ -27,13 +27,21 @@ public enum ProjectType {
             return null;
         }
         
+        String trimmedValue = value.trim();
+        
+        // Try to match by display name first
         for (ProjectType type : ProjectType.values()) {
-            if (type.displayName.equalsIgnoreCase(value.trim())) {
+            if (type.displayName.equalsIgnoreCase(trimmedValue)) {
                 return type;
             }
         }
         
-        throw new OperationNotAllowedException("Tipo de proyecto no válido: " + value);
+        // Try to match by enum name
+        try {
+            return ProjectType.valueOf(trimmedValue.toUpperCase());
+        } catch (IllegalArgumentException e) {
+            throw new OperationNotAllowedException("Tipo de proyecto no válido: " + value);
+        }
     }
 
     
