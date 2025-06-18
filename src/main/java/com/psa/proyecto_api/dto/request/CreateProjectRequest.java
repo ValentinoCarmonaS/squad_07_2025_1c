@@ -30,7 +30,8 @@ public class CreateProjectRequest {
     @Future(message = "La fecha de fin debe ser futura")
     private LocalDate endDate;
     
-    private Integer leaderId;
+    @Size(min = 36, max = 36, message = "El id del lider debe tener 36 caracteres")
+    private String leaderId;
     
     private List<String> tagNames;
 }

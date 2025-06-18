@@ -12,8 +12,6 @@ import com.psa.proyecto_api.service.ProjectService;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -51,29 +49,16 @@ public class ProjectController {
         return ResponseEntity.noContent().build();
     }
 
-    // GET /proyectos - Listar todos los proyectos con filtros
+    // GET /proyectos?nombre=&tipo=&estado=&tag=
     @GetMapping
     public ResponseEntity<List<ProjectSummaryResponse>> getProjects(
-            @RequestParam(required = false) ProjectStatus status,
-            @RequestParam(required = false) ProjectType type,
-            @RequestParam(required = false) String tag) {
-        
-        ProjectFilterRequest filterRequest = ProjectFilterRequest.builder()
-            .status(status)
-            .type(type)
-            .tag(tag)
-            .build();
-            
-        List<ProjectSummaryResponse> filteredProjects = projectService.getProjects(filterRequest);
-        return ResponseEntity.ok(filteredProjects);
-    }
-
-    // GET /proyectos/buscar - Buscar proyectos por nombre
-    @GetMapping("/buscar")
-    public ResponseEntity<List<ProjectSummaryResponse>> searchProjects(
-            @RequestParam String name) {
-        List<ProjectSummaryResponse> filteredProjects = projectService.searchProjects(name);
-        return ResponseEntity.ok(filteredProjects);
+            @RequestParam(required = false) String nombre,
+            @RequestParam(required = false) String tipo,
+            @RequestParam(required = false) String estado,
+            @RequestParam(required = false) String tag
+    ) {
+        List<ProjectSummaryResponse> proyectos = projectService.getProjectsFiltered(nombre, tipo, estado, tag);
+        return ResponseEntity.ok(proyectos);
     }
 
     // GET /proyectos/{id} - Ver detalles de un proyecto específico

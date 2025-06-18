@@ -15,6 +15,6 @@ public class TaskResponse {
     private Long projectId;
     private TaskStatus status;
     private Integer estimatedHours;
-    private Integer assignedResourceId;
+    private String assignedResourceId;
     private List<String> tagNames;
 }

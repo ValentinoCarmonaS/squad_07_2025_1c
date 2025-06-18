@@ -1,0 +1,182 @@
+Crear proyecto #6
+
+Como Gerente de Proyectos
+Quiero crear un nuevo proyecto con información básica (nombre, cliente, lider de proyecto, tipo, tipo de financiación, fechas estimadas)
+Para que pueda comenzar un nuevo desarrollo
+
+Criterios de Aceptación:
+
+Puedo asignar un cliente existente o marcarlo como interno (PSA)
+Puedo asignar un líder de proyecto
+Puedo definir tipo de proyecto (Desarrollo o Implementación)
+Puedo definir tipo de financiación de proyecto (Time & Material o Fixed Price)
+Puedo definir fecha de inicio
+Puedo definir fecha de fin (opcional para proyectos Time & Material)
+Puedo proveer un nombre único para el proyecto
+El sistema asigna automáticamente un identificador único
+El sistema valida que todos los campos obligatorios estén completos
+Prioridad: Must
+
+====================================================================================================================
+
+Planificar fecha de fin de un proyecto #7
+
+Como Gerente de Proyectos
+Quiero establecer fechas de inicio y fin estimadas para un proyecto
+Para que pueda planificar el cronograma de desarrollo
+
+Criterios de Aceptación:
+
+Puedo definir fecha de inicio estimada
+Puedo definir fecha de fin (opcional para proyectos Time & Material)
+El sistema valida que fecha inicio sea anterior a fecha fin cuando ambas están definidas
+El sistema advierte si las fechas no son compatibles
+Prioridad: Must
+
+====================================================================================================================
+
+Etiquetar proyectos #8
+
+Como Gerente de Proyectos
+Quiero asignar etiquetas (tags) a un proyecto
+Para que pueda clasificar, describir y filtrar proyectos eficientemente
+
+Criterios de Aceptación:
+
+Puedo seleccionar etiquetas existentes
+Puedo crear nuevas etiquetas
+Puedo guardar el proyecto sin etiquetas (opcional)
+Prioridad: Must
+
+====================================================================================================================
+
+Modificar estado de proyecto #17
+
+Como Gerente de Proyectos
+Quiero cambiar el estado de un proyecto
+Para que pueda reflejar el progreso actual del desarrollo
+
+Criterios de Aceptación:
+
+Puedo cambiar entre estados: No Iniciado, En Desarrollo, Finalizado
+El sistema valida las reglas de transición de estados
+El sistema advierte si hay tareas pendientes que impiden el cambio
+Los cambios se guardan correctamente
+Prioridad: Must
+
+====================================================================================================================
+
+Eliminar proyecto #18
+
+Como Gerente de Proyectos
+Quiero eliminar un proyecto
+Para que pueda remover proyectos cancelados o completados
+
+Criterios de Aceptación:
+
+El sistema solicita confirmación antes de eliminar
+Prioridad: Must
+
+====================================================================================================================
+
+Crear tarea básica #19
+
+Como Gerente de Proyectos
+Quiero crear una tarea dentro de un proyecto
+Para que pueda organizar el trabajo en unidades manejables
+
+Criterios de Aceptación:
+
+Puedo definir un nombre para la tarea dentro del proyecto
+Puedo definir horas estimadas (valores positivos)
+Puedo asignar etiquetas existentes o crear nuevas
+Puedo asignar un recurso para la tarea (opcional)
+El estado inicial es "No Iniciada" por defecto
+El sistema valida campos obligatorios antes de guardar
+El sistema actualiza automáticamente el total de horas del proyecto
+Prioridad: Must
+
+====================================================================================================================
+
+Modificar horas estimadas de tarea #25
+
+Como Gerente de Proyectos
+Quiero cambiar las horas estimadas de una tarea
+Para que pueda ajustar las estimaciones según el progreso real
+
+Criterios de Aceptación:
+
+Puedo ingresar nuevas horas estimadas
+El sistema valida que sean valores positivos (no negativos)
+El sistema actualiza automáticamente el total de horas del proyecto
+Los cambios se guardan correctamente
+Prioridad: Must
+
+====================================================================================================================
+
+Cambiar estado de tarea #26
+
+Como Gerente de Proyectos
+Quiero activar una tarea
+Para que pueda reflejar el progreso del trabajo
+
+Criterios de Aceptación:
+
+Puedo cambiar entre estados: No Iniciada, En Proceso, Finalizada
+El sistema permite transiciones válidas entre estados
+Prioridad: Must
+
+====================================================================================================================
+
+Modificar recurso de tarea #27
+
+Como Gerente de Proyectos
+Quiero cambiar el recurso asignado a una tarea
+Para que pueda redistribuir la carga de trabajo según necesidades
+
+Criterios de Aceptación:
+
+Puedo seleccionar un nuevo recurso de la lista disponible
+Puedo quitar la asignación de recurso (dejar sin asignar)
+Prioridad: Must
+
+====================================================================================================================
+
+Calcular duración estimada de proyecto #31
+
+Como Gerente de Proyectos
+Quiero calcular la duración estimada de un proyecto en base a sus tareas
+Para que pueda controlar el tiempo estimado de un proyecto
+
+Criterios de Aceptación:
+
+Puedo calcular la duración estimada de un proyecto en base a la suma de las horas estimadas de sus tareas
+Prioridad: Must
+
+====================================================================================================================
+
+Crear etiqueta #33
+
+Como Gerente de Proyectos
+Quiero crear una nueva etiqueta
+Para que pueda categorizar proyectos y tareas
+
+Criterios de Aceptación:
+
+Puedo ingresar un nombre no vacío para la etiqueta
+El sistema le asigna un identificador único y un slug
+El sistema valida que el slug sea único
+Prioridad: Must
+
+====================================================================================================================
+
+Asignar etiqueta #34
+
+Como Gerente de Proyectos
+Quiero asignar una etiqueta a un proyecto o tarea
+Para que pueda categorizar proyectos y tareas
+
+Criterios de Aceptación:
+
+Puedo seleccionar una etiqueta existente o crear una nueva
+Prioridad: Must

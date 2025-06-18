@@ -7,8 +7,6 @@ import com.psa.proyecto_api.dto.response.TaskSummaryResponse;
 import com.psa.proyecto_api.service.TaskService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -55,7 +53,17 @@ public class TaskController {
         return ResponseEntity.ok(response);
     }
 
-    // GET /proyectos/{id}/tareas - Consultar tareas de un proyecto ===================================================
+    // GET /proyectos/{id}/tareas?estado=&etiqueta=&nombre=
+    @GetMapping("/{id}/tareas")
+    public ResponseEntity<List<TaskSummaryResponse>> getProjectTasks(
+            @PathVariable Long id,
+            @RequestParam(required = false) String estado,
+            @RequestParam(required = false) String etiqueta,
+            @RequestParam(required = false) String nombre
+    ) {
+        List<TaskSummaryResponse> tareas = taskService.getProjectTasksFiltered(id, estado, etiqueta, nombre);
+        return ResponseEntity.ok(tareas);
+    }
 
     // GET /tareas/{id} - Obtener detalles de una tarea específica
     @GetMapping("/tareas/{id}")

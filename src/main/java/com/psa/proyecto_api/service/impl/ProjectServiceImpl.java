@@ -5,7 +5,10 @@ import com.psa.proyecto_api.dto.request.ProjectFilterRequest;
 import com.psa.proyecto_api.dto.request.UpdateProjectRequest;
 import com.psa.proyecto_api.dto.response.ProjectResponse;
 import com.psa.proyecto_api.dto.response.ProjectSummaryResponse;
+import com.psa.proyecto_api.exception.ProjectNotFoundException;
 import com.psa.proyecto_api.model.Project;
+import com.psa.proyecto_api.model.enums.ProjectStatus;
+import com.psa.proyecto_api.model.enums.ProjectType;
 import com.psa.proyecto_api.repository.ProjectRepository;
 import com.psa.proyecto_api.service.ProjectService;
 import com.psa.proyecto_api.specification.ProjectSpecifications;
@@ -32,13 +35,14 @@ public class ProjectServiceImpl implements ProjectService {
     public ProjectResponse createProject(CreateProjectRequest request) {
         Project project = projectMapper.toEntity(request);
         project = projectRepository.save(project);
+        
         return projectMapper.toResponse(project);
     }
 
     @Override
     public ProjectResponse updateProject(Long id, UpdateProjectRequest request) {
         Project project = projectRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Proyecto no encontrado"));
+                .orElseThrow(() -> new ProjectNotFoundException(id));
         projectMapper.updateEntity(project, request);
         project = projectRepository.save(project);
         return projectMapper.toResponse(project);
@@ -61,13 +65,24 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public ProjectResponse getProjectById(Long id) {
         Project project = projectRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Proyecto no encontrado"));
+                .orElseThrow(() -> new ProjectNotFoundException(id));
         return projectMapper.toResponse(project);
     }
 
     @Override
+    public List<ProjectSummaryResponse> getProjectsFiltered(String nombre, String tipo, String estado, String tag) {
+        ProjectType projectType = ProjectType.fromString(tipo);
+        ProjectStatus projectStatus = ProjectStatus.fromString(estado);
+
+        List<Project> projects = projectRepository.findByProgressiveFilters(nombre, projectType, projectStatus, tag);
+        return projects.stream()
+                .map(projectMapper::toSummary)
+                .toList();
+    }
+
+    @Override
     public void deleteProject(Long id) {
-        if (!projectRepository.existsById(id)) throw new RuntimeException("Proyecto no encontrado");
+        if (!projectRepository.existsById(id)) throw new ProjectNotFoundException(id);
         projectRepository.deleteById(id);
     }
 
@@ -76,7 +91,7 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public ProjectResponse addTagToProject(Long id, String tag) {
         Project project = projectRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Proyecto no encontrado"));
+                .orElseThrow(() -> new ProjectNotFoundException(id));
         project.addTag(tag);
         project = projectRepository.save(project);
         return projectMapper.toResponse(project);
@@ -85,7 +100,7 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public ProjectResponse removeTagFromProject(Long id, String tag) {
         Project project = projectRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Proyecto no encontrado"));
+                .orElseThrow(() -> new ProjectNotFoundException(id));
         project.removeTag(tag);
         project = projectRepository.save(project);
         return projectMapper.toResponse(project);
@@ -94,7 +109,7 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public ProjectResponse updateProjectTag(Long id, String oldTag, String newTag) {
         Project project = projectRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Proyecto no encontrado"));
+                .orElseThrow(() -> new ProjectNotFoundException(id));
         project.updateProjectTag(oldTag, newTag);
         project = projectRepository.save(project);
         return projectMapper.toResponse(project);
@@ -103,7 +118,7 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public List<String> getProjectTags(Long id) {
         Project project = projectRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Proyecto no encontrado"));
+                .orElseThrow(() -> new ProjectNotFoundException(id));
         return project.getTagNames();
     }
 }

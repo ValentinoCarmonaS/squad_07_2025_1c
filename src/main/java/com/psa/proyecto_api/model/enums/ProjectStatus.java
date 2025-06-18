@@ -1,5 +1,7 @@
 package com.psa.proyecto_api.model.enums;
 
+import com.psa.proyecto_api.exception.OperationNotAllowedException;
+
 /**
  * Enumeración que define los posibles estados de un proyecto.
  */
@@ -24,6 +26,20 @@ public enum ProjectStatus {
     
     ProjectStatus(String displayName) {
         this.displayName = displayName;
+    }
+
+    public static ProjectStatus fromString(String value) {
+        if (value == null) {
+            return null;
+        }
+        
+        for (ProjectStatus type : ProjectStatus.values()) {
+            if (type.displayName.equalsIgnoreCase(value.trim())) {
+                return type;
+            }
+        }
+        
+        throw new OperationNotAllowedException("Tipo de proyecto no válido: " + value);
     }
     
     public String getDisplayName() {

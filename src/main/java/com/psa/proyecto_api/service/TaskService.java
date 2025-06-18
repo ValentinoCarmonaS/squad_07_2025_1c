@@ -2,7 +2,6 @@ package com.psa.proyecto_api.service;
 
 import com.psa.proyecto_api.dto.request.CreateTaskRequest;
 import com.psa.proyecto_api.dto.request.UpdateTaskRequest;
-import com.psa.proyecto_api.dto.response.ProjectResponse;
 import com.psa.proyecto_api.dto.response.TaskResponse;
 import com.psa.proyecto_api.dto.response.TaskSummaryResponse;
 
@@ -15,6 +14,7 @@ public interface TaskService {
     void deleteTask(Long taskId);
     TaskResponse activateTask(Long id);
     TaskResponse deactivateTask(Long id);
+    List<TaskSummaryResponse> getProjectTasksFiltered(Long projectId, String status, String tag, String name);
 
     TaskResponse addTagToTask(Long id, String tag);
     TaskResponse removeTagFromTask(Long id, String tag);
