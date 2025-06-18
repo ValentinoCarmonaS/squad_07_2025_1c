@@ -284,6 +284,7 @@ public class Task {
     
     /**
      * Inicia la tarea cambiando su estado a IN_PROGRESS.
+     * @return true si la tarea fue iniciada exitosamente, false si la tarea no está en estado TO_DO
      */
     public void start() {
         if (status != TaskStatus.TO_DO) {

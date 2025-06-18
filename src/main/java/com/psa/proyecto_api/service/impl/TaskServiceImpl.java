@@ -51,6 +51,7 @@ public class TaskServiceImpl implements TaskService {
         Task task = taskRepository.findById(id)
                 .orElseThrow(() -> new TaskNotFoundException(id));
         task.start();
+
         task = taskRepository.save(task);
         return taskMapper.toResponse(task);
     }
@@ -60,6 +61,7 @@ public class TaskServiceImpl implements TaskService {
         Task task = taskRepository.findById(id)
                 .orElseThrow(() -> new TaskNotFoundException(id));
         task.complete();
+
         task = taskRepository.save(task);
         return taskMapper.toResponse(task);
     }

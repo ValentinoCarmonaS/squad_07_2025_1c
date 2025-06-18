@@ -82,4 +82,10 @@ public class ProjectMapper {
                 .tagNames(project.getTagNames())
                 .build();
     }
+
+    public List<ProjectSummaryResponse> toSummaryList(List<Project> projects) {
+        return projects.stream()
+                .map(this::toSummary)
+                .toList();
+    }
 }

@@ -1,10 +1,15 @@
 package com.psa.proyecto_api.controller;
 
 import com.psa.proyecto_api.dto.request.CreateProjectRequest;
+import com.psa.proyecto_api.dto.request.ProjectFilterRequest;
 import com.psa.proyecto_api.dto.request.UpdateProjectRequest;
 import com.psa.proyecto_api.dto.response.ProjectResponse;
 import com.psa.proyecto_api.dto.response.ProjectSummaryResponse;
+import com.psa.proyecto_api.model.enums.ProjectStatus;
+import com.psa.proyecto_api.model.enums.ProjectType;
 import com.psa.proyecto_api.service.ProjectService;
+
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
