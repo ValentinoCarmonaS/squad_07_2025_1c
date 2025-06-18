@@ -31,18 +31,26 @@ public enum TaskStatus {
         return displayName;
     }
 
-        public static TaskStatus fromString(String value) {
+    public static TaskStatus fromString(String value) {
         if (value == null) {
             return null;
         }
         
+        String trimmedValue = value.trim();
+        
+        // Try to match by display name first
         for (TaskStatus type : TaskStatus.values()) {
-            if (type.displayName.equalsIgnoreCase(value.trim())) {
+            if (type.displayName.equalsIgnoreCase(trimmedValue)) {
                 return type;
             }
         }
         
-        throw new OperationNotAllowedException("Tipo de estado no válido: " + value);
+        // Try to match by enum name
+        try {
+            return TaskStatus.valueOf(trimmedValue.toUpperCase());
+        } catch (IllegalArgumentException e) {
+            throw new OperationNotAllowedException("Tipo de estado no válido: " + value);
+        }
     }
     
     /**
