@@ -47,11 +47,11 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
     List<Task> findByProjectIdAndAssignedResourceIdIsNull(Long projectId);
 
     @Query("SELECT DISTINCT t FROM Task t " +
-           "LEFT JOIN t.taskTags tag " + // Usamos LEFT JOIN para incluir tareas sin tags cuando no se filtra por tag
-           "WHERE t.project.id = :projectId " + // Este es un filtro obligatorio: siempre se filtrará por proyecto
-           "AND (:status IS NULL OR t.status = :status) " +
-           "AND (:tagName IS NULL OR :tagName = '' OR LOWER(tag.tagName) LIKE LOWER(CONCAT('%', :tagName, '%')) OR (SIZE(t.taskTags) = 0 AND :tagName IS NOT NULL AND :tagName = '')) " +
-           "AND (:taskName IS NULL OR :taskName = '' OR LOWER(t.name) LIKE LOWER(CONCAT('%', :taskName, '%')))")
+       "WHERE t.project.id = :projectId " +
+       "AND (:status IS NULL OR t.status = :status) " +
+       "AND (:taskName IS NULL OR :taskName = '' OR LOWER(t.name) LIKE LOWER(CONCAT('%', :taskName, '%'))) " +
+       "AND (:tagName IS NULL OR :tagName = '' OR " +
+       "     EXISTS (SELECT 1 FROM t.taskTags tt WHERE LOWER(tt.tagName) = LOWER(:tagName)))")
     List<Task> findByProgressiveFilters(
             @Param("projectId") Long projectId,
             @Param("status") TaskStatus status,

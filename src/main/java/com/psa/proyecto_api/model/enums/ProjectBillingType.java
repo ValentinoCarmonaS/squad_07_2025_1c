@@ -1,5 +1,7 @@
 package com.psa.proyecto_api.model.enums;
 
+import com.psa.proyecto_api.exception.OperationNotAllowedException;
+
 public enum ProjectBillingType {
     
     /**
@@ -20,6 +22,28 @@ public enum ProjectBillingType {
     
     public String getDisplayName() {
         return displayName;
+    }
+
+    public static ProjectBillingType fromString(String value) {
+        if (value == null) {
+            return null;
+        }
+        
+        String trimmedValue = value.trim();
+        
+        // Try to match by display name first
+        for (ProjectBillingType type : ProjectBillingType.values()) {
+            if (type.displayName.equalsIgnoreCase(trimmedValue)) {
+                return type;
+            }
+        }
+        
+        // Try to match by enum name
+        try {
+            return ProjectBillingType.valueOf(trimmedValue.toUpperCase());
+        } catch (IllegalArgumentException e) {
+            throw new OperationNotAllowedException("Tipo de facturación no válido: " + value);
+        }
     }
 
     /**

@@ -6,6 +6,8 @@ import com.psa.proyecto_api.dto.response.ProjectResponse;
 import com.psa.proyecto_api.dto.response.ProjectSummaryResponse;
 import com.psa.proyecto_api.model.Project;
 
+import java.util.List;
+
 import org.springframework.stereotype.Component;
 
 @Component
