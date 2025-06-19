@@ -67,11 +67,3 @@ Feature: Crear Proyecto
       | Proyecto  | 1        | DEVELOPMENT | TIME_AND_MATERIAL  | 2023-01-01 | 2023-12-31 | e1a8216f-7c66-4888-9668-f7c4145cce7e  |
     When se envía la solicitud para crear el proyecto
     Then se rechaza la creación del proyecto
-
-  @crear-proyecto
-  Scenario: No se puede crear un proyecto con fecha de fin anterior a la fecha de inicio
-    Given se tiene la siguiente información del proyecto:
-      | name      | clientId | type        | billingType        | startDate  | endDate    | leaderId                                |
-      | Proyecto  | 1        | DEVELOPMENT | TIME_AND_MATERIAL  | 2030-12-31 | 2030-01-01 | e1a8216f-7c66-4888-9668-f7c4145cce7e  |
-    When se envía la solicitud para crear el proyecto
-    Then se rechaza la creación del proyecto

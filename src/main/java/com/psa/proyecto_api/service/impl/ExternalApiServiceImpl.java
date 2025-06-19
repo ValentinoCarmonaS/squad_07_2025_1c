@@ -64,24 +64,24 @@ public class ExternalApiServiceImpl implements ExternalApiService {
         }
     }
 
-    @Override
-    public List<Map<String, Object>> getTicketsByTaskId(Long taskId) {
-        try {
-            String url = externalApiConfig.getSupportApiUrl() + "/tickets?taskId=" + taskId;
+    // @Override
+    // public List<Map<String, Object>> getTicketsByTaskId(Long taskId) {
+    //     try {
+    //         String url = externalApiConfig.getSupportApiUrl() + "/tickets?taskId=" + taskId;
 
-            ResponseEntity<List<Map<String, Object>>> response = restTemplate.exchange(
-                    url,
-                    HttpMethod.GET,
-                    null,
-                    new ParameterizedTypeReference<List<Map<String, Object>>>() {}
-            );
+    //         ResponseEntity<List<Map<String, Object>>> response = restTemplate.exchange(
+    //                 url,
+    //                 HttpMethod.GET,
+    //                 null,
+    //                 new ParameterizedTypeReference<List<Map<String, Object>>>() {}
+    //         );
 
-            return response.getBody();
+    //         return response.getBody();
 
-        } catch (RestClientException e) {
-            throw new ExternalServiceException("No se pudo consultar los tickets para la tarea " + taskId, e);
-        }
-    }
+    //     } catch (RestClientException e) {
+    //         throw new ExternalServiceException("No se pudo consultar los tickets para la tarea " + taskId, e);
+    //     }
+    // }
 
     @Override
     public Map<String, Object> getClientById(Integer clientId) {

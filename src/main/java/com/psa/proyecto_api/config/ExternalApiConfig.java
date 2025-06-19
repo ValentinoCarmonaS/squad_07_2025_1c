@@ -13,8 +13,8 @@ public class ExternalApiConfig {
     @Value("${CLIENTS_API_URL}")
     private String clientsApiUrl;
 
-    @Value("${SUPPORT_API_URL}")
-    private String supportApiUrl;
+    // @Value("${SUPPORT_API_URL}")
+    // private String supportApiUrl;
 
     // Getters para usar en los servicios
     public String getResourceApiUrl() {
@@ -25,7 +25,7 @@ public class ExternalApiConfig {
         return clientsApiUrl;
     }
 
-    public String getSupportApiUrl() {
-        return supportApiUrl;
-    }
+    // public String getSupportApiUrl() {
+    //     return supportApiUrl;
+    // }
 }

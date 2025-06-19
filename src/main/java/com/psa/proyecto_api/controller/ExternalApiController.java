@@ -44,12 +44,12 @@ public class ExternalApiController {
         return ResponseEntity.ok(client);
     }
 
-    // GET /soporte/tickets - Consultar tickets asociados a una tarea
-    @GetMapping("/soporte/tickets")
-    public ResponseEntity<List<Map<String, Object>>> getTicketsByTaskId(
-            @RequestParam Long taskId) {
+    // // GET /soporte/tickets - Consultar tickets asociados a una tarea
+    // @GetMapping("/soporte/tickets")
+    // public ResponseEntity<List<Map<String, Object>>> getTicketsByTaskId(
+    //         @RequestParam Long taskId) {
         
-        List<Map<String, Object>> tickets = externalApiService.getTicketsByTaskId(taskId);
-        return ResponseEntity.ok(tickets);
-    }
+    //     List<Map<String, Object>> tickets = externalApiService.getTicketsByTaskId(taskId);
+    //     return ResponseEntity.ok(tickets);
+    // }
 }
