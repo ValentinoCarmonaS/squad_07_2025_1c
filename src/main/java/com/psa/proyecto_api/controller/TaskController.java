@@ -54,7 +54,7 @@ public class TaskController {
     }
 
     // GET /proyectos/{id}/tareas?estado=&etiqueta=&nombre=
-    @GetMapping("/{id}/tareas")
+    @GetMapping("/proyectos/{id}/tareas")
     public ResponseEntity<List<TaskSummaryResponse>> getProjectTasks(
             @PathVariable Long id,
             @RequestParam(required = false) String estado,
