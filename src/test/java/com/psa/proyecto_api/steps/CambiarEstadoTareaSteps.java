@@ -8,127 +8,69 @@ import jakarta.transaction.Transactional;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.test.annotation.Rollback;
 
+import com.psa.proyecto_api.BaseIntegrationTest;
 import com.psa.proyecto_api.builders.ProjectTestDataBuilder;
 import com.psa.proyecto_api.builders.TaskTestDataBuilder;
 import com.psa.proyecto_api.dto.response.ProjectResponse;
 import com.psa.proyecto_api.dto.response.TaskResponse;
 import com.psa.proyecto_api.model.enums.TaskStatus;
 
+import io.cucumber.java.Before;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 
-@Transactional
-@Rollback
-public class CambiarEstadoTareaSteps {
+
+public class CambiarEstadoTareaSteps extends BaseCucumber {
     
-    @LocalServerPort
-    private int port;
-
-    @Autowired
-    private TestRestTemplate restTemplate;
-
-    private ProjectTestDataBuilder projectBuilder;
-    private TaskTestDataBuilder taskBuilder;
-
-    private ProjectResponse project;
-    private TaskResponse task;
-    private TaskResponse lastResult;
-    private Exception lastError;
-
-    private String getBaseUrl() {
-        return "http://localhost:" + port + "/api/v1";
+    @Before
+    public void setUp() {
+        super.setUp();
     }
 
-    private void initializeBuilders() {
-        if (projectBuilder == null) {
-            String projectApiUrl = getBaseUrl() + "/proyectos";
-            projectBuilder = new ProjectTestDataBuilder(projectApiUrl, restTemplate);
-        }
-    }
+    private Exception exception;
 
-    private void ensureProjectExists() {
-        initializeBuilders();
-        if (project == null) {
-            try {
-                project = projectBuilder.createDefaultProject();
-                if (project == null) {
-                    throw new RuntimeException("Project creation returned null");
-                }
-                
-                String taskApiUrl = getBaseUrl() + "/proyectos/" + project.getId() + "/tareas";
-                taskBuilder = new TaskTestDataBuilder(taskApiUrl, restTemplate);
-                
-            } catch (Exception e) {
-                throw new RuntimeException("Failed to create test project: " + e.getMessage(), e);
-            }
-        }
-    }
-
-    @Given("existe una tarea con estado {string}")
-    public void existeUnaTareaConEstado(String estado) {
-        ensureProjectExists();
-        
-        try {
-            TaskStatus targetStatus = TaskStatus.valueOf(estado);
-            
-            task = taskBuilder.createTaskWithStatus("Tarea de Prueba", 10, targetStatus);
-            
-            assertNotNull("Failed to create task", task);
-            assertEquals("Task status not set correctly", targetStatus, task.getStatus());
-            
-        } catch (Exception e) {
-            fail("Error setting up task with status " + estado + ": " + e.getMessage());
-        }
+    @Given("cambiar estado de tarea: existe una tarea con estado {string}")
+    public void cambiarEstadoDeTareaExisteUnaTareaConElEstado(String status) {
+        project = projectBuilder.getOrCreateProject();
+        task = projectBuilder.getOrCreateTaskWithStatus(status);
+        assertNotNull(task);
+        assertEquals(status, task.getStatus().toString());
     }
 
     @When("el usuario intenta iniciar la tarea")
     public void elUsuarioIntentaIniciarLaTarea() {
-        lastError = null;
-        lastResult = null;
+        exception = null;
         
         try {
-            lastResult = taskBuilder.activate(task);
-            if (lastResult != null) {
-                task = lastResult;
-            }
+            taskBuilder.activate(task);
+            task = taskBuilder.getTask();
         } catch (Exception e) {
-            lastError = e;
+            exception = e;
         }
     }
 
     @When("el usuario intenta completar la tarea")
     public void elUsuarioIntentaCompletarLaTarea() {
-        lastError = null;
-        lastResult = null;
+        exception = null;
         
         try {
-            if (task.getStatus() == TaskStatus.TO_DO) {
-                lastResult = taskBuilder.deactivate(task);
-            } else {
-                lastResult = taskBuilder.deactivate(task);
-            }
-            
-            if (lastResult != null) {
-                task = lastResult;
-            }
+            taskBuilder.deactivate(task);
+            task = taskBuilder.getTask();
         } catch (Exception e) {
-            lastError = e;
+            exception = e;
         }
     }
 
     @When("el usuario intenta retroceder la tarea")
     public void elUsuarioIntentaRetrocederLaTarea() {
-        lastError = null;
-        lastResult = null;
+        exception = null;
         
         try {
-            lastResult = taskBuilder.setStatus(task, TaskStatus.TO_DO);
-            if (lastResult != null) {
-                task = lastResult;
-            }
+            taskBuilder.activate(task);
+            task = taskBuilder.getTask();
         } catch (Exception e) {
-            lastError = e;
+            exception = e;
         }
     }
 
@@ -142,7 +84,7 @@ public class CambiarEstadoTareaSteps {
     @Then("se rechaza la operación por estado inválido")
     public void seRechazaLaOperacionPorEstadoInvalido() {
         assertTrue("Se esperaba que la operación fallara", 
-            lastResult == null || lastError != null);
+            exception != null);
     }
 
     @Then("el estado de la tarea se mantiene en {string}")
