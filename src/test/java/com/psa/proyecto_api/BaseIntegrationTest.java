@@ -31,11 +31,8 @@ public abstract class BaseIntegrationTest {
     @Autowired
     protected DataSource dataSource;
 
-    protected String baseUrl;
-
     @BeforeEach
-    void setUp() {
-        baseUrl = "http://localhost:" + port + "/api/v1";
+    public void setUp() {
         
         // Verify H2 connection
         try (Connection conn = dataSource.getConnection()) {
@@ -46,9 +43,16 @@ public abstract class BaseIntegrationTest {
     }
 
     /**
+     * Helper method to get the base URL with the current port
+     */
+    protected String getBaseUrl() {
+        return "http://localhost:" + port + "/api/v1";
+    }
+
+    /**
      * Helper method to get the full URL for an endpoint
      */
     protected String url(String endpoint) {
-        return baseUrl + endpoint;
+        return getBaseUrl() + endpoint;
     }
 }
