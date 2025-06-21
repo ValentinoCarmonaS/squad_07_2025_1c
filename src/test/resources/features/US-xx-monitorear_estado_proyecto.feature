@@ -1,9 +1,9 @@
 @monitor-project-progress
 Feature: Monitorear progreso de un proyecto
 # Como Gerente de Proyectos
-# Quiero que el estado del proyecto se actualice automáticamente según el progreso de las tareas
-# Para que pueda supervisar el avance sin intervención manual
-
+# Quiero actualizraa el estado del proyecto según el progreso de sus tareas
+# Para que pueda evitar discrepancias de estado entre un proyecto y sus tareas
+  
   Scenario: Iniciar una tarea actualiza el proyecto
     Given existe un proyecto con estado "INITIATED"
     And existe una tarea con el estado "TO_DO"
@@ -30,8 +30,8 @@ Feature: Monitorear progreso de un proyecto
 
   Scenario: Completar la última tarea activa actualiza el proyecto a finalizado
     Given existe un proyecto con estado "IN_PROGRESS"
-    When el usuario completa la tarea "Setup Task"
-    Then la tarea "Setup Task" cambia a estado "DONE"
+    When completa todas sus tareas
+    Then todas las tareas cambian a estado "DONE"
     And el proyecto actualiza su estado a "TRANSITION"
 
   Scenario: Proyecto regresa a estado inicial sin tareas activas
