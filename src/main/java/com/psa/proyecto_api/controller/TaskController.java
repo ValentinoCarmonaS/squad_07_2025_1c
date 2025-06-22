@@ -53,15 +53,16 @@ public class TaskController {
         return ResponseEntity.ok(response);
     }
 
-    // GET /proyectos/{id}/tareas?estado=&etiqueta=&nombre=
+    // GET /proyectos/{id}/tareas?estado=&etiqueta=&nombre=&ticketId=
     @GetMapping("/proyectos/{id}/tareas")
     public ResponseEntity<List<TaskSummaryResponse>> getProjectTasks(
             @PathVariable Long id,
             @RequestParam(required = false) String estado,
             @RequestParam(required = false) String etiqueta,
-            @RequestParam(required = false) String nombre
+            @RequestParam(required = false) String nombre,
+            @RequestParam(required = false) Integer ticketId
     ) {
-        List<TaskSummaryResponse> tareas = taskService.getProjectTasksFiltered(id, estado, etiqueta, nombre);
+        List<TaskSummaryResponse> tareas = taskService.getProjectTasksFiltered(id, estado, etiqueta, nombre, ticketId);
         return ResponseEntity.ok(tareas);
     }
 

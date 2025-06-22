@@ -51,11 +51,13 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
        "AND (:status IS NULL OR t.status = :status) " +
        "AND (:taskName IS NULL OR :taskName = '' OR LOWER(t.name) LIKE LOWER(CONCAT('%', :taskName, '%'))) " +
        "AND (:tagName IS NULL OR :tagName = '' OR " +
-       "     EXISTS (SELECT 1 FROM t.taskTags tt WHERE LOWER(tt.tagName) = LOWER(:tagName)))")
+       "     EXISTS (SELECT 1 FROM t.taskTags tt WHERE LOWER(tt.tagName) = LOWER(:tagName))) " +
+       "AND (:ticketId IS NULL OR t.ticketId = :ticketId)")
     List<Task> findByProgressiveFilters(
             @Param("projectId") Long projectId,
             @Param("status") TaskStatus status,
             @Param("tagName") String tagName,
-            @Param("taskName") String taskName
+            @Param("taskName") String taskName,
+            @Param("ticketId") Integer ticketId
     );
 }

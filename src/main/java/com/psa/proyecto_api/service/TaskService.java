@@ -14,7 +14,7 @@ public interface TaskService {
     void deleteTask(Long taskId);
     TaskResponse activateTask(Long id);
     TaskResponse deactivateTask(Long id);
-    List<TaskSummaryResponse> getProjectTasksFiltered(Long projectId, String status, String tag, String name);
+    List<TaskSummaryResponse> getProjectTasksFiltered(Long projectId, String status, String tag, String name, Integer ticketId);
 
     TaskResponse addTagToTask(Long id, String tag);
     TaskResponse removeTagFromTask(Long id, String tag);

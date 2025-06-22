@@ -13,6 +13,7 @@ public class TaskSummaryResponse {
     private Long id;
     private String name;
     private Long projectId;
+    private Integer ticketId;
     private TaskStatus status;
     private Integer estimatedHours;
     private String assignedResourceId;

@@ -82,10 +82,10 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public List<TaskSummaryResponse> getProjectTasksFiltered(Long projectId, String status, String tag, String name) {
+    public List<TaskSummaryResponse> getProjectTasksFiltered(Long projectId, String status, String tag, String name, Integer ticketId) {
         TaskStatus taskStatus = TaskStatus.fromString(status);
 
-        List<Task> tasks = taskRepository.findByProgressiveFilters(projectId, taskStatus, tag, name);
+        List<Task> tasks = taskRepository.findByProgressiveFilters(projectId, taskStatus, tag, name, ticketId);
         return tasks.stream()
                 .map(taskMapper::toSummary)
                 .toList();

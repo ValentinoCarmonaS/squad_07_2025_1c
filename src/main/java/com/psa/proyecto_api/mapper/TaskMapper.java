@@ -27,6 +27,10 @@ public class TaskMapper {
             req.getTagNames().forEach(task::addTag);
         }
 
+        if (req.getTicketId() != null) {
+            task.setTicketId(req.getTicketId());
+        }
+
         return task;
     }
 
@@ -34,7 +38,8 @@ public class TaskMapper {
         task.updateDetails(
             req.getName(),
             req.getEstimatedHours(),
-            req.getAssignedResourceId()
+            req.getAssignedResourceId(),
+            req.getTicketId()
         );
     }
 
@@ -46,6 +51,7 @@ public class TaskMapper {
             .status(task.getStatus())
             .estimatedHours(task.getEstimatedHours())
             .assignedResourceId(task.getAssignedResourceId())
+            .ticketId(task.getTicketId())
             .tagNames(task.getTagNames())
             .build();
     }
@@ -58,6 +64,7 @@ public class TaskMapper {
             .status(task.getStatus())
             .estimatedHours(task.getEstimatedHours())
             .assignedResourceId(task.getAssignedResourceId())
+            .ticketId(task.getTicketId())
             .tagNames(task.getTagNames())
             .build();
     }

@@ -2,6 +2,7 @@
 CREATE TABLE tasks (
     id SERIAL PRIMARY KEY,
     project_id INTEGER NOT NULL REFERENCES projects(id) ON DELETE CASCADE,
+    ticket_id INTEGER,
     name VARCHAR(100) NOT NULL,
     status VARCHAR(50) NOT NULL DEFAULT 'TO_DO' CHECK (status IN ('TO_DO', 'IN_PROGRESS', 'DONE')),
     estimated_hours INT NOT NULL CHECK (estimated_hours > 0),
