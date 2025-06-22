@@ -31,7 +31,6 @@ public abstract class BaseIntegrationTest {
     @Autowired
     protected DataSource dataSource;
 
-    @BeforeEach
     public void setUp() {
         
         // Verify H2 connection
