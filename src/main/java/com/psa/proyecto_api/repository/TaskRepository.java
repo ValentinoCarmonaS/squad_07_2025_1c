@@ -60,4 +60,6 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
             @Param("taskName") String taskName,
             @Param("ticketId") Integer ticketId
     );
+
+    List<Task> findByTicketId(Integer ticketId);
 }
