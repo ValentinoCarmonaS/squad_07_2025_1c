@@ -1,6 +1,7 @@
 package com.psa.proyecto_api.builders;
 
 import com.psa.proyecto_api.dto.request.CreateProjectRequest;
+import com.psa.proyecto_api.dto.request.UpdateProjectRequest;
 import com.psa.proyecto_api.dto.response.ProjectResponse;
 import com.psa.proyecto_api.dto.response.TaskResponse;
 import com.psa.proyecto_api.model.Project;
@@ -16,10 +17,15 @@ import java.util.List;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpMethod;
+
 
 import static com.psa.proyecto_api.model.enums.ProjectStatus.TRANSITION;
 import com.psa.proyecto_api.model.enums.TaskStatus;
+
+
 import static com.psa.proyecto_api.model.enums.TaskStatus.IN_PROGRESS;
 
 /**
@@ -42,7 +48,6 @@ public class ProjectTestDataBuilder {
     
     private ResponseEntity<ProjectResponse> response;
     private ProjectResponse project;
-
     private TaskTestDataBuilder taskBuilder;
 
     // Private helper methods
@@ -223,5 +228,36 @@ public class ProjectTestDataBuilder {
             createBasicProject();
         }
         return getProject();
+    }
+
+    public void createProject(LocalDate startDate, LocalDate endDate) {
+        CreateProjectRequest request = new CreateProjectRequest();
+        request = setMinimalDefaults(request);
+        request.setStartDate(startDate);
+        request.setEndDate(endDate);
+        response = restTemplate.postForEntity(url(PROJECTS_ENDPOINT), request, ProjectResponse.class);
+        project = response.getBody();
+    }
+
+    public void createProject(LocalDate startDate) {
+        CreateProjectRequest request = new CreateProjectRequest();
+        request = setMinimalDefaults(request);
+        request.setStartDate(startDate);
+        response = restTemplate.postForEntity(url(PROJECTS_ENDPOINT), request, ProjectResponse.class);
+        project = response.getBody();
+    }
+
+
+    public void modifyProject(UpdateProjectRequest request) {
+        response = restTemplate.exchange(
+            url(PROJECTS_ENDPOINT + "/" + project.getId()),
+            HttpMethod.PUT,
+            new HttpEntity<>(request),
+            ProjectResponse.class);
+        project = response.getBody();
+    }
+
+    public boolean requestWasSuccesfull() {
+        return response.getStatusCode().is2xxSuccessful();
     }
 }
