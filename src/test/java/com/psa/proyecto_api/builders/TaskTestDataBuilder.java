@@ -1,6 +1,9 @@
 package com.psa.proyecto_api.builders;
 
+import java.util.List;
+
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -197,6 +200,16 @@ public class TaskTestDataBuilder {
         changeStatus(status);
     }
 
+    public void createTask(Long projectId, String name, String status, String ticketId) {
+        CreateTaskRequest request = new CreateTaskRequest();
+        request = setMinimalDefaults(request);
+        request.setName(name);
+        request.setTicketId(Integer.parseInt(ticketId));
+        response = restTemplate.postForEntity(url(PROJECTS_ENDPOINT + "/" + projectId + TASKS_ENDPOINT), request, TaskResponse.class);
+        this.task = response.getBody();
+        changeStatus(status);
+    }
+
     /**
      * Constructs the full URL for an API endpoint
      * @param endpoint The endpoint path to append to the base URL
@@ -204,5 +217,17 @@ public class TaskTestDataBuilder {
      */
     private String url(String endpoint) {
         return baseUrl + endpoint;
+    }
+
+    public List<TaskResponse> getTasksBy(Long projectId, String filter) {
+        String url = url(PROJECTS_ENDPOINT + "/" + projectId + TASKS_ENDPOINT + filter);
+        ResponseEntity<List<TaskResponse>> response = restTemplate.exchange(url, HttpMethod.GET, null,
+            new ParameterizedTypeReference<List<TaskResponse>>() {});
+        if (response.getStatusCode() != HttpStatus.OK) {
+            throw new RuntimeException("Failed to get tasks. Status: " + response.getStatusCode());
+        }
+
+        List<TaskResponse> taskResponses = response.getBody();
+        return taskResponses;
     }
 }
