@@ -118,7 +118,7 @@ public class ProjectTestDataBuilder {
     /**
      * Creates a basic project with minimal default values
      */
-    private void createBasicProject() {
+    public void createBasicProject() {
         CreateProjectRequest request = new CreateProjectRequest();
         request = setMinimalDefaults(request);
         
