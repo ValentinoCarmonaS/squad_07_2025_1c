@@ -66,6 +66,14 @@ public class TaskController {
         return ResponseEntity.ok(tareas);
     }
 
+    // GET /tareas?ticketId=
+    @GetMapping("/tareas")
+    public ResponseEntity<List<TaskSummaryResponse>> getTasksByTicketId(
+            @RequestParam(required = false) Integer ticketId) {
+        List<TaskSummaryResponse> tareas = taskService.getTasksByTicketId(ticketId);
+        return ResponseEntity.ok(tareas);
+    }
+
     // GET /tareas/{id} - Obtener detalles de una tarea específica
     @GetMapping("/tareas/{id}")
     public ResponseEntity<TaskResponse> getTaskById(@PathVariable Long id) {
