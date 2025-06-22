@@ -16,6 +16,8 @@ public class UpdateTaskRequest {
     @Min(value = 1, message = "Las horas estimadas no pueden ser negativas")
     @Schema(example = "1", description = "Horas estimadas para completar la tarea")
     private Integer estimatedHours;
+
+    private Integer ticketId;
     
     @Size(min = 36, max = 36, message = "El id del recurso debe tener 36 caracteres")
     private String assignedResourceId;

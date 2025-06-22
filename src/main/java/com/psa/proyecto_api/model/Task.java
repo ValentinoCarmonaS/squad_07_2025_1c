@@ -56,6 +56,9 @@ public class Task {
     @Column(name = "assigned_resource_id")
     @Size(min = 36, max = 36, message = "El id del recurso debe tener 36 caracteres")
     private String assignedResourceId;
+
+    @Column(name = "ticket_id")
+    private Integer ticketId;
     
     // Relaciones internas
     @NotNull(message = "El proyecto es obligatorio")
@@ -136,7 +139,7 @@ public class Task {
     /**
      * Actualiza los detalles de una tarea.
      */
-    public void updateDetails(String name, Integer estimatedHours, String assignedResourceId) {
+    public void updateDetails(String name, Integer estimatedHours, String assignedResourceId, Integer ticketId) {
         if (name != null && !name.trim().isEmpty()) {
             this.name = name;
         
@@ -146,6 +149,9 @@ public class Task {
 
         } else if (assignedResourceId != null && !assignedResourceId.trim().isEmpty()) {
             this.assignedResourceId = assignedResourceId;
+
+        } else if (ticketId != null) {
+            this.ticketId = ticketId;
         }
     }
 
