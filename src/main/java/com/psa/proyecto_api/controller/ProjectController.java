@@ -77,7 +77,7 @@ public class ProjectController {
         return ResponseEntity.ok(response);
     }
 
-    // DELETE /proyectos/{id}/tags - Quitar tag de un proyecto
+    // DELETE /proyectos/{id}/tags?tagName= - Quitar tag de un proyecto
     @DeleteMapping("/{id}/tags")
     public ResponseEntity<ProjectResponse> removeTagFromProject(
             @PathVariable Long id, 
@@ -86,7 +86,7 @@ public class ProjectController {
         return ResponseEntity.ok(response);
     }
 
-    // PUT /proyectos/{id}/tags - Actualizar tag de un proyecto
+    // PUT /proyectos/{id}/tags?oldTagName=?newTagName= - Actualizar tag de un proyecto
     @PutMapping("/{id}/tags")
     public ResponseEntity<ProjectResponse> updateProjectTag(
             @PathVariable Long id, 
