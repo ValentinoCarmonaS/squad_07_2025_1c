@@ -2,7 +2,7 @@
 
 ## Tema: Proyectos
 
-### US-01: Crear proyecto
+### US-06: Crear proyecto
 
 **Como** Gerente de Proyectos  
 **Quiero** crear un nuevo proyecto con información básica (nombre, cliente, lider de proyecto, tipo, tipo de financiación, fechas estimadas)  
@@ -24,7 +24,7 @@
 
 ---
 
-### US-02: Planificar fecha de fin de un proyecto
+### US-07: Planificar fecha de fin de un proyecto
 
 **Como** Gerente de Proyectos  
 **Quiero** establecer fechas de inicio y fin estimadas para un proyecto  
@@ -41,23 +41,23 @@
 
 ---
 
-### US-03: Etiquetar proyectos
+### US-08: Etiquetar proyectos
 
 **Como** Gerente de Proyectos  
 **Quiero** asignar etiquetas (tags) a un proyecto  
-**Para que** pueda clasificar, describir y filtrar proyectos eficientemente
+**Para que** pueda clasificar, describir proyectos eficientemente
 
 **Criterios de Aceptación:**
 
-- Puedo seleccionar etiquetas existentes
 - Puedo crear nuevas etiquetas
 - Puedo guardar el proyecto sin etiquetas (opcional)
+- Puedo remover o agregar etiquetas a un proyecto existente
 
 **Prioridad:** Must
 
 ---
 
-### US-04: Ver lista de proyectos
+### US-09: Ver lista de proyectos
 
 **Como** Maximiliano Gant  
 **Quiero** visualizar proyectos en formato tabla  
@@ -73,37 +73,24 @@
 **Prioridad:** Must
 
 ---
-
-### US-05: Buscar proyectos
+### US-11: Filtrar proyectos
 
 **Como** usuario del sistema  
-**Quiero** buscar proyectos por diferentes criterios
+**Quiero** filtrar un proyecto  
 **Para que** pueda encontrar proyectos específicos rápidamente
 
 **Criterios de Aceptación:**
 
-- Puedo buscar por nombre de proyecto
-- El sistema muestra mensaje cuando no hay resultados
+- Puedo filtrar por nombre, tipo, estado, tag (singular)
+- Puedo buscar proyectos por nombre
+- Puedo combinar filtros y busqueda
+- El sistema mantiene los filtros aplicados hasta que los cambie
 
-**Prioridad:** Must
-
----
-### US-06: Filtrar proyectos
-
-**Como** usuario del sistema  
-**Quiero** filtrar proyectos por diferentes criterios  
-**Para que** pueda encontrar proyectos específicos rápidamente
-
-**Criterios de Aceptación:**
-
-- Puedo filtrar por tipo, estado, tags
-- El sistema muestra mensaje cuando no hay resultados
-
-**Prioridad:** Could
+**Prioridad:** Should
 
 ---
 
-### US-07: Ordenar lista de proyectos
+### US-12: Ordenar lista de proyectos [exclusivo front-end]
 
 **Como** usuario del sistema  
 **Quiero** ordenar la lista de proyectos por diferentes columnas  
@@ -119,7 +106,7 @@
 
 ---
 
-### US-08: Ver tablero Kanban de proyectos
+### US-13: Ver tablero Kanban de proyectos [exclusivo front-end]
 
 **Como** Maximiliano Gant  
 **Quiero** visualizar proyectos en un tablero Kanban  
@@ -135,41 +122,7 @@
 
 ---
 
-### US-09: Personalizar columnas Kanban
-
-**Como** usuario del sistema  
-**Quiero** crear y personalizar columnas del tablero Kanban  
-**Para que** pueda adaptar el tablero a las necesidades de mi equipo
-
-**Criterios de Aceptación:**
-
-- Puedo crear nuevas columnas personalizables además de las columnas estándar
-- Las columnas no poseen restricción alguna respecto al estado del proyecto
-- Puedo eliminar columnas personalizadas (no las estándar)
-
-**Prioridad:** Won't 
-**Razón:** No es necesario para el MVP (fuera de alcance)
-
----
-
-### US-10: Mover proyectos en Kanban
-
-**Como** usuario del sistema  
-**Quiero** mover proyectos entre columnas del tablero Kanban  
-**Para que** pueda actualizar el estado de los proyectos visualmente
-
-**Criterios de Aceptación:**
-
-- Puedo arrastrar y soltar proyectos entre columnas
-- El sistema valida las reglas de transición de estados entre columnas estándar
-- El sistema solo permite movimientos válidos
-- El estado del proyecto se actualiza al moverlo
-
-**Prioridad:** Should
-
----
-
-### US-11: Ver detalles completos de proyecto
+### US-16: Ver detalles completos de proyecto
 
 **Como** Gerente de Proyectos
 **Quiero** acceder a una vista detallada de un proyecto  
@@ -186,24 +139,25 @@
 
 ---
 
-### US-12: Modificar estado de proyecto
+### US-17: Modificar estado de proyecto
 
-**Como** Gerente de Proyectos  
-**Quiero** cambiar el estado de un proyecto  
-**Para que** pueda reflejar el progreso actual del desarrollo
+Como Gerente de Proyectos
+Quiero actualizraa el estado del proyecto según el progreso de sus tareas
+Para que pueda evitar discrepancias de estado entre un proyecto y sus tareas
 
 **Criterios de Aceptación:**
 
-- Puedo cambiar entre estados: No Iniciado, En Desarrollo, Finalizado
-- El sistema valida las reglas de transición de estados
-- El sistema advierte si hay tareas pendientes que impiden el cambio
-- Los cambios se guardan correctamente
+- Puedo cambiar entre estados: INICIADO, EN PROGRESO, EN TRANSICIÓN en base al estado de sus tareas
+- Si no tiene tareas o están todas POR HACER, el proyecto estará INICIADO
+- Si hay una tarea EN PROGRESO, el proyecto estará EN PROGRESO
+- Si cada una de sus tareas está HECHA, el proyecto estará EN TRANSICIÓN
 
 **Prioridad:** Must
 
+
 ---
 
-### US-13: Eliminar proyecto
+### US-18: Eliminar proyecto
 
 **Como** Gerente de Proyectos  
 **Quiero** eliminar un proyecto  
@@ -212,20 +166,7 @@
 **Criterios de Aceptación:**
 
 - El sistema solicita confirmación antes de eliminar
-
-**Prioridad:** Must
-
----
-
-### US-14: Calcular duración estimada de proyecto
-
-**Como** Gerente de Proyectos  
-**Quiero** calcular la duración estimada de un proyecto en base a sus tareas  
-**Para que** pueda controlar el tiempo estimado de un proyecto
-
-**Criterios de Aceptación:**
-
-- Puedo calcular la duración estimada de un proyecto en base a la suma de las horas estimadas de sus tareas
+- Se eliminan todas las tareas asociadas al mismo
 
 **Prioridad:** Must
 
@@ -233,7 +174,7 @@
 
 ## Tema: Tareas
 
-### US-15: Crear tarea básica
+### US-19: Crear tarea básica
 
 **Como** Gerente de Proyectos  
 **Quiero** crear una tarea dentro de un proyecto  
@@ -246,7 +187,6 @@
 - Puedo asignar etiquetas existentes o crear nuevas
 - Puedo asignar un recurso para la tarea (opcional)
 - El estado inicial es "No Iniciada" por defecto
-- La tarea debe saber a qué proyecto pertenece
 - El sistema valida campos obligatorios antes de guardar
 - El sistema actualiza **automáticamente** el total de horas del proyecto
 
@@ -254,7 +194,7 @@
 
 ---
 
-### US-16: Asignar recurso a tarea
+### US-20: Asignar recurso a tarea
 
 **Como** Gerente de Proyectos  
 **Quiero** asignar un recurso a una tarea  
@@ -267,11 +207,11 @@
 - Puedo dejar la tarea sin recurso asignado (opcional)
 - El sistema muestra los recursos disponibles
 
-**Prioridad:** Could
+**Prioridad:** Must
 
 ---
 
-### US-17: Ver lista de tareas de proyecto
+### US-21: Ver lista de tareas de proyecto
 
 **Como** miembro del equipo  
 **Quiero** visualizar las tareas de un proyecto en formato lista  
@@ -282,45 +222,13 @@
 - Veo columnas con nombre, estado, recurso asignado, horas estimadas, etiquetas
 - Puedo ver todas las tareas del proyecto seleccionado
 - La lista se actualiza cuando se agregan/modifican tareas
-- El sistema muestra mensaje cuando no hay tareas
+
 
 **Prioridad:** Must
 
 ---
 
-### US-18: Ordenar tareas
-
-**Como** usuario del sistema  
-**Quiero** filtrar y ordenar las tareas de un proyecto  
-**Para que** pueda encontrar tareas específicas rápidamente
-
-**Criterios de Aceptación:**
-
-- Puedo filtrar por estado, etiquetas
-- Puedo ordenar alfabéticamente y por fechas (ascendente/descendente)
-- Puedo buscar tareas por nombre
-- El sistema mantiene los filtros aplicados hasta que los cambie
-
-**Prioridad:** Should
-
----
-
-### US-19: Buscar tareas por nombre
-
-**Como** usuario del sistema  
-**Quiero** buscar tareas por nombre usando una barra de búsqueda  
-**Para que** pueda encontrar tareas específicas rápidamente
-
-**Criterios de Aceptación:**
-
-- Puedo escribir en una barra de búsqueda
-- El sistema muestra mensaje cuando no hay resultados
-
-**Prioridad:** Could
-
----
-
-### US-20: Ver detalles completos de tarea
+### US-24: Ver detalles completos de tarea
 
 **Como** Maximiliano Gant  
 **Quiero** acceder a una vista detallada de una tarea  
@@ -336,7 +244,7 @@
 
 ---
 
-### US-21: Modificar horas estimadas de tarea
+### US-25: Modificar horas estimadas de tarea
 
 **Como** Gerente de Proyectos  
 **Quiero** cambiar las horas estimadas de una tarea  
@@ -353,7 +261,7 @@
 
 ---
 
-### US-22: Cambiar estado de tarea
+### US-26: Cambiar estado de tarea
 
 **Como** miembro del equipo  
 **Quiero** actualizar el estado de una tarea  
@@ -368,55 +276,9 @@
 
 ---
 
-### US-23: Modificar recurso de tarea
-
-**Como** Gerente de Proyectos  
-**Quiero** cambiar el recurso asignado a una tarea  
-**Para que** pueda redistribuir la carga de trabajo según necesidades
-
-**Criterios de Aceptación:**
-
-- Puedo seleccionar un nuevo recurso de la lista disponible
-- Puedo quitar la asignación de recurso (dejar sin asignar)
-
-**Prioridad:** Must
-
----
-
-### US-24: Eliminar tarea
-
-**Como** Gerente de Proyectos  
-**Quiero** eliminar una tarea de un proyecto  
-**Para que** pueda remover tareas canceladas o incorrectas
-
-**Criterios de Aceptación:**
-
-- El sistema solicita confirmación antes de eliminar
-- Puedo cancelar la operación de eliminación
-- La tarea se elimina permanentemente tras confirmar
-- El sistema actualiza **automáticamente** el total de horas del proyecto
-
-**Prioridad:** Must
-
----
-
 ## Tema: Etiquetas
 
-### US-25: Crear etiqueta
-
-**Como** Gerente de Proyectos  
-**Quiero** crear una nueva etiqueta  
-**Para que** pueda categorizar proyectos y tareas
-
-**Criterios de Aceptación:**
-
-- Puedo ingresar un nombre no vacío para la etiqueta
-- El sistema le asigna un identificador único y un slug
-- El sistema valida que el slug sea único
-
-**Prioridad:** Must
-
-### US-26: Asignar etiqueta
+### US-34: Asignar etiqueta
 
 **Como** Gerente de Proyectos  
 **Quiero** asignar una etiqueta a un proyecto o tarea  
@@ -424,8 +286,22 @@
 
 **Criterios de Aceptación:**
 
-- Puedo seleccionar una etiqueta existente o crear una nueva
+- Puedo seleccionar crear una nueva
+- La etiqueta es unica dentro del proyecto si es una etiqueta de proyecto
+- La etiqueta es unica dentro de la tarea si es una etiqueta de tarea
 
 **Prioridad:** Must
 
 ---
+
+### US-31: Calcular duración estimada de proyecto
+
+**Como** Gerente de Proyectos  
+**Quiero** calcular la duración estimada de un proyecto en base a sus tareas  
+**Para que** pueda controlar el tiempo estimado de un proyecto
+
+**Criterios de Aceptación:**
+
+- Puedo calcular la duración estimada de un proyecto en base a la suma de las horas estimadas de sus tareas
+
+**Prioridad:** Must
