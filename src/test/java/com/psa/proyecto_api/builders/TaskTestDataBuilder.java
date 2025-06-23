@@ -14,10 +14,15 @@ import com.psa.proyecto_api.model.Task;
 import com.psa.proyecto_api.model.enums.TaskStatus;
 
 /**
- * Builder class for creating and managing tasks in tests
+ * Builder class for creating and managing tasks in tests.
+ * Provides methods to create, update, and manipulate tasks for testing purposes.
  */
 public class TaskTestDataBuilder {
 
+    // ========================================================================
+    // CONSTANTS
+    // ========================================================================
+    
     private static final String DEFAULT_TASK_NAME = "Tarea de Prueba";
     private static final Integer DEFAULT_ESTIMATED_HOURS = 1;
     private static final Long DEFAULT_RESOURCE_ID = 1L;
@@ -25,12 +30,20 @@ public class TaskTestDataBuilder {
     private static final String DEACTIVATE_ENDPOINT = "/desactivar";
     private static final String TASKS_ENDPOINT = "/tareas";
     private static final String PROJECTS_ENDPOINT = "/proyectos";
+
+    // ========================================================================
+    // INSTANCE FIELDS
+    // ========================================================================
+    
     private String baseUrl;
     private TestRestTemplate restTemplate;
-
     private ResponseEntity<TaskResponse> response;
     private TaskResponse task;
 
+    // ========================================================================
+    // CONSTRUCTOR
+    // ========================================================================
+    
     /**
      * Constructor for TaskTestDataBuilder
      * @param baseUrl The base URL for API requests
@@ -43,6 +56,10 @@ public class TaskTestDataBuilder {
         this.task = null;
     }
 
+    // ========================================================================
+    // PRIVATE HELPER METHODS
+    // ========================================================================
+    
     /**
      * Sets minimal default values for a task request
      * @param request The task request to populate
@@ -54,6 +71,19 @@ public class TaskTestDataBuilder {
         return request;
     }
 
+    /**
+     * Constructs the full URL for an API endpoint
+     * @param endpoint The endpoint path to append to the base URL
+     * @return The complete URL
+     */
+    private String url(String endpoint) {
+        return baseUrl + endpoint;
+    }
+
+    // ========================================================================
+    // PUBLIC TASK STATUS METHODS
+    // ========================================================================
+    
     /**
      * Changes the status of the current task
      * @param status The new status to set
@@ -80,27 +110,6 @@ public class TaskTestDataBuilder {
             default:
                 throw new RuntimeException("Invalid status: " + status);
         }
-    }
-
-    /**
-     * Gets the current task after updating it from the server
-     * @return The current task response
-     */
-    public TaskResponse getTask() {
-        updateTask();
-        return task;
-    }
-
-    /**
-     * Updates the current task data from the server
-     */
-    public void updateTask() {
-        if (task == null) {
-            throw new RuntimeException("Task not found");
-        }
-        String url = url(TASKS_ENDPOINT + "/" + task.getId());
-        response = restTemplate.getForEntity(url, TaskResponse.class);
-        task = response.getBody();
     }
 
     /**
@@ -143,6 +152,10 @@ public class TaskTestDataBuilder {
         }
     }
 
+    // ========================================================================
+    // PUBLIC CREATION METHODS
+    // ========================================================================
+    
     /**
      * Creates a basic task with minimal default values
      * @param projectId The ID of the project to create the task for
@@ -210,13 +223,29 @@ public class TaskTestDataBuilder {
         changeStatus(status);
     }
 
+    // ========================================================================
+    // PUBLIC GETTER METHODS
+    // ========================================================================
+    
     /**
-     * Constructs the full URL for an API endpoint
-     * @param endpoint The endpoint path to append to the base URL
-     * @return The complete URL
+     * Gets the current task after updating it from the server
+     * @return The current task response
      */
-    private String url(String endpoint) {
-        return baseUrl + endpoint;
+    public TaskResponse getTask() {
+        updateTask();
+        return task;
+    }
+
+    /**
+     * Updates the current task data from the server
+     */
+    public void updateTask() {
+        if (task == null) {
+            throw new RuntimeException("Task not found");
+        }
+        String url = url(TASKS_ENDPOINT + "/" + task.getId());
+        response = restTemplate.getForEntity(url, TaskResponse.class);
+        task = response.getBody();
     }
 
     public List<TaskResponse> getTasksBy(Long projectId, String filter) {

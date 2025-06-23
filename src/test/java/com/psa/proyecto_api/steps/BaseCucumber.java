@@ -10,7 +10,10 @@ import com.psa.proyecto_api.dto.response.TaskResponse;
 
 import io.cucumber.java.Before;
 
-
+/**
+ * Base class for all Cucumber step definitions.
+ * Provides common setup and shared resources for test steps.
+ */
 public class BaseCucumber extends BaseIntegrationTest {
         
     protected ProjectTestDataBuilder projectBuilder;
@@ -19,12 +22,10 @@ public class BaseCucumber extends BaseIntegrationTest {
     protected ProjectResponse project;
     protected TaskResponse task;
 
-
     @Override
     public void setUp() {
         super.setUp();
         taskBuilder = new TaskTestDataBuilder(getBaseUrl(), restTemplate);
         projectBuilder = new ProjectTestDataBuilder(getBaseUrl(), restTemplate, taskBuilder);
     }
-
 }

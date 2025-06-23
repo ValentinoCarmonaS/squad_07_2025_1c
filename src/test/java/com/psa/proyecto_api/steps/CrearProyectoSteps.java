@@ -1,6 +1,16 @@
 package com.psa.proyecto_api.steps;
 
-import java.io.Console;
+import static org.junit.jupiter.api.Assertions.*;
+
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 import com.psa.proyecto_api.dto.request.CreateProjectRequest;
 import com.psa.proyecto_api.dto.response.ProjectResponse;
@@ -9,27 +19,15 @@ import com.psa.proyecto_api.model.enums.ProjectStatus;
 import com.psa.proyecto_api.model.enums.ProjectType;
 
 import io.cucumber.datatable.DataTable;
-import io.cucumber.java.en.Given;
-import io.cucumber.java.en.When;
-import io.cucumber.java.en.Then;
 import io.cucumber.java.Before;
+import io.cucumber.java.en.Given;
+import io.cucumber.java.en.Then;
+import io.cucumber.java.en.When;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.boot.test.web.server.LocalServerPort;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-
-import java.time.LocalDate;
-import java.util.List;
-import java.util.Map;
-import java.util.Collections;
-
-import static org.junit.jupiter.api.Assertions.*;
-import org.springdoc.core.service.GenericResponseService;
-
-import com.psa.proyecto_api.dto.response.ProjectSummaryResponse;
-
+/**
+ * Step definitions for project creation scenarios.
+ * Handles the creation of projects with various configurations.
+ */
 public class CrearProyectoSteps {
 
     @LocalServerPort
@@ -141,7 +139,6 @@ public class CrearProyectoSteps {
 
         assertNotNull(project.getId(), "Project ID should not be null"); 
         assertEquals(1, idFrequency, "Project ID should exist in the list of projects and be unique");
-        
     }
 
     @Then("el proyecto debería tener un estado inicial {string}")
@@ -155,7 +152,6 @@ public class CrearProyectoSteps {
     public void seRechazaLaCreacionDelProyecto() {
         assertNull(project, "Project should be null for invalid data");
         assertNull(response, "Response should be null");
-
     }
 
     @Then("el proyecto debería tener 0 horas estimadas")
@@ -164,5 +160,4 @@ public class CrearProyectoSteps {
         assertEquals(0, project.getEstimatedHours(), 
             "Project estimated hours should be 0");
     }
-
 }

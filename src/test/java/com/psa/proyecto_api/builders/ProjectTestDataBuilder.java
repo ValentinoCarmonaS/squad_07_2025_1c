@@ -22,10 +22,8 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpMethod;
 
-
 import static com.psa.proyecto_api.model.enums.ProjectStatus.TRANSITION;
 import com.psa.proyecto_api.model.enums.TaskStatus;
-
 
 import static com.psa.proyecto_api.model.enums.TaskStatus.IN_PROGRESS;
 
@@ -35,23 +33,49 @@ import static com.psa.proyecto_api.model.enums.TaskStatus.IN_PROGRESS;
  */
 public class ProjectTestDataBuilder {
 
+    // ========================================================================
+    // CONSTANTS
+    // ========================================================================
+    
     private static final String DEFAULT_PROJECT_NAME = "Proyecto de Prueba";
     private static final ProjectType DEFAULT_PROJECT_TYPE = ProjectType.DEVELOPMENT;
     private static final ProjectBillingType DEFAULT_PROJECT_BILLING_TYPE = ProjectBillingType.TIME_AND_MATERIAL;
     private static final LocalDate DEFAULT_PROJECT_START_DATE = LocalDate.of(2030, 12, 31);
     private static final LocalDate DEFAULT_PROJECT_END_DATE = LocalDate.of(2030, 6, 30);
     private static final Integer DEFAULT_PROJECT_CLIENT_ID = 1;
-
     private static final String PROJECTS_ENDPOINT = "/proyectos";
 
+    // ========================================================================
+    // INSTANCE FIELDS
+    // ========================================================================
+    
     private String baseUrl;
     private TestRestTemplate restTemplate;
-    
     private ResponseEntity<ProjectResponse> response;
     private ProjectResponse project;
     private TaskTestDataBuilder taskBuilder;
 
-    // Private helper methods
+    // ========================================================================
+    // CONSTRUCTOR
+    // ========================================================================
+    
+    /**
+     * Constructor for ProjectTestDataBuilder
+     * @param baseUrl The base URL for API requests
+     * @param restTemplate The REST template for making HTTP requests
+     * @param taskBuilder The task builder for creating associated tasks
+     */
+    public ProjectTestDataBuilder(String baseUrl, TestRestTemplate restTemplate, TaskTestDataBuilder taskBuilder) {
+        this.baseUrl = baseUrl;
+        this.restTemplate = restTemplate;
+        this.taskBuilder = taskBuilder;
+        this.response = null;
+        this.project = null;
+    }
+
+    // ========================================================================
+    // PRIVATE HELPER METHODS
+    // ========================================================================
     
     /**
      * Constructs the full URL for an API endpoint
@@ -116,6 +140,10 @@ public class ProjectTestDataBuilder {
         }
     }
 
+    // ========================================================================
+    // PUBLIC CREATION METHODS
+    // ========================================================================
+    
     /**
      * Creates a basic project with minimal default values
      */
@@ -144,24 +172,6 @@ public class ProjectTestDataBuilder {
         }
     }
 
-    // Constructor
-
-    /**
-     * Constructor for ProjectTestDataBuilder
-     * @param baseUrl The base URL for API requests
-     * @param restTemplate The REST template for making HTTP requests
-     * @param taskBuilder The task builder for creating associated tasks
-     */
-    public ProjectTestDataBuilder(String baseUrl, TestRestTemplate restTemplate, TaskTestDataBuilder taskBuilder) {
-        this.baseUrl = baseUrl;
-        this.restTemplate = restTemplate;
-        this.taskBuilder = taskBuilder;
-        this.response = null;
-        this.project = null;
-    }
-
-    // Public creation methods
-
     /**
      * Creates a basic project and sets it to the specified status
      * @param status The status to set for the project
@@ -171,8 +181,35 @@ public class ProjectTestDataBuilder {
         changeStatus(ProjectStatus.valueOf(status));
     }
 
-    // Public getter/update methods
+    public void createProject(LocalDate startDate, LocalDate endDate) {
+        CreateProjectRequest request = new CreateProjectRequest();
+        request = setMinimalDefaults(request);
+        request.setStartDate(startDate);
+        request.setEndDate(endDate);
+        response = restTemplate.postForEntity(url(PROJECTS_ENDPOINT), request, ProjectResponse.class);
+        project = response.getBody();
+    }
 
+    public void createProject(LocalDate startDate) {
+        CreateProjectRequest request = new CreateProjectRequest();
+        request = setMinimalDefaults(request);
+        request.setStartDate(startDate);
+        response = restTemplate.postForEntity(url(PROJECTS_ENDPOINT), request, ProjectResponse.class);
+        project = response.getBody();
+    }
+
+    public void createProjectWithTags(List<String> tags) {
+        CreateProjectRequest request = new CreateProjectRequest();
+        request = setMinimalDefaults(request);
+        request.setTagNames(tags);
+        response = restTemplate.postForEntity(url(PROJECTS_ENDPOINT), request, ProjectResponse.class);
+        project = response.getBody();
+    }
+
+    // ========================================================================
+    // PUBLIC GETTER/UPDATE METHODS
+    // ========================================================================
+    
     /**
      * Gets the current project after updating it from the server
      * @return The current project response
@@ -231,24 +268,6 @@ public class ProjectTestDataBuilder {
         return getProject();
     }
 
-    public void createProject(LocalDate startDate, LocalDate endDate) {
-        CreateProjectRequest request = new CreateProjectRequest();
-        request = setMinimalDefaults(request);
-        request.setStartDate(startDate);
-        request.setEndDate(endDate);
-        response = restTemplate.postForEntity(url(PROJECTS_ENDPOINT), request, ProjectResponse.class);
-        project = response.getBody();
-    }
-
-    public void createProject(LocalDate startDate) {
-        CreateProjectRequest request = new CreateProjectRequest();
-        request = setMinimalDefaults(request);
-        request.setStartDate(startDate);
-        response = restTemplate.postForEntity(url(PROJECTS_ENDPOINT), request, ProjectResponse.class);
-        project = response.getBody();
-    }
-
-
     public void modifyProject(UpdateProjectRequest request) {
         response = restTemplate.exchange(
             url(PROJECTS_ENDPOINT + "/" + project.getId()),
@@ -262,41 +281,30 @@ public class ProjectTestDataBuilder {
         return response.getStatusCode().is2xxSuccessful();
     }
 
-    public void createProjectWithTags(List<String> tags) {
-        CreateProjectRequest request = new CreateProjectRequest();
-        request = setMinimalDefaults(request);
-        request.setTagNames(tags);
-        response = restTemplate.postForEntity(url(PROJECTS_ENDPOINT), request, ProjectResponse.class);
-        project = response.getBody();
-    }
-
     public void removeTagsFromProject(List<String> tags) {
-        updateProject();
         for (String tag : tags) {
-            try {
             response = restTemplate.exchange(
                 url(PROJECTS_ENDPOINT + "/" + project.getId() + "/tags?tagName=" + tag),
                 HttpMethod.DELETE,
-                    null,
-                    ProjectResponse.class);
-            } catch (Exception e) {
-                throw new RuntimeException("Error removing tag: " + e.getMessage());
+                null,
+                ProjectResponse.class);
+            if (!response.getStatusCode().is2xxSuccessful()) {
+                throw new RuntimeException("Failed to remove tag: " + tag + ". Status: " + response.getStatusCode());
             }
         }
+        updateProject();
     }
 
     public void addTagsToProject(List<String> tags) {
-        updateProject();
-        
-        String tagRequest = tags.stream().collect(Collectors.joining(","));
-        
-        try {
+        for (String tag : tags) {
             response = restTemplate.postForEntity(
                 url(PROJECTS_ENDPOINT + "/" + project.getId() + "/tags"),
-                tagRequest,
+                tag,
                 ProjectResponse.class);
-        } catch (Exception e) {
-            throw new RuntimeException("Error adding tag: " + e.getMessage());
+            if (!response.getStatusCode().is2xxSuccessful()) {
+                throw new RuntimeException("Failed to add tag: " + tag + ". Status: " + response.getStatusCode());
+            }
         }
+        updateProject();
     }
 }

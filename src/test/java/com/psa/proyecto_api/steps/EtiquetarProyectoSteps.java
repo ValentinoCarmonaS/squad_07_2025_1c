@@ -47,6 +47,7 @@ public class EtiquetarProyectoSteps extends BaseCucumber {
         for (String tag : tags) {
             assertTrue(project.getTagNames().contains(tag));
         }
+
     }
 
     @Then("se rechaza la operación porque la etiqueta no existe dentro del proyecto")
