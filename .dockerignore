@@ -6,3 +6,8 @@ coverage/
 .env
 .gitignore
 Makefile
+*.iml
+.idea/
+*.log
+.env.*
+.DS_Store

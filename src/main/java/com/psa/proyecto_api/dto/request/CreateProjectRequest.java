@@ -13,10 +13,7 @@ public class CreateProjectRequest {
     @NotBlank(message = "El nombre del proyecto es obligatorio")
     @Size(max = 100, message = "El nombre no puede exceder 100 caracteres")
     private String name;
-    
-    @NotNull(message = "El cliente es obligatorio")
-    private Integer clientId;
-    
+        
     @NotNull(message = "El tipo de proyecto es obligatorio")
     private ProjectType type;
     
@@ -26,6 +23,8 @@ public class CreateProjectRequest {
     @NotNull(message = "La fecha de inicio es obligatoria")
     @FutureOrPresent(message = "La fecha de inicio no puede ser en el pasado")
     private LocalDate startDate;
+    
+    private Integer clientId;
     
     @Future(message = "La fecha de fin debe ser futura")
     private LocalDate endDate;
