@@ -35,7 +35,7 @@ public abstract class BaseIntegrationTest {
         
         // Verify H2 connection
         try (Connection conn = dataSource.getConnection()) {
-            System.out.println("✅ Connected to H2 database: " + conn.getMetaData().getURL());
+            // System.out.println("✅ Connected to H2 database: " + conn.getMetaData().getURL());
         } catch (SQLException e) {
             throw new RuntimeException("❌ Failed to connect to H2 database", e);
         }
