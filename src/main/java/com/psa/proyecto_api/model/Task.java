@@ -143,14 +143,17 @@ public class Task {
         if (name != null && !name.trim().isEmpty()) {
             this.name = name;
         
-        } else if (estimatedHours != null && estimatedHours > 0) {
+        }
+        if (estimatedHours != null && estimatedHours > 0) {
             this.estimatedHours = estimatedHours;
             this.project.updateProjectStatusAndHours();
 
-        } else if (assignedResourceId != null && !assignedResourceId.trim().isEmpty()) {
+        }
+        if (assignedResourceId != null && !assignedResourceId.trim().isEmpty()) {
             this.assignedResourceId = assignedResourceId;
 
-        } else if (ticketId != null) {
+        } 
+        if (ticketId != null) {
             this.ticketId = ticketId;
         }
     }
