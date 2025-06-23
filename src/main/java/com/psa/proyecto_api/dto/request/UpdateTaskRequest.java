@@ -3,8 +3,6 @@ package com.psa.proyecto_api.dto.request;
 import jakarta.validation.constraints.*;
 import lombok.Data;
 
-import java.util.List;
-
 import io.swagger.v3.oas.annotations.media.Schema;
 
 @Data

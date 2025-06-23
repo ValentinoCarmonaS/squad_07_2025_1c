@@ -76,7 +76,6 @@ public class Project {
     private ProjectStatus status = ProjectStatus.INITIATED;
     
     // Relaciones externas
-    @NotNull(message = "El cliente es obligatorio")
     @Column(name = "client_id")
     private Integer clientId;
 
@@ -100,6 +99,7 @@ public class Project {
      * Constructor para crear un proyecto con los campos obligatorios.
      */
     public Project(String name, Integer clientId, ProjectType type, ProjectBillingType billingType, LocalDate startDate) {
+        this.verificateParameters(clientId, type);
         this.name = name;
         this.clientId = clientId;
         this.type = type;
@@ -112,6 +112,12 @@ public class Project {
     }
 
     // Metodos de gestion de datos basicos
+
+    private void verificateParameters(Integer clientId, ProjectType type) {
+        if (type == ProjectType.IMPLEMENTATION && clientId == null) {
+            throw new OperationNotAllowedException("El cliente es obligatorio para proyectos de implementación");
+        }
+    }
 
     public void addEndDate(LocalDate endDate) {
         if (endDate != null && ((endDate.isAfter(this.startDate)) || endDate.isEqual(this.startDate))) {
