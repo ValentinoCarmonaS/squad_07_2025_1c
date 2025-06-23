@@ -12,6 +12,10 @@ import com.psa.proyecto_api.steps.BaseCucumber;
 
 public class AsignarRecursoTareaSteps extends BaseCucumber {
     
+    Long taskId;
+    String previousResourceId = "stringstringstringstringstringstring";
+    String assignedResourceId;
+
     @Before
     public void setUp() {
         super.setUp();
@@ -27,19 +31,22 @@ public class AsignarRecursoTareaSteps extends BaseCucumber {
         taskBuilder.createBasicTask(project.getId());
         task = taskBuilder.getTask();
         assertNotNull("La tarea debería existir", task);
-        
+        taskId = taskBuilder.getTask().getId();
         project = projectBuilder.getProject();
     }
 
     @When("se solicita la asignación del recurso {string} a la tarea")
     public void seSolicitaLaAsignacionDeUnRecursoATarea(String resourceId) {
+        this.assignedResourceId = resourceId;
         taskBuilder.assignResourceToTask(task.getId(), resourceId);
     }
 
     @Then("el recurso se asigna correctamente a la tarea")
     public void elRecursoSeAsignaCorrectamenteATarea() {
-        task = taskBuilder.getTask();
+        task = taskBuilder.getTask(taskId);
         assertNotNull("La tarea debería existir", task);
+
+        assertEquals("El recurso debería estar asignado", assignedResourceId, task.getAssignedResourceId());
     }
 
     @Given("existe la siguiente tarea con recurso asignado")
@@ -49,11 +56,11 @@ public class AsignarRecursoTareaSteps extends BaseCucumber {
         project = projectBuilder.getProject();
         assertTrue("La lista de tareas debería estar vacía", project.getTasks().isEmpty());
 
-        taskBuilder.createTaskWithAssignedResource(project.getId(), "124e4567-e89b-12d3-a456-426614174000");
+        taskBuilder.createTaskWithAssignedResource(project.getId(), previousResourceId);
         task = taskBuilder.getTask();
         assertNotNull("La tarea debería existir", task);
-        assertEquals("El recurso debería estar asignado", "124e4567-e89b-12d3-a456-426614174000", task.getAssignedResourceId());
-        
+        assertEquals("El recurso debería estar asignado", previousResourceId, task.getAssignedResourceId());
+        taskId = taskBuilder.getTask().getId();
         project = projectBuilder.getProject();
     }
 
