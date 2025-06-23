@@ -38,8 +38,8 @@ public class TaskTestDataBuilder {
     // INSTANCE FIELDS
     // ========================================================================
     
-    private String baseUrl;
-    private TestRestTemplate restTemplate;
+    private final String baseUrl;
+    private final TestRestTemplate restTemplate;
     private ResponseEntity<TaskResponse> response;
     private TaskResponse task;
 
@@ -64,13 +64,35 @@ public class TaskTestDataBuilder {
     // ========================================================================
     
     /**
-     * Sets minimal default values for a task request
-     * @param request The task request to populate
-     * @return The populated task request with minimal defaults
+     * Creates a basic task request with minimal default values
+     * @return A new task request with minimal defaults
      */
-    private CreateTaskRequest setMinimalDefaults(CreateTaskRequest request) {
+    private CreateTaskRequest createBasicTaskRequest() {
+        CreateTaskRequest request = new CreateTaskRequest();
         request.setName(DEFAULT_TASK_NAME);
         request.setEstimatedHours(DEFAULT_ESTIMATED_HOURS);
+        return request;
+    }
+
+    /**
+     * Creates a task request with custom values
+     * @param name The task name
+     * @param estimatedHours The estimated hours
+     * @param ticketId The ticket ID (optional)
+     * @param assignedResourceId The assigned resource ID (optional)
+     * @return A configured task request
+     */
+    private CreateTaskRequest createTaskRequest(String name, Integer estimatedHours, 
+                                              Integer ticketId, String assignedResourceId) {
+        CreateTaskRequest request = new CreateTaskRequest();
+        request.setName(name != null ? name : DEFAULT_TASK_NAME);
+        request.setEstimatedHours(estimatedHours != null ? estimatedHours : DEFAULT_ESTIMATED_HOURS);
+        if (ticketId != null) {
+            request.setTicketId(ticketId);
+        }
+        if (assignedResourceId != null) {
+            request.setAssignedResourceId(assignedResourceId);
+        }
         return request;
     }
 
@@ -83,6 +105,60 @@ public class TaskTestDataBuilder {
         return baseUrl + endpoint;
     }
 
+    /**
+     * Validates that a response is successful and contains a body
+     * @param response The response to validate
+     * @param operation The operation name for error messages
+     * @return The response body
+     * @throws RuntimeException if the response is not successful or body is null
+     */
+    private TaskResponse validateResponse(ResponseEntity<TaskResponse> response, String operation) {
+        if (!response.getStatusCode().is2xxSuccessful()) {
+            throw new RuntimeException(String.format("Failed to %s. HTTP Status: %s, Body: %s", 
+                operation, response.getStatusCode(), response.getBody()));
+        }
+        
+        if (response.getBody() == null) {
+            throw new RuntimeException(String.format("%s response body is null", operation));
+        }
+        
+        return response.getBody();
+    }
+
+    /**
+     * Validates that the current task exists
+     * @throws RuntimeException if task is null
+     */
+    private void validateTaskExists() {
+        if (task == null) {
+            throw new RuntimeException("Task not found");
+        }
+    }
+
+    /**
+     * Performs an HTTP request and handles common error scenarios
+     * @param url The URL to make the request to
+     * @param method The HTTP method
+     * @param requestBody The request body (can be null)
+     * @param operation The operation name for error messages
+     * @return The response body
+     */
+    private TaskResponse performRequest(String url, HttpMethod method, Object requestBody, String operation) {
+        try {
+            ResponseEntity<TaskResponse> response;
+            if (requestBody != null) {
+                response = restTemplate.exchange(url, method, new HttpEntity<>(requestBody), TaskResponse.class);
+            } else {
+                response = restTemplate.exchange(url, method, null, TaskResponse.class);
+            }
+            
+            return validateResponse(response, operation);
+        } catch (Exception e) {
+            throw new RuntimeException(String.format("Failed to %s. The API likely returned an error response. " +
+                "Original error: %s", operation, e.getMessage()), e);
+        }
+    }
+
     // ========================================================================
     // PUBLIC TASK STATUS METHODS
     // ========================================================================
@@ -93,12 +169,12 @@ public class TaskTestDataBuilder {
      */
     public void changeStatus(String status) {
         updateTask();
-        if (task == null) {
-            throw new RuntimeException("Task not found");
-        }
+        validateTaskExists();
+        
         if (status.equals(task.getStatus().toString())) {
             return;
         }
+        
         TaskStatus newStatus = TaskStatus.valueOf(status);
         try {
             switch (newStatus) {
@@ -125,20 +201,7 @@ public class TaskTestDataBuilder {
      */
     public void activate(TaskResponse task) {
         String url = url(TASKS_ENDPOINT + "/" + task.getId() + ACTIVATE_ENDPOINT);
-        try {
-            response = restTemplate.exchange(
-                url, HttpMethod.PUT, null, TaskResponse.class);
-            if (!response.getStatusCode().is2xxSuccessful()) {
-                throw new RuntimeException("Task activation failed with status: " + response.getStatusCode());
-            }
-            this.task = response.getBody();
-            if (this.task == null) {
-                throw new RuntimeException("Task activation returned null");
-            }
-        } catch (Exception e) {
-            throw new RuntimeException("Failed to activate task. The API likely returned an error response. " +
-                "Original error: " + e.getMessage(), e);
-        }
+        this.task = performRequest(url, HttpMethod.PUT, null, "activate task");
     }
 
     /**
@@ -147,22 +210,7 @@ public class TaskTestDataBuilder {
      */
     public void deactivate(TaskResponse task) {
         String url = url(TASKS_ENDPOINT + "/" + task.getId() + DEACTIVATE_ENDPOINT);
-        try {
-            response = restTemplate.exchange(
-                url, HttpMethod.PUT, null, TaskResponse.class);
-            
-            if (!response.getStatusCode().is2xxSuccessful()) {
-                throw new RuntimeException("Task deactivation failed with status: " + response.getStatusCode());
-            }
-            
-            this.task = response.getBody();
-            if (this.task == null) {
-                throw new RuntimeException("Task deactivation returned null");
-            }
-            
-        } catch (Exception e) {
-            throw new RuntimeException("Error deactivating task", e);
-        }
+        this.task = performRequest(url, HttpMethod.PUT, null, "deactivate task");
     }
 
     // ========================================================================
@@ -170,31 +218,35 @@ public class TaskTestDataBuilder {
     // ========================================================================
     
     /**
+     * Creates a task with the specified parameters
+     * @param projectId The ID of the project to create the task for
+     * @param name The task name (optional, uses default if null)
+     * @param status The status to set for the task (optional)
+     * @param ticketId The ticket ID (optional)
+     * @param estimatedHours The estimated hours (optional, uses default if null)
+     * @param assignedResourceId The assigned resource ID (optional)
+     */
+    public void createTask(Long projectId, String name, String status, 
+                          String ticketId, String estimatedHours, String assignedResourceId) {
+        Integer ticketIdInt = ticketId != null ? Integer.parseInt(ticketId) : null;
+        Integer estimatedHoursInt = estimatedHours != null ? Integer.parseInt(estimatedHours) : null;
+        
+        CreateTaskRequest request = createTaskRequest(name, estimatedHoursInt, ticketIdInt, assignedResourceId);
+        
+        String url = url(PROJECTS_ENDPOINT + "/" + projectId + TASKS_ENDPOINT);
+        this.task = performRequest(url, HttpMethod.POST, request, "create task");
+        
+        if (status != null) {
+            changeStatus(status);
+        }
+    }
+
+    /**
      * Creates a basic task with minimal default values
      * @param projectId The ID of the project to create the task for
      */
     public void createBasicTask(Long projectId) {
-        CreateTaskRequest request = new CreateTaskRequest();
-        request = setMinimalDefaults(request);
-        
-        try {
-            response = restTemplate.postForEntity(
-                url(PROJECTS_ENDPOINT + "/" + projectId + TASKS_ENDPOINT), request, TaskResponse.class);
-            
-            if (!response.getStatusCode().is2xxSuccessful()) {
-                throw new RuntimeException("Failed to create task. HTTP Status: " + response.getStatusCode() + 
-                    ", Body: " + response.getBody());
-            }
-            
-            if (response.getBody() == null) {
-                throw new RuntimeException("Task response body is null");
-            }
-            
-            task = response.getBody();
-        } catch (Exception e) {
-            throw new RuntimeException("Failed to create task. The API likely returned an error response. " +
-                "Original error: " + e.getMessage(), e);
-        }
+        createTask(projectId, null, null, null, null, null);
     }
 
     /**
@@ -203,8 +255,7 @@ public class TaskTestDataBuilder {
      * @param status The status to set for the task
      */
     public void createBasicTaskWithStatus(Long projectId, String status) {
-        createBasicTask(projectId);
-        changeStatus(status);
+        createTask(projectId, null, status, null, null, null);
     }
 
     /**
@@ -214,52 +265,39 @@ public class TaskTestDataBuilder {
      * @param status The status to set for the task
      */
     public void createTaskWithStatus(String name, Long projectId, String status) {
-        CreateTaskRequest request = new CreateTaskRequest();
-        request = setMinimalDefaults(request);
-        request.setName(name);
-        response = restTemplate.postForEntity(url(
-            PROJECTS_ENDPOINT + "/" + projectId + TASKS_ENDPOINT), request, TaskResponse.class);
-        this.task = response.getBody();
-        System.out.println("Task created: " + this.task);
-        changeStatus(status);
+        createTask(projectId, name, status, null, null, null);
     }
 
+    /**
+     * Creates a task with ticket ID and status
+     * @param projectId The ID of the project to create the task for
+     * @param name The name for the task
+     * @param status The status to set for the task
+     * @param ticketId The ticket ID
+     */
     public void createTask(Long projectId, String name, String status, String ticketId) {
-        CreateTaskRequest request = new CreateTaskRequest();
-        request = setMinimalDefaults(request);
-        request.setName(name);
-        request.setTicketId(Integer.parseInt(ticketId));
-        try {
-            response = restTemplate.postForEntity(
-                url(PROJECTS_ENDPOINT + "/" + projectId + TASKS_ENDPOINT),
-                request, TaskResponse.class);
-            if (!response.getStatusCode().is2xxSuccessful()) {
-                System.err.println("[DEBUG] Failed to create task. Status: " + response.getStatusCode());
-                System.err.println("[DEBUG] Response body: " + response.getBody());
-                throw new RuntimeException("Failed to create task. HTTP Status: " + response.getStatusCode() + 
-                    ", Body: " + response.getBody());
-            }
-            if (response.getBody() == null) {
-                System.err.println("[DEBUG] Task response body is null");
-                throw new RuntimeException("Task response body is null");
-            }
-            task = response.getBody();
-            changeStatus(status);
-        } catch (Exception e) {
-            System.err.println("[DEBUG] Exception during task creation: " + e.getMessage());
-            throw new RuntimeException("Failed to create task. The API likely returned an error response. " +
-                "Original error: " + e.getMessage(), e);
-        }
+        createTask(projectId, name, status, ticketId, null, null);
     }
 
+    /**
+     * Creates a task with ticket ID, status, and assigned resource
+     * @param projectId The ID of the project to create the task for
+     * @param name The name for the task
+     * @param status The status to set for the task
+     * @param ticketId The ticket ID
+     * @param assignedResourceId The assigned resource ID
+     */
+    public void createTask(Long projectId, String name, String status, String ticketId, String assignedResourceId) {
+        createTask(projectId, name, status, ticketId, null, assignedResourceId);
+    }
+
+    /**
+     * Creates a task with an assigned resource
+     * @param projectId The ID of the project to create the task for
+     * @param resourceId The resource ID to assign
+     */
     public void createTaskWithAssignedResource(Long projectId, String resourceId) {
-        CreateTaskRequest request = new CreateTaskRequest();
-        request = setMinimalDefaults(request);
-        request.setAssignedResourceId(resourceId);
-        response = restTemplate.postForEntity(
-            url(PROJECTS_ENDPOINT + "/" + projectId + TASKS_ENDPOINT), request, TaskResponse.class);
-        this.task = response.getBody();
-        System.out.println("Task created: " + this.task);
+        createTask(projectId, null, null, null, null, resourceId);
     }
 
     // ========================================================================
@@ -275,83 +313,79 @@ public class TaskTestDataBuilder {
         return task;
     }
 
+    /**
+     * Gets a task by its ID
+     * @param id The task ID
+     * @return The task response
+     */
     public TaskResponse getTask(Long id) {
-        try {
-            String url = url(TASKS_ENDPOINT + "/" + id);
-            response = restTemplate.getForEntity(url, TaskResponse.class);
-            
-            // Check if the response is successful before trying to deserialize
-            if (!response.getStatusCode().is2xxSuccessful()) {
-                throw new RuntimeException("Failed to get task: " + id + ". Status: " + response.getStatusCode());
-            }
-            
-            task = response.getBody();
-            return task;
-        } catch (Exception e) {
-            throw new RuntimeException("Failed to get task: " + id + ". Error: " + e.getMessage(), e);
-        }
+        String url = url(TASKS_ENDPOINT + "/" + id);
+        this.task = performRequest(url, HttpMethod.GET, null, "get task: " + id);
+        return this.task;
     }
 
     /**
      * Updates the current task data from the server
      */
     public void updateTask() {
-        if (task == null) {
-            throw new RuntimeException("Task not found");
-        }
+        validateTaskExists();
         String url = url(TASKS_ENDPOINT + "/" + task.getId());
-        try {
-            response = restTemplate.getForEntity(url, TaskResponse.class);
-            
-            // Check if the response is successful before trying to deserialize
-            if (!response.getStatusCode().is2xxSuccessful()) {
-                throw new RuntimeException("Failed to update task. Status: " + response.getStatusCode());
-            }
-            
-            task = response.getBody();
-        } catch (Exception e) {
-            throw new RuntimeException("Failed to update task. Error: " + e.getMessage(), e);
-        }
+        this.task = performRequest(url, HttpMethod.GET, null, "update task");
     }
 
+    /**
+     * Gets tasks by project ID with optional filter
+     * @param projectId The project ID
+     * @param filter The filter string (optional)
+     * @return List of task responses
+     */
     public List<TaskResponse> getTasksBy(Long projectId, String filter) {
-        String url = url(PROJECTS_ENDPOINT + "/" + projectId + TASKS_ENDPOINT + filter);
+        String url = url(PROJECTS_ENDPOINT + "/" + projectId + TASKS_ENDPOINT + (filter != null ? filter : ""));
         ResponseEntity<List<TaskResponse>> response = restTemplate.exchange(url, HttpMethod.GET, null,
             new ParameterizedTypeReference<List<TaskResponse>>() {});
+        
         if (response.getStatusCode() != HttpStatus.OK) {
             throw new RuntimeException("Failed to get tasks. Status: " + response.getStatusCode());
         }
 
-        List<TaskResponse> taskResponses = response.getBody();
-        return taskResponses;
+        return response.getBody();
     }
 
+    /**
+     * Gets task summaries by project ID with optional filter
+     * @param projectId The project ID
+     * @param filter The filter string (optional)
+     * @return List of task summary responses
+     */
     public List<TaskSummaryResponse> getTasksSummaryBy(Long projectId, String filter) {
-        String url = url(PROJECTS_ENDPOINT + "/" + projectId + TASKS_ENDPOINT + filter);
+        String url = url(PROJECTS_ENDPOINT + "/" + projectId + TASKS_ENDPOINT + (filter != null ? filter : ""));
         ResponseEntity<List<TaskSummaryResponse>> response = restTemplate.exchange(url, HttpMethod.GET, null,
             new ParameterizedTypeReference<List<TaskSummaryResponse>>() {});
+        
         if (response.getStatusCode() != HttpStatus.OK) {
             throw new RuntimeException("Failed to get tasks. Status: " + response.getStatusCode());
         }
 
-        List<TaskSummaryResponse> taskResponses = response.getBody();
-        return taskResponses;
+        return response.getBody();
     }
 
     // ========================================================================
     // PUBLIC DELETE METHODS
     // ========================================================================
 
+    /**
+     * Clears all tasks from the system
+     */
     public void clearTasks() {
-        // Get all tasks (assuming an endpoint exists to list all tasks)
-        String url = baseUrl + "/tareas";
+        String url = url(TASKS_ENDPOINT);
         ResponseEntity<List<TaskResponse>> response = restTemplate.exchange(
             url, HttpMethod.GET, null, new ParameterizedTypeReference<List<TaskResponse>>() {});
+        
         List<TaskResponse> tasks = response.getBody();
         if (tasks != null) {
             for (TaskResponse task : tasks) {
                 restTemplate.exchange(
-                    baseUrl + "/tareas/" + task.getId(),
+                    url(TASKS_ENDPOINT + "/" + task.getId()),
                     HttpMethod.DELETE,
                     null,
                     Void.class
@@ -361,22 +395,32 @@ public class TaskTestDataBuilder {
     }
 
     // ========================================================================
-    // PUBLIC ASSIGNMENT METHODS
+    // PUBLIC MODIFICATION METHODS
     // ========================================================================
 
+    /**
+     * Assigns a resource to a task
+     * @param taskId The task ID
+     * @param resourceId The resource ID to assign
+     */
     public void assignResourceToTask(Long taskId, String resourceId) {
         UpdateTaskRequest request = new UpdateTaskRequest();
         request.setAssignedResourceId(resourceId);
+        
         String url = url(TASKS_ENDPOINT + "/" + taskId);
-        try {
-            response = restTemplate.exchange(
-                url, HttpMethod.PUT, new HttpEntity<>(request), TaskResponse.class);
-            if (!response.getStatusCode().is2xxSuccessful()) {
-                throw new RuntimeException("Failed to assign resource to task. Status: " + response.getStatusCode());
-            }
-            task = response.getBody(); 
-        } catch (Exception e) {
-            throw new RuntimeException("Failed to assign resource to task. Error: " + e.getMessage(), e);
-        }
+        this.task = performRequest(url, HttpMethod.PUT, request, "assign resource to task");
+    }
+
+    /**
+     * Modifies the estimated hours for a task
+     * @param taskId The task ID
+     * @param estimatedHours The new estimated hours
+     */
+    public void modifyEstimatedHours(Long taskId, int estimatedHours) {
+        UpdateTaskRequest request = new UpdateTaskRequest();
+        request.setEstimatedHours(estimatedHours);
+        
+        String url = url(TASKS_ENDPOINT + "/" + taskId);
+        this.task = performRequest(url, HttpMethod.PUT, request, "modify estimated hours");
     }
 }
