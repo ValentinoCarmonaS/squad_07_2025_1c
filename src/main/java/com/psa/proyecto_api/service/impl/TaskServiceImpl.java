@@ -129,7 +129,8 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public List<TaskSummaryResponse> getTasksByTicketId(Integer ticketId) {
-        List<Task> tasks = taskRepository.findByTicketId(ticketId);
+        List<Task> tasks = taskRepository.filterByTicketId(ticketId);
+            
         return tasks.stream()
                .map(taskMapper::toSummary)
                .toList();

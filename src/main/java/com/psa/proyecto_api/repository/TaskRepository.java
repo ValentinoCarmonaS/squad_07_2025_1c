@@ -61,5 +61,9 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
             @Param("ticketId") Integer ticketId
     );
 
-    List<Task> findByTicketId(Integer ticketId);
+    @Query("SELECT DISTINCT t FROM Task t " +
+       "WHERE (:ticketId IS NULL OR " +
+       "        (:ticketId = -1 AND t.ticketId IS NULL) OR " +
+       "        (:ticketId != -1 AND t.ticketId = :ticketId))")
+List<Task> filterByTicketId(@Param("ticketId") Integer ticketId);
 }
