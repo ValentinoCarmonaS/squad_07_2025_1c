@@ -51,11 +51,11 @@ public class ProjectTestDataBuilder {
     // INSTANCE FIELDS
     // ========================================================================
     
-    private final String baseUrl;
-    private final TestRestTemplate restTemplate;
-    private final TaskTestDataBuilder taskBuilder;
+    private String baseUrl;
+    private TestRestTemplate restTemplate;
     private ResponseEntity<ProjectResponse> response;
     private ProjectResponse project;
+    private TaskTestDataBuilder taskBuilder;
 
     // ========================================================================
     // CONSTRUCTOR
@@ -89,11 +89,26 @@ public class ProjectTestDataBuilder {
     }
 
     /**
-     * Creates a basic project request with minimal default values
-     * @return A new project request with minimal defaults
+     * Sets all default values for a project request
+     * @param request The project request to populate
+     * @return The populated project request
      */
-    private CreateProjectRequest createBasicProjectRequest() {
-        CreateProjectRequest request = new CreateProjectRequest();
+    private CreateProjectRequest setAllDefaults(CreateProjectRequest request) {
+        request.setName(DEFAULT_PROJECT_NAME);
+        request.setType(DEFAULT_PROJECT_TYPE);
+        request.setBillingType(DEFAULT_PROJECT_BILLING_TYPE);
+        request.setStartDate(DEFAULT_PROJECT_START_DATE);
+        request.setEndDate(DEFAULT_PROJECT_END_DATE);
+        request.setClientId(DEFAULT_PROJECT_CLIENT_ID);
+        return request;
+    }
+    
+    /**
+     * Sets minimal required default values for a project request
+     * @param request The project request to populate
+     * @return The populated project request with minimal defaults
+     */
+    private CreateProjectRequest setMinimalDefaults(CreateProjectRequest request) {
         request.setName(DEFAULT_PROJECT_NAME);
         request.setType(DEFAULT_PROJECT_TYPE);
         request.setBillingType(DEFAULT_PROJECT_BILLING_TYPE);
@@ -103,101 +118,11 @@ public class ProjectTestDataBuilder {
     }
 
     /**
-     * Creates a project request with custom values
-     * @param name The project name (optional, uses default if null)
-     * @param clientId The client ID (optional, uses default if null)
-     * @param type The project type (optional, uses default if null)
-     * @param billingType The billing type (optional, uses default if null)
-     * @param startDate The start date (optional, uses default if null)
-     * @param endDate The end date (optional)
-     * @param leaderId The leader ID (optional)
-     * @param tagNames The tag names (optional)
-     * @return A configured project request
-     */
-    private CreateProjectRequest createProjectRequest(String name, Integer clientId, 
-                                                    ProjectType type, ProjectBillingType billingType,
-                                                    LocalDate startDate, LocalDate endDate,
-                                                    String leaderId, List<String> tagNames) {
-        CreateProjectRequest request = new CreateProjectRequest();
-        request.setName(name != null ? name : DEFAULT_PROJECT_NAME);
-        request.setClientId(clientId != null ? clientId : DEFAULT_PROJECT_CLIENT_ID);
-        request.setType(type != null ? type : DEFAULT_PROJECT_TYPE);
-        request.setBillingType(billingType != null ? billingType : DEFAULT_PROJECT_BILLING_TYPE);
-        request.setStartDate(startDate != null ? startDate : DEFAULT_PROJECT_START_DATE);
-        if (endDate != null) {
-            request.setEndDate(endDate);
-        }
-        if (leaderId != null) {
-            request.setLeaderId(leaderId);
-        }
-        if (tagNames != null) {
-            request.setTagNames(tagNames);
-        }
-        return request;
-    }
-
-    /**
-     * Validates that a response is successful and contains a body
-     * @param response The response to validate
-     * @param operation The operation name for error messages
-     * @return The response body
-     * @throws RuntimeException if the response is not successful or body is null
-     */
-    private ProjectResponse validateResponse(ResponseEntity<ProjectResponse> response, String operation) {
-        if (!response.getStatusCode().is2xxSuccessful()) {
-            throw new RuntimeException(String.format("Failed to %s. HTTP Status: %s, Body: %s", 
-                operation, response.getStatusCode(), response.getBody()));
-        }
-        
-        if (response.getBody() == null) {
-            throw new RuntimeException(String.format("%s response body is null", operation));
-        }
-        
-        return response.getBody();
-    }
-
-    /**
-     * Validates that the current project exists
-     * @throws RuntimeException if project is null
-     */
-    private void validateProjectExists() {
-        if (project == null) {
-            throw new RuntimeException("Project not found");
-        }
-    }
-
-    /**
-     * Performs an HTTP request and handles common error scenarios
-     * @param url The URL to make the request to
-     * @param method The HTTP method
-     * @param requestBody The request body (can be null)
-     * @param operation The operation name for error messages
-     * @return The response body
-     */
-    private ProjectResponse performRequest(String url, HttpMethod method, Object requestBody, String operation) {
-        try {
-            ResponseEntity<ProjectResponse> response;
-            if (requestBody != null) {
-                response = restTemplate.exchange(url, method, new HttpEntity<>(requestBody), ProjectResponse.class);
-            } else {
-                response = restTemplate.exchange(url, method, null, ProjectResponse.class);
-            }
-            
-            return validateResponse(response, operation);
-        } catch (Exception e) {
-            throw new RuntimeException(String.format("Failed to %s. The API likely returned an error response. " +
-                "Original error: %s", operation, e.getMessage()), e);
-        }
-    }
-
-    /**
      * Changes the status of the current project
      * @param status The new status to set
      */
     private void changeStatus(ProjectStatus status) {
-        validateProjectExists();
-        
-        if (project.getId() == null) {
+        if (project == null || project.getId() == null) {
             throw new RuntimeException("Project not created or has no ID");
         }
         
@@ -222,36 +147,31 @@ public class ProjectTestDataBuilder {
     // ========================================================================
     
     /**
-     * Creates a project with the specified parameters
-     * @param name The project name (optional, uses default if null)
-     * @param clientId The client ID (optional, uses default if null)
-     * @param type The project type (optional, uses default if null)
-     * @param billingType The billing type (optional, uses default if null)
-     * @param startDate The start date (optional, uses default if null)
-     * @param endDate The end date (optional)
-     * @param status The status to set for the project (optional)
-     * @param leaderId The leader ID (optional)
-     * @param tagNames The tag names (optional)
-     */
-    public void createProject(String name, Integer clientId, ProjectType type, 
-                            ProjectBillingType billingType, LocalDate startDate, LocalDate endDate,
-                            ProjectStatus status, String leaderId, List<String> tagNames) {
-        CreateProjectRequest request = createProjectRequest(name, clientId, type, billingType, 
-                                                          startDate, endDate, leaderId, tagNames);
-        
-        String url = url(PROJECTS_ENDPOINT);
-        this.project = performRequest(url, HttpMethod.POST, request, "create project");
-        
-        if (status != null) {
-            changeStatus(status);
-        }
-    }
-
-    /**
      * Creates a basic project with minimal default values
      */
     public void createBasicProject() {
-        createProject(null, null, null, null, null, null, null, null, null);
+        CreateProjectRequest request = new CreateProjectRequest();
+        request = setMinimalDefaults(request);
+        
+        try {
+            response = restTemplate.postForEntity(url(PROJECTS_ENDPOINT), request, ProjectResponse.class);
+            
+            System.out.println("Response status: " + response.getStatusCode());
+            System.out.println("Response body: " + response.getBody());
+            
+            if (response.getStatusCode() != HttpStatus.CREATED) {
+                throw new RuntimeException("Failed to create project. Status: " + response.getStatusCode() + 
+                    ", Body: " + response.getBody());
+            }
+            
+            project = response.getBody();
+            if (project == null) {
+                throw new RuntimeException("Project response body is null");
+            }
+        } catch (Exception e) {
+            System.err.println("Error creating project: " + e.getMessage());
+            throw new RuntimeException("Failed to create project", e);
+        }
     }
 
     /**
@@ -259,49 +179,71 @@ public class ProjectTestDataBuilder {
      * @param status The status to set for the project
      */
     public void createBasicProjectWithStatus(String status) {
-        createProject(null, null, null, null, null, null, ProjectStatus.valueOf(status), null, null);
+        createBasicProject();
+        changeStatus(ProjectStatus.valueOf(status));
     }
 
-    /**
-     * Creates a project with specific start and end dates
-     * @param startDate The start date
-     * @param endDate The end date
-     */
     public void createProject(LocalDate startDate, LocalDate endDate) {
-        createProject(null, null, null, null, startDate, endDate, null, null, null);
+        CreateProjectRequest request = new CreateProjectRequest();
+        request = setMinimalDefaults(request);
+        request.setStartDate(startDate);
+        request.setEndDate(endDate);
+        response = restTemplate.postForEntity(url(PROJECTS_ENDPOINT), request, ProjectResponse.class);
+        project = response.getBody();
     }
 
-    /**
-     * Creates a project with a specific start date
-     * @param startDate The start date
-     */
     public void createProject(LocalDate startDate) {
-        createProject(null, null, null, null, startDate, null, null, null, null);
+        CreateProjectRequest request = new CreateProjectRequest();
+        request = setMinimalDefaults(request);
+        request.setStartDate(startDate);
+        response = restTemplate.postForEntity(url(PROJECTS_ENDPOINT), request, ProjectResponse.class);
+        project = response.getBody();
     }
 
-    /**
-     * Creates a project with tags
-     * @param tags The list of tag names
-     */
     public void createProjectWithTags(List<String> tags) {
-        createProject(null, null, null, null, null, null, null, null, tags);
+        CreateProjectRequest request = new CreateProjectRequest();
+        request = setMinimalDefaults(request);
+        request.setTagNames(tags);
+        response = restTemplate.postForEntity(url(PROJECTS_ENDPOINT), request, ProjectResponse.class);
+        project = response.getBody();
     }
 
-    /**
-     * Creates a project with all specified parameters
-     * @param name The project name
-     * @param clientId The client ID
-     * @param type The project type
-     * @param billingType The billing type
-     * @param startDate The start date
-     * @param endDate The end date
-     * @param status The status to set for the project
-     * @param leaderId The leader ID
-     */
-    public void createProject(String name, Integer clientId, ProjectType type,
-                            ProjectBillingType billingType, LocalDate startDate, LocalDate endDate,
-                            ProjectStatus status, String leaderId) {
-        createProject(name, clientId, type, billingType, startDate, endDate, status, leaderId, null);
+    public void createProject(
+            String name,
+            Integer clientId,
+            ProjectType type,
+            ProjectBillingType billingType,
+            LocalDate startDate,
+            LocalDate endDate,
+            ProjectStatus status,
+            String leaderId) {
+
+        CreateProjectRequest request = new CreateProjectRequest();
+        request = setMinimalDefaults(request);
+        request.setName(name);
+        request.setClientId(clientId);
+        request.setType(type);
+        request.setBillingType(billingType);
+        request.setStartDate(startDate);
+        request.setEndDate(endDate);
+        request.setLeaderId(leaderId);
+        try {
+            response = restTemplate.postForEntity(
+                url(PROJECTS_ENDPOINT),
+                 request,
+                  ProjectResponse.class);
+            
+            project = response.getBody();
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to create project", e);
+        }
+
+        try {
+            changeStatus(status);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to change status at project creation", e);
+        }
+
     }
 
     // ========================================================================
@@ -317,21 +259,22 @@ public class ProjectTestDataBuilder {
         return project;
     }
 
-    /**
-     * Gets a project by its ID
-     * @param id The project ID
-     * @return The project response
-     */
     public ProjectResponse getProject(Long id) {
-        String url = url(PROJECTS_ENDPOINT + "/" + id);
-        this.project = performRequest(url, HttpMethod.GET, null, "get project: " + id);
-        return this.project;
+        try {
+            response = restTemplate.getForEntity(url(PROJECTS_ENDPOINT + "/" + id), ProjectResponse.class);
+            
+            // Check if the response is successful before trying to deserialize
+            if (!response.getStatusCode().is2xxSuccessful()) {
+                throw new RuntimeException("Failed to get project: " + id + ". Status: " + response.getStatusCode());
+            }
+            
+            project = response.getBody();
+            return project;
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to get project: " + id + ". Error: " + e.getMessage(), e);
+        }
     }
 
-    /**
-     * Gets all projects
-     * @return List of project summary responses
-     */
     public List<ProjectSummaryResponse> getProjects() {
         ResponseEntity<List<ProjectSummaryResponse>> response = restTemplate.exchange(
             url(PROJECTS_ENDPOINT),
@@ -347,9 +290,8 @@ public class ProjectTestDataBuilder {
      * @return List of filtered projects
      */
     public List<ProjectSummaryResponse> getProjectsBy(String filter) {
-        String url = url(PROJECTS_ENDPOINT + (filter != null ? filter : ""));
         ResponseEntity<List<ProjectSummaryResponse>> response = restTemplate.exchange(
-            url,
+            url(PROJECTS_ENDPOINT + filter),
             HttpMethod.GET,
             null,
             new ParameterizedTypeReference<List<ProjectSummaryResponse>>() {});
@@ -362,15 +304,21 @@ public class ProjectTestDataBuilder {
     public void updateProject() {
         if (project != null && project.getId() != null) {
             String url = url(PROJECTS_ENDPOINT + "/" + project.getId());
-            this.project = performRequest(url, HttpMethod.GET, null, "update project");
+            try {
+                response = restTemplate.getForEntity(url, ProjectResponse.class);
+                
+                // Check if the response is successful before trying to deserialize
+                if (!response.getStatusCode().is2xxSuccessful()) {
+                    throw new RuntimeException("Failed to update project. Status: " + response.getStatusCode());
+                }
+                
+                project = response.getBody();
+            } catch (Exception e) {
+                throw new RuntimeException("Failed to update project. Error: " + e.getMessage(), e);
+            }
         }
     }
 
-    /**
-     * Gets or creates a task with the specified status
-     * @param status The task status
-     * @return The task response
-     */
     public TaskResponse getOrCreateTaskWithStatus(String status) {
         updateProject();
         if (!hasTaskWithStatus(status)) {
@@ -382,36 +330,26 @@ public class ProjectTestDataBuilder {
         return taskBuilder.getTask();
     }
 
-    /**
-     * Checks if the project has a task with the specified status
-     * @param status The task status to check
-     * @return true if a task with the status exists, false otherwise
-     */
     public boolean hasTaskWithStatus(String status) {
         updateProject();
-        validateProjectExists();
+        if (project == null) {
+            throw new RuntimeException("Project not found");
+        }
         return project.getTasks().stream()
             .anyMatch(task -> status.equals(task.getStatus().toString()));
     }
 
-    /**
-     * Gets a task by its name
-     * @param name The task name
-     * @return The task response
-     */
     public TaskResponse getTaskWithName(String name) {
         updateProject();
-        validateProjectExists();
+        if (project == null) {
+            throw new RuntimeException("Project not found");
+        }
         return project.getTasks().stream()
             .filter(task -> task.getName().equals(name))
             .findFirst()
             .orElseThrow(() -> new RuntimeException("Task not found: " + name));
     }
 
-    /**
-     * Gets the current project or creates a basic one if none exists
-     * @return The project response
-     */
     public ProjectResponse getOrCreateProject() {
         if (project == null) {
             createBasicProject();
@@ -419,46 +357,42 @@ public class ProjectTestDataBuilder {
         return getProject();
     }
 
-    /**
-     * Modifies the current project with the provided request
-     * @param request The update request
-     */
     public void modifyProject(UpdateProjectRequest request) {
-        validateProjectExists();
-        String url = url(PROJECTS_ENDPOINT + "/" + project.getId());
-        this.project = performRequest(url, HttpMethod.PUT, request, "modify project");
+        response = restTemplate.exchange(
+            url(PROJECTS_ENDPOINT + "/" + project.getId()),
+            HttpMethod.PUT,
+            new HttpEntity<>(request),
+            ProjectResponse.class);
+        project = response.getBody();
     }
 
-    /**
-     * Checks if the last request was successful
-     * @return true if the request was successful, false otherwise
-     */
     public boolean requestWasSuccesfull() {
         return response.getStatusCode().is2xxSuccessful();
     }
 
-    /**
-     * Removes tags from the current project
-     * @param tags The list of tag names to remove
-     */
     public void removeTagsFromProject(List<String> tags) {
-        validateProjectExists();
         for (String tag : tags) {
-            String url = url(PROJECTS_ENDPOINT + "/" + project.getId() + "/tags?tagName=" + tag);
-            performRequest(url, HttpMethod.DELETE, null, "remove tag: " + tag);
+            response = restTemplate.exchange(
+                url(PROJECTS_ENDPOINT + "/" + project.getId() + "/tags?tagName=" + tag),
+                HttpMethod.DELETE,
+                null,
+                ProjectResponse.class);
+            if (!response.getStatusCode().is2xxSuccessful()) {
+                throw new RuntimeException("Failed to remove tag: " + tag + ". Status: " + response.getStatusCode());
+            }
         }
         updateProject();
     }
 
-    /**
-     * Adds tags to the current project
-     * @param tags The list of tag names to add
-     */
     public void addTagsToProject(List<String> tags) {
-        validateProjectExists();
         for (String tag : tags) {
-            String url = url(PROJECTS_ENDPOINT + "/" + project.getId() + "/tags");
-            performRequest(url, HttpMethod.POST, tag, "add tag: " + tag);
+            response = restTemplate.postForEntity(
+                url(PROJECTS_ENDPOINT + "/" + project.getId() + "/tags"),
+                tag,
+                ProjectResponse.class);
+            if (!response.getStatusCode().is2xxSuccessful()) {
+                throw new RuntimeException("Failed to add tag: " + tag + ". Status: " + response.getStatusCode());
+            }
         }
         updateProject();
     }
@@ -467,9 +401,6 @@ public class ProjectTestDataBuilder {
     // PUBLIC CLEAR METHODS
     // ========================================================================
 
-    /**
-     * Clears all projects from the system
-     */
     public void clearProjects() {
         List<ProjectSummaryResponse> projects = getProjects();
         for (ProjectSummaryResponse project : projects) {
@@ -477,12 +408,14 @@ public class ProjectTestDataBuilder {
         }
     }
 
-    /**
-     * Deletes a project by its ID
-     * @param id The project ID to delete
-     */
     public void deleteProject(Long id) {
-        String url = url(PROJECTS_ENDPOINT + "/" + id);
-        performRequest(url, HttpMethod.DELETE, null, "delete project: " + id);
+        response = restTemplate.exchange(
+            url(PROJECTS_ENDPOINT + "/" + id),
+            HttpMethod.DELETE,
+            null,
+            ProjectResponse.class);
+        if (!response.getStatusCode().is2xxSuccessful()) {
+            throw new RuntimeException("Failed to delete project: " + id + ". Status: " + response.getStatusCode());
+        }
     }
 }
