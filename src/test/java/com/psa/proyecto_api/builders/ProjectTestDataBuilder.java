@@ -3,6 +3,7 @@ package com.psa.proyecto_api.builders;
 import com.psa.proyecto_api.dto.request.CreateProjectRequest;
 import com.psa.proyecto_api.dto.request.UpdateProjectRequest;
 import com.psa.proyecto_api.dto.response.ProjectResponse;
+import com.psa.proyecto_api.dto.response.ProjectSummaryResponse;
 import com.psa.proyecto_api.dto.response.TaskResponse;
 import com.psa.proyecto_api.model.Project;
 import com.psa.proyecto_api.model.Task;
@@ -18,6 +19,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpMethod;
@@ -206,6 +208,44 @@ public class ProjectTestDataBuilder {
         project = response.getBody();
     }
 
+    public void createProject(
+            String name,
+            Integer clientId,
+            ProjectType type,
+            ProjectBillingType billingType,
+            LocalDate startDate,
+            LocalDate endDate,
+            ProjectStatus status,
+            String leaderId) {
+
+        CreateProjectRequest request = new CreateProjectRequest();
+        request = setMinimalDefaults(request);
+        request.setName(name);
+        request.setClientId(clientId);
+        request.setType(type);
+        request.setBillingType(billingType);
+        request.setStartDate(startDate);
+        request.setEndDate(endDate);
+        request.setLeaderId(leaderId);
+        try {
+            response = restTemplate.postForEntity(
+                url(PROJECTS_ENDPOINT),
+                 request,
+                  ProjectResponse.class);
+            
+            project = response.getBody();
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to create project", e);
+        }
+
+        try {
+            changeStatus(status);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to change status at project creation", e);
+        }
+
+    }
+
     // ========================================================================
     // PUBLIC GETTER/UPDATE METHODS
     // ========================================================================
@@ -217,6 +257,29 @@ public class ProjectTestDataBuilder {
     public ProjectResponse getProject() {
         updateProject();
         return project;
+    }
+
+    public List<ProjectSummaryResponse> getProjects() {
+        ResponseEntity<List<ProjectSummaryResponse>> response = restTemplate.exchange(
+            url(PROJECTS_ENDPOINT),
+            HttpMethod.GET,
+            null,
+            new ParameterizedTypeReference<List<ProjectSummaryResponse>>() {});
+        return response.getBody();
+    }
+
+    /**
+     * Gets projects filtered by query parameters
+     * @param filter The query string (e.g., "?nombre=test&tipo=DEVELOPMENT")
+     * @return List of filtered projects
+     */
+    public List<ProjectSummaryResponse> getProjectsBy(String filter) {
+        ResponseEntity<List<ProjectSummaryResponse>> response = restTemplate.exchange(
+            url(PROJECTS_ENDPOINT + filter),
+            HttpMethod.GET,
+            null,
+            new ParameterizedTypeReference<List<ProjectSummaryResponse>>() {});
+        return response.getBody();
     }
 
     /**
@@ -306,5 +369,23 @@ public class ProjectTestDataBuilder {
             }
         }
         updateProject();
+    }
+
+    // ========================================================================
+    // PUBLIC CLEAR METHODS
+    // ========================================================================
+
+    public void clearProjects() {
+        List<ProjectSummaryResponse> projects = getProjects();
+        for (ProjectSummaryResponse project : projects) {
+            response = restTemplate.exchange(
+                url(PROJECTS_ENDPOINT + "/" + project.getId()),
+                HttpMethod.DELETE,
+                null,
+                ProjectResponse.class);
+            if (!response.getStatusCode().is2xxSuccessful()) {
+                throw new RuntimeException("Failed to delete project: " + project.getId() + ". Status: " + response.getStatusCode());
+            }
+        }
     }
 }
