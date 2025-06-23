@@ -5,13 +5,8 @@ import static org.junit.Assert.*;
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.web.client.TestRestTemplate;
-
-import com.psa.proyecto_api.BaseIntegrationTest;
 import com.psa.proyecto_api.builders.ProjectTestDataBuilder;
 import com.psa.proyecto_api.builders.TaskTestDataBuilder;
-import com.psa.proyecto_api.dto.response.ProjectResponse;
 import com.psa.proyecto_api.dto.response.TaskResponse;
 
 import io.cucumber.datatable.DataTable;

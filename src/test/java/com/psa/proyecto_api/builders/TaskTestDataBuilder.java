@@ -13,7 +13,6 @@ import com.psa.proyecto_api.dto.request.CreateTaskRequest;
 import com.psa.proyecto_api.dto.request.UpdateTaskRequest;
 import com.psa.proyecto_api.dto.response.TaskResponse;
 import com.psa.proyecto_api.dto.response.TaskSummaryResponse;
-import com.psa.proyecto_api.model.Task;
 import com.psa.proyecto_api.model.enums.TaskStatus;
 
 /**
@@ -38,8 +37,8 @@ public class TaskTestDataBuilder {
     // INSTANCE FIELDS
     // ========================================================================
     
-    private String baseUrl;
-    private TestRestTemplate restTemplate;
+    private final String baseUrl;
+    private final TestRestTemplate restTemplate;
     private ResponseEntity<TaskResponse> response;
     private TaskResponse task;
 
@@ -369,8 +368,7 @@ public class TaskTestDataBuilder {
             throw new RuntimeException("Failed to get tasks. Status: " + response.getStatusCode());
         }
 
-        List<TaskResponse> taskResponses = response.getBody();
-        return taskResponses;
+        return response.getBody();
     }
 
     public List<TaskSummaryResponse> getTasksSummaryBy(Long projectId, String filter) {
@@ -381,8 +379,7 @@ public class TaskTestDataBuilder {
             throw new RuntimeException("Failed to get tasks. Status: " + response.getStatusCode());
         }
 
-        List<TaskSummaryResponse> taskResponses = response.getBody();
-        return taskResponses;
+        return response.getBody();
     }
 
     // ========================================================================

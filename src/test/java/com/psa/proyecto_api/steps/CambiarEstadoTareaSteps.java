@@ -2,17 +2,8 @@ package com.psa.proyecto_api.steps;
 
 import static org.junit.Assert.*;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.web.client.TestRestTemplate;
-import jakarta.transaction.Transactional;
-import org.springframework.boot.test.web.server.LocalServerPort;
-import org.springframework.test.annotation.Rollback;
-
-import com.psa.proyecto_api.BaseIntegrationTest;
 import com.psa.proyecto_api.builders.ProjectTestDataBuilder;
 import com.psa.proyecto_api.builders.TaskTestDataBuilder;
-import com.psa.proyecto_api.dto.response.ProjectResponse;
-import com.psa.proyecto_api.dto.response.TaskResponse;
 import com.psa.proyecto_api.model.enums.TaskStatus;
 
 import io.cucumber.java.Before;

@@ -1,6 +1,5 @@
 package com.psa.proyecto_api;
 
-import io.cucumber.junit.platform.engine.Cucumber;
 import org.junit.platform.suite.api.ConfigurationParameter;
 import org.junit.platform.suite.api.IncludeEngines;
 import org.junit.platform.suite.api.SelectClasspathResource;

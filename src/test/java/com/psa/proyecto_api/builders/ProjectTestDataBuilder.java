@@ -5,17 +5,12 @@ import com.psa.proyecto_api.dto.request.UpdateProjectRequest;
 import com.psa.proyecto_api.dto.response.ProjectResponse;
 import com.psa.proyecto_api.dto.response.ProjectSummaryResponse;
 import com.psa.proyecto_api.dto.response.TaskResponse;
-import com.psa.proyecto_api.model.Project;
-import com.psa.proyecto_api.model.Task;
 import com.psa.proyecto_api.model.enums.ProjectStatus;
 import com.psa.proyecto_api.model.enums.ProjectType;
 import com.psa.proyecto_api.model.enums.ProjectBillingType;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.boot.test.web.client.TestRestTemplate;
@@ -26,8 +21,6 @@ import org.springframework.http.HttpMethod;
 
 import static com.psa.proyecto_api.model.enums.ProjectStatus.TRANSITION;
 import com.psa.proyecto_api.model.enums.TaskStatus;
-
-import static com.psa.proyecto_api.model.enums.TaskStatus.IN_PROGRESS;
 
 /**
  * Builder class for creating test project data.
@@ -51,11 +44,11 @@ public class ProjectTestDataBuilder {
     // INSTANCE FIELDS
     // ========================================================================
     
-    private String baseUrl;
-    private TestRestTemplate restTemplate;
+    private final String baseUrl;
+    private final TestRestTemplate restTemplate;
     private ResponseEntity<ProjectResponse> response;
     private ProjectResponse project;
-    private TaskTestDataBuilder taskBuilder;
+    private final TaskTestDataBuilder taskBuilder;
 
     // ========================================================================
     // CONSTRUCTOR
