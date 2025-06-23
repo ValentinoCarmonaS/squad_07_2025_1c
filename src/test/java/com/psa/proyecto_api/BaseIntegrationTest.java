@@ -1,6 +1,5 @@
 package com.psa.proyecto_api;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
@@ -31,24 +30,27 @@ public abstract class BaseIntegrationTest {
     @Autowired
     protected DataSource dataSource;
 
-    protected String baseUrl;
-
-    @BeforeEach
-    void setUp() {
-        baseUrl = "http://localhost:" + port + "/api/v1";
+    public void setUp() {
         
         // Verify H2 connection
         try (Connection conn = dataSource.getConnection()) {
-            System.out.println("✅ Connected to H2 database: " + conn.getMetaData().getURL());
+            // System.out.println("✅ Connected to H2 database: " + conn.getMetaData().getURL());
         } catch (SQLException e) {
             throw new RuntimeException("❌ Failed to connect to H2 database", e);
         }
     }
 
     /**
+     * Helper method to get the base URL with the current port
+     */
+    protected String getBaseUrl() {
+        return "http://localhost:" + port + "/api/v1";
+    }
+
+    /**
      * Helper method to get the full URL for an endpoint
      */
     protected String url(String endpoint) {
-        return baseUrl + endpoint;
+        return getBaseUrl() + endpoint;
     }
 }

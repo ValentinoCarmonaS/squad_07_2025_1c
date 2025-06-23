@@ -9,8 +9,6 @@ import com.psa.proyecto_api.model.enums.ProjectType;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 
-import java.util.Collections;
-
 import jakarta.persistence.criteria.Join;
 
 @Component

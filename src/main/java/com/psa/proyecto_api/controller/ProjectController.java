@@ -1,15 +1,11 @@
 package com.psa.proyecto_api.controller;
 
 import com.psa.proyecto_api.dto.request.CreateProjectRequest;
-import com.psa.proyecto_api.dto.request.ProjectFilterRequest;
 import com.psa.proyecto_api.dto.request.UpdateProjectRequest;
 import com.psa.proyecto_api.dto.response.ProjectResponse;
 import com.psa.proyecto_api.dto.response.ProjectSummaryResponse;
-import com.psa.proyecto_api.model.enums.ProjectStatus;
-import com.psa.proyecto_api.model.enums.ProjectType;
 import com.psa.proyecto_api.service.ProjectService;
 
-import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -77,7 +73,7 @@ public class ProjectController {
         return ResponseEntity.ok(response);
     }
 
-    // DELETE /proyectos/{id}/tags - Quitar tag de un proyecto
+    // DELETE /proyectos/{id}/tags?tagName= - Quitar tag de un proyecto
     @DeleteMapping("/{id}/tags")
     public ResponseEntity<ProjectResponse> removeTagFromProject(
             @PathVariable Long id, 
@@ -86,7 +82,7 @@ public class ProjectController {
         return ResponseEntity.ok(response);
     }
 
-    // PUT /proyectos/{id}/tags - Actualizar tag de un proyecto
+    // PUT /proyectos/{id}/tags?oldTagName=?newTagName= - Actualizar tag de un proyecto
     @PutMapping("/{id}/tags")
     public ResponseEntity<ProjectResponse> updateProjectTag(
             @PathVariable Long id, 
