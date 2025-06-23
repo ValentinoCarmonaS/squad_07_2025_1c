@@ -14,6 +14,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.boot.test.web.client.TestRestTemplate;
@@ -259,5 +260,43 @@ public class ProjectTestDataBuilder {
 
     public boolean requestWasSuccesfull() {
         return response.getStatusCode().is2xxSuccessful();
+    }
+
+    public void createProjectWithTags(List<String> tags) {
+        CreateProjectRequest request = new CreateProjectRequest();
+        request = setMinimalDefaults(request);
+        request.setTagNames(tags);
+        response = restTemplate.postForEntity(url(PROJECTS_ENDPOINT), request, ProjectResponse.class);
+        project = response.getBody();
+    }
+
+    public void removeTagsFromProject(List<String> tags) {
+        updateProject();
+        for (String tag : tags) {
+            try {
+            response = restTemplate.exchange(
+                url(PROJECTS_ENDPOINT + "/" + project.getId() + "/tags?tagName=" + tag),
+                HttpMethod.DELETE,
+                    null,
+                    ProjectResponse.class);
+            } catch (Exception e) {
+                throw new RuntimeException("Error removing tag: " + e.getMessage());
+            }
+        }
+    }
+
+    public void addTagsToProject(List<String> tags) {
+        updateProject();
+        
+        String tagRequest = tags.stream().collect(Collectors.joining(","));
+        
+        try {
+            response = restTemplate.postForEntity(
+                url(PROJECTS_ENDPOINT + "/" + project.getId() + "/tags"),
+                tagRequest,
+                ProjectResponse.class);
+        } catch (Exception e) {
+            throw new RuntimeException("Error adding tag: " + e.getMessage());
+        }
     }
 }
