@@ -259,6 +259,22 @@ public class ProjectTestDataBuilder {
         return project;
     }
 
+    public ProjectResponse getProject(Long id) {
+        try {
+            response = restTemplate.getForEntity(url(PROJECTS_ENDPOINT + "/" + id), ProjectResponse.class);
+            
+            // Check if the response is successful before trying to deserialize
+            if (!response.getStatusCode().is2xxSuccessful()) {
+                throw new RuntimeException("Failed to get project: " + id + ". Status: " + response.getStatusCode());
+            }
+            
+            project = response.getBody();
+            return project;
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to get project: " + id + ". Error: " + e.getMessage(), e);
+        }
+    }
+
     public List<ProjectSummaryResponse> getProjects() {
         ResponseEntity<List<ProjectSummaryResponse>> response = restTemplate.exchange(
             url(PROJECTS_ENDPOINT),
@@ -286,10 +302,20 @@ public class ProjectTestDataBuilder {
      * Updates the current project data from the server
      */
     public void updateProject() {
-        if (project != null) {
+        if (project != null && project.getId() != null) {
             String url = url(PROJECTS_ENDPOINT + "/" + project.getId());
-            response = restTemplate.getForEntity(url, ProjectResponse.class);
-            project = response.getBody();
+            try {
+                response = restTemplate.getForEntity(url, ProjectResponse.class);
+                
+                // Check if the response is successful before trying to deserialize
+                if (!response.getStatusCode().is2xxSuccessful()) {
+                    throw new RuntimeException("Failed to update project. Status: " + response.getStatusCode());
+                }
+                
+                project = response.getBody();
+            } catch (Exception e) {
+                throw new RuntimeException("Failed to update project. Error: " + e.getMessage(), e);
+            }
         }
     }
 
@@ -378,14 +404,18 @@ public class ProjectTestDataBuilder {
     public void clearProjects() {
         List<ProjectSummaryResponse> projects = getProjects();
         for (ProjectSummaryResponse project : projects) {
-            response = restTemplate.exchange(
-                url(PROJECTS_ENDPOINT + "/" + project.getId()),
-                HttpMethod.DELETE,
-                null,
-                ProjectResponse.class);
-            if (!response.getStatusCode().is2xxSuccessful()) {
-                throw new RuntimeException("Failed to delete project: " + project.getId() + ". Status: " + response.getStatusCode());
-            }
+            deleteProject(project.getId());
+        }
+    }
+
+    public void deleteProject(Long id) {
+        response = restTemplate.exchange(
+            url(PROJECTS_ENDPOINT + "/" + id),
+            HttpMethod.DELETE,
+            null,
+            ProjectResponse.class);
+        if (!response.getStatusCode().is2xxSuccessful()) {
+            throw new RuntimeException("Failed to delete project: " + id + ". Status: " + response.getStatusCode());
         }
     }
 }
