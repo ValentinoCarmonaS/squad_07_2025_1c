@@ -270,9 +270,6 @@ public class Project {
         if (name != null && !name.trim().isEmpty()) {
             this.name = name;
         }
-        if (clientId != null) {
-            this.clientId = clientId;
-        }
         if (leaderId != null && !leaderId.trim().isEmpty()) {
             this.leaderId = leaderId;
         }
