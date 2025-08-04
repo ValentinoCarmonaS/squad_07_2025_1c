@@ -62,12 +62,9 @@ make dev
 Esto limpia el proyecto, instalara las dependencias y ejecuta `mvn spring-boot:run`. La aplicación estará disponible en http://localhost:8080 (o el puerto definido en `.env`).
 
 2. Accede a la Documentación de la API:
-Abre http://localhost:8080/swagger-ui.html para explorar los endpoints disponibles con Swagger UI.
-
-De momento Spring Security, que  creara un usuario provisorio(`user`) y una contraseña en el siguiente mensaje:
-```bash
-Using generated security password: 7d711f9a-2f30-4880-8a67-37fe3334bc13
-```
+> Abre este [link](https://squad-07-2025-1c.onrender.com/swagger-ui/index.html) para explorar los endpoints disponibles con Swagger UI.
+> 
+> Tambien todos los documentos finales del proyecto se encuentran en este [link](https://drive.google.com/file/d/1e22B1wmQyQSw3FzNEy5DdK-x8szU7Pth/view?usp=drive_link).
 
 ## Estructura del Proyecto
 ```bash
